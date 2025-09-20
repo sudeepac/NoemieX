@@ -1,0 +1,25 @@
+{
+  "name": "noemiex",
+  "version": "1.0.0",
+  "description": "Multi-tenant billing system for study abroad agencies",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "install-deps": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "test": "cd backend && npm test && cd ../frontend && npm test"
+  },
+  "keywords": [
+    "billing",
+    "study-abroad",
+    "multi-tenant",
+    "MERN"
+  ],
+  "author": "NoemieX Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
