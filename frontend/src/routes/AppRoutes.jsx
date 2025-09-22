@@ -9,6 +9,15 @@ import {
   usePermissions
 } from '../shared';
 
+// Model-based Routes
+import UsersRoutes from './UsersRoutes';
+import AccountsModelRoutes from './AccountsModelRoutes';
+import AgenciesModelRoutes from './AgenciesModelRoutes';
+import BillingEventHistoriesRoutes from './BillingEventHistoriesRoutes';
+import PaymentSchedulesRoutes from './PaymentSchedulesRoutes';
+import BillingTransactionsRoutes from './BillingTransactionsRoutes';
+import OfferLettersRoutes from './OfferLettersRoutes';
+
 const AppRoutes = () => {
   return (
     <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
@@ -60,8 +69,56 @@ const AppRoutes = () => {
           <Route path="commissions" element={<LazyComponents.CommissionTracking />} />
         </Route>
         
-
+        {/* Model-based Routes - Accessible based on permissions */}
+        {/* Users Management Routes */}
+        <Route path="/users/*" element={
+          <SuperadminRoute>
+            <UsersRoutes />
+          </SuperadminRoute>
+        } />
         
+        {/* Accounts Management Routes */}
+        <Route path="/accounts/*" element={
+          <SuperadminRoute>
+            <AccountsModelRoutes />
+          </SuperadminRoute>
+        } />
+        
+        {/* Agencies Management Routes */}
+        <Route path="/agencies/*" element={
+          <SuperadminRoute>
+            <AgenciesModelRoutes />
+          </SuperadminRoute>
+        } />
+        
+        {/* Billing Event Histories Routes */}
+        <Route path="/billing-event-histories/*" element={
+          <AccountRoute>
+            <BillingEventHistoriesRoutes />
+          </AccountRoute>
+        } />
+        
+        {/* Payment Schedules Routes */}
+        <Route path="/payment-schedules/*" element={
+          <AccountRoute>
+            <PaymentSchedulesRoutes />
+          </AccountRoute>
+        } />
+        
+        {/* Billing Transactions Routes */}
+        <Route path="/billing-transactions/*" element={
+          <AccountRoute>
+            <BillingTransactionsRoutes />
+          </AccountRoute>
+        } />
+        
+        {/* Offer Letters Routes */}
+        <Route path="/offer-letters/*" element={
+          <AccountRoute>
+            <OfferLettersRoutes />
+          </AccountRoute>
+        } />
+
         {/* Root redirect based on user portal */}
         <Route path="/" element={<RootRedirect />} />
         
