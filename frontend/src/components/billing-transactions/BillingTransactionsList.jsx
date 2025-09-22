@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useGetBillingTransactionsQuery,
   useDeleteBillingTransactionMutation,
-  useUpdateBillingTransactionStatusMutation,
-} from '../../store/billing-transactions/billing-transactions.api';
+  useUpdateBillingTransactionStatusMutation
+} from '../../store/api/api';
 import {
   selectFilters,
   selectPagination,
@@ -13,7 +13,7 @@ import {
   goToCreateTransaction,
   goToEditTransaction,
   goToTransactionDetail,
-} from '../../store/billing-transactions/billing-transactions.slice';
+} from '../../store/slices/billing-transactions.slice';
 import styles from './BillingTransactionsList.module.css';
 
 /**

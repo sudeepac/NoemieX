@@ -3,17 +3,19 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useGetPaymentScheduleQuery,
+  useDeletePaymentScheduleMutation,
   useApprovePaymentScheduleMutation,
   useRetirePaymentScheduleMutation,
   useCompletePaymentScheduleMutation,
   useCancelPaymentScheduleMutation,
-  useDeletePaymentScheduleMutation,
-} from '../../store/payment-schedules/payment-schedules.api';
+  useReplacePaymentScheduleMutation,
+  useGenerateRecurringItemsMutation
+} from '../../store/api/api';
 import {
   selectSelectedPaymentSchedule,
   closeDetail,
   openForm,
-} from '../../store/payment-schedules/payment-schedules.slice';
+} from '../../store/slices/payment-schedules.slice';
 import { toast } from 'react-toastify';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 

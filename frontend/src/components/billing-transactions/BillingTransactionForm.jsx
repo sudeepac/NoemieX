@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useCreateBillingTransactionMutation,
   useUpdateBillingTransactionMutation,
-} from '../../store/billing-transactions/billing-transactions.api';
+} from '../../store/api/api';
 import {
   selectEditingTransaction,
   selectCurrentView,
   goBackToTransactionsList,
-} from '../../store/billing-transactions/billing-transactions.slice';
+} from '../../store/slices/billing-transactions.slice';
 import styles from './BillingTransactionForm.module.css';
 
 /**

@@ -6,12 +6,12 @@ import {
   useMarkAsPaidMutation,
   useDisputeBillingTransactionMutation,
   useDeleteBillingTransactionMutation,
-} from '../../store/billing-transactions/billing-transactions.api';
+} from '../../store/api/api';
 import {
   selectEditingTransaction,
   goBackToTransactionsList,
   goToEditTransaction,
-} from '../../store/billing-transactions/billing-transactions.slice';
+} from '../../store/slices/billing-transactions.slice';
 import styles from './BillingTransactionDetail.module.css';
 
 /**

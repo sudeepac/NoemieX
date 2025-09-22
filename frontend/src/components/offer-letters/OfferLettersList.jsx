@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   useGetOfferLettersQuery,
   useDeleteOfferLetterMutation,
-  useUpdateOfferLetterStatusMutation,
-} from '../../store/offer-letters/offer-letters.api';
+  useUpdateOfferLetterStatusMutation
+} from '../../store/api/api';
 import {
   selectFilters,
   selectPagination,
@@ -13,7 +13,7 @@ import {
   setPage,
   openForm,
   openDetail,
-} from '../../store/offer-letters/offer-letters.slice';
+} from '../../store/slices/offer-letters.slice';
 // AI-NOTE: Fixed import error - selectAuth selector doesn't exist in auth.slice, use direct state.auth access instead
 import styles from './OfferLettersList.module.css';
 
@@ -21,7 +21,7 @@ import styles from './OfferLettersList.module.css';
  * OfferLettersList component - displays paginated list of offer letters with filtering and search
  * Supports different portal views (superadmin, account, agency) with appropriate permissions
  */
-const OfferLettersList = () => {
+const OfferLettersList = ({ portal = 'account' }) => {
   const dispatch = useDispatch();
   const filters = useSelector(selectFilters);
   const pagination = useSelector(selectPagination);

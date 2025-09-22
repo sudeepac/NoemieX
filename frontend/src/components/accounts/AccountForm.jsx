@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { 
+import {
   useGetAccountQuery,
-  useCreateAccountMutation, 
-  useUpdateAccountMutation 
-} from '../../store/api/accounts.api';
+  useCreateAccountMutation,
+  useUpdateAccountMutation
+} from '../../store/api/api';
 import { 
   accountHelpers,
   SUBSCRIPTION_PLANS,

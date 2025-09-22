@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { 
+import {
   useGetAccountQuery,
-  useGetAccountStatsQuery 
-} from '../../store/api/accounts.api';
+  useGetAccountStatsQuery
+} from '../../store/api/api';
 import { 
   ChevronDown, 
   Building2, 

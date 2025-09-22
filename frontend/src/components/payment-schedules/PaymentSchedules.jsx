@@ -1,7 +1,7 @@
 // AI-NOTE: Main payment schedules component that orchestrates list, form, and detail views
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectActiveView, selectIsFormOpen } from '../../store/payment-schedules/payment-schedules.slice';
+import { selectActiveView, selectIsFormOpen } from '../../store/slices/payment-schedules.slice';
 import PaymentSchedulesList from './PaymentSchedulesList';
 import PaymentScheduleForm from './PaymentScheduleForm';
 import PaymentScheduleDetail from './PaymentScheduleDetail';

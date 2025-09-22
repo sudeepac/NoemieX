@@ -4,12 +4,12 @@ import {
   useCreateOfferLetterMutation,
   useUpdateOfferLetterMutation,
   useReplaceOfferLetterMutation,
-} from '../../store/offer-letters/offer-letters.api';
+} from '../../store/api/api';
 import {
   selectSelectedOfferLetter,
   selectFormMode,
   closeForm,
-} from '../../store/offer-letters/offer-letters.slice';
+} from '../../store/slices/offer-letters.slice';
 // AI-NOTE: Fixed import error - selectAuth selector doesn't exist in auth.slice, use direct state.auth access instead
 import styles from './OfferLetterForm.module.css';
 

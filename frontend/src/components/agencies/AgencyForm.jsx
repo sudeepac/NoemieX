@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { 
+import {
   useGetAgencyQuery,
-  useCreateAgencyMutation, 
-  useUpdateAgencyMutation 
-} from '../../store/api/agencies.api';
-import { useGetAccountsQuery } from '../../store/api/accounts.api';
+  useCreateAgencyMutation,
+  useUpdateAgencyMutation,
+  useGetAccountsQuery
+} from '../../store/api/api';
 import {
   clearEditingAgency,
   setError,

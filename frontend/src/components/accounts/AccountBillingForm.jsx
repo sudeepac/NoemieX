@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetAccountByIdQuery, useUpdateAccountMutation } from '../../store/api/accountsApi';
+import { useGetAccountQuery, useUpdateAccountMutation } from '../../store/api/api';
 import { BILLING_CYCLES, BILLING_STATUSES, CURRENCIES } from '../../types/account.types';
 import { useAuth } from '../../hooks/useAuth';
 import './AccountBillingForm.css';
@@ -15,7 +15,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   const { user } = useAuth();
   
   // RTK Query hooks
-  const { data: accountData, isLoading, error } = useGetAccountByIdQuery(accountId, {
+  const { data: accountData, isLoading, error } = useGetAccountQuery(accountId, {
     skip: !accountId
   });
   const [updateAccount, { isLoading: isUpdating }] = useUpdateAccountMutation();

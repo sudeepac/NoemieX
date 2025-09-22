@@ -6,7 +6,7 @@ import {
   useDeleteAgencyMutation, 
   useToggleAgencyStatusMutation,
   useGetAgencyStatsQuery
-} from '../../store/api/agencies.api';
+} from '../../store/api/api';
 import { PORTAL_TYPES } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
 import './AgencyDetail.css';

@@ -6,7 +6,7 @@ import {
   useDeleteAccountMutation, 
   useToggleAccountStatusMutation,
   useGetAccountStatsQuery
-} from '../../store/api/accounts.api';
+} from '../../store/api/api';
 import { 
   SUBSCRIPTION_PLANS,
   SUBSCRIPTION_STATUSES,

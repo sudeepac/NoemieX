@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  useGetAccountsQuery, 
-  useDeleteAccountMutation, 
-  useToggleAccountStatusMutation 
-} from '../../store/api/accounts.api';
+import {
+  useGetAccountsQuery,
+  useDeleteAccountMutation,
+  useToggleAccountStatusMutation
+} from '../../store/api/api';
 import { 
   accountHelpers,
   SUBSCRIPTION_PLANS,

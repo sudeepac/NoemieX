@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  useGetAgenciesQuery, 
-  useDeleteAgencyMutation, 
-  useToggleAgencyStatusMutation 
-} from '../../store/api/agencies.api';
+import {
+  useGetAgenciesQuery,
+  useDeleteAgencyMutation,
+  useToggleAgencyStatusMutation
+} from '../../store/api/api';
 import {
   setFilters,
   resetFilters,

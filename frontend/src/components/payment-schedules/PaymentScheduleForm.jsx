@@ -2,16 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  useGetPaymentScheduleQuery,
   useCreatePaymentScheduleMutation,
   useUpdatePaymentScheduleMutation,
-} from '../../store/payment-schedules/payment-schedules.api';
+  useReplacePaymentScheduleMutation,
+  useGetOfferLettersQuery,
+  useGetAgenciesQuery
+} from '../../store/api/api';
 import {
   selectFormMode,
   selectSelectedPaymentSchedule,
   closeForm,
-} from '../../store/payment-schedules/payment-schedules.slice';
-import { useGetOfferLettersQuery } from '../../store/offer-letters/offer-letters.api';
-import { useGetAgenciesQuery } from '../../store/api/api';
+} from '../../store/slices/payment-schedules.slice';
 import { toast } from 'react-toastify';
 
 const PaymentScheduleForm = () => {

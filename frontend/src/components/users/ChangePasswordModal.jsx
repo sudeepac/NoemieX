@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useChangeUserPasswordMutation } from '../../store/api/users.api';
+import { useChangeUserPasswordMutation } from '../../store/api/api';
 import { validatePasswordChange } from '../../types/user.types';
 import './ChangePasswordModal.css';
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams, Link } from 'react-router-dom';
-import { 
+import {
   useGetUserQuery,
-  useDeleteUserMutation, 
-  useToggleUserStatusMutation 
-} from '../../store/api/users.api';
+  useDeleteUserMutation,
+  useToggleUserStatusMutation
+} from '../../store/api/api';
 import { 
   USER_ROLES, 
   PORTAL_TYPES, 

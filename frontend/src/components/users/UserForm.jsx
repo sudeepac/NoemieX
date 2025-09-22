@@ -4,8 +4,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { 
   useGetUserQuery,
   useCreateUserMutation, 
-  useUpdateUserMutation 
-} from '../../store/api/users.api';
+  useUpdateUserMutation,
+  useGetAccountsQuery,
+  useGetAgenciesQuery
+} from '../../store/api/api';
 import { 
   createUserFormData, 
   validateUserForm,

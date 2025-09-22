@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGetOfferLetterStatsQuery } from '../../store/offer-letters/offer-letters.api';
+import { useGetOfferLetterStatsQuery } from '../../store/api/api';
 import { 
   BarChart3, 
   TrendingUp, 

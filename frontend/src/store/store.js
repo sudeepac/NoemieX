@@ -1,35 +1,47 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { api } from './api/api';
-import { offerLettersApi } from './offer-letters/offer-letters.api';
-import { paymentSchedulesApi } from './payment-schedules/payment-schedules.api';
+
+// Import slices - all slices are now in the centralized slices folder
 import authReducer from './slices/auth.slice';
+import accountsReducer from './slices/accounts.slice';
 import agenciesReducer from './slices/agencies.slice';
-import offerLettersReducer from './offer-letters/offer-letters.slice';
-import paymentSchedulesReducer from './payment-schedules/payment-schedules.slice';
-import billingTransactionsReducer from './billing-transactions/billing-transactions.slice';
+import billingEventHistoriesReducer from './slices/billing-event-histories.slice';
+import offerLettersReducer from './slices/offer-letters.slice';
+import paymentSchedulesReducer from './slices/payment-schedules.slice';
+import billingTransactionsReducer from './slices/billing-transactions.slice';
+import usersReducer from './slices/users.slice';
 
 export const store = configureStore({
   reducer: {
+    // Add the generated reducer as a specific top-level slice
+    [api.reducerPath]: api.reducer,
+    // Traditional slices for local state management
     auth: authReducer,
+    accounts: accountsReducer,
     agencies: agenciesReducer,
     offerLetters: offerLettersReducer,
     paymentSchedules: paymentSchedulesReducer,
     billingTransactions: billingTransactionsReducer,
-    [api.reducerPath]: api.reducer,
-    [offerLettersApi.reducerPath]: offerLettersApi.reducer,
-    [paymentSchedulesApi.reducerPath]: paymentSchedulesApi.reducer,
+    billingEventHistories: billingEventHistoriesReducer,
+    users: usersReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  // Adding the api middleware enables caching, invalidation, polling,
+  // and other useful features of `rtk-query`.
+  middleware: (getDefaultMiddleware) => {
+    const defaultMiddleware = getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }).concat(api.middleware, offerLettersApi.middleware, paymentSchedulesApi.middleware),
+    });
+    return defaultMiddleware.concat(api.middleware);
+  },
 });
 
-// Enable listener behavior for the store
+// Optional, but required for refetchOnFocus/refetchOnReconnect behaviors
+// see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
 setupListeners(store.dispatch);
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// Export types for TypeScript (if needed)
+// export type RootState = ReturnType<typeof store.getState>;
+// export type AppDispatch = typeof store.dispatch;

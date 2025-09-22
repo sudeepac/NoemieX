@@ -7,7 +7,7 @@ import {
   useDeletePaymentScheduleMutation,
   useApprovePaymentScheduleMutation,
   useGenerateBillingTransactionsMutation,
-} from '../../store/payment-schedules/payment-schedules.api';
+} from '../../store/api/api';
 import {
   selectFilters,
   selectPagination,
@@ -28,7 +28,7 @@ import {
   toggleStats,
   openForm,
   openDetail,
-} from '../../store/payment-schedules/payment-schedules.slice';
+} from '../../store/slices/payment-schedules.slice';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { toast } from 'react-toastify';
 
