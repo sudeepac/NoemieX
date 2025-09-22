@@ -120,22 +120,7 @@ const seedData = {
   ],
 
   users: [
-    // Superadmin Portal Users
-    {
-      email: 'superadmin@noemiex.com',
-      password: 'SuperAdmin123!',
-      firstName: 'Super',
-      lastName: 'Administrator',
-      role: 'admin',
-      portalType: 'superadmin',
-      profile: {
-        phone: '+1-555-1001',
-        department: 'System Administration',
-        jobTitle: 'Super Administrator',
-        bio: 'System-wide administrator with full access to all portals and features.'
-      },
-      emailVerified: true
-    },
+    // Superadmin Portal Users (superadmin@noemiex.com is created separately in seedSuperadminUser function)
     {
       email: 'manager.super@noemiex.com',
       password: 'Manager123!',
@@ -277,11 +262,48 @@ const clearDatabase = async () => {
   }
 };
 
-// Seed accounts
-const seedAccounts = async () => {
+// AI-NOTE: Added seedSuperadminUser function to create the superadmin user first, which is required for createdBy fields
+const seedSuperadminUser = async () => {
+  try {
+    console.log('👤 Seeding superadmin user...');
+    
+    const superadminData = {
+      email: 'superadmin@noemiex.com',
+      hashedPassword: 'SuperAdmin123!', // AI-NOTE: Fixed double hashing issue - let User model pre-save middleware handle hashing
+      firstName: 'Super',
+      lastName: 'Administrator',
+      role: 'admin',
+      portalType: 'superadmin',
+      profile: {
+        phone: '+1-555-1001',
+        department: 'System Administration',
+        jobTitle: 'Super Administrator',
+        bio: 'System-wide administrator with full access to all portals and features.'
+      },
+      emailVerified: true
+    };
+
+    const superadminUser = await User.create(superadminData);
+    console.log(`✅ Created superadmin user: ${superadminUser.email}`);
+    return superadminUser;
+  } catch (error) {
+    console.error('❌ Error seeding superadmin user:', error);
+    throw error;
+  }
+};
+
+// AI-NOTE: Updated seedAccounts to accept createdBy parameter and include it in account creation
+const seedAccounts = async (createdBy) => {
   try {
     console.log('🏢 Seeding accounts...');
-    const accounts = await Account.insertMany(seedData.accounts);
+    
+    // Add createdBy to each account
+    const accountsWithCreatedBy = seedData.accounts.map(account => ({
+      ...account,
+      createdBy: createdBy
+    }));
+    
+    const accounts = await Account.insertMany(accountsWithCreatedBy);
     console.log(`✅ Created ${accounts.length} accounts`);
     return accounts;
   } catch (error) {
@@ -290,18 +312,19 @@ const seedAccounts = async () => {
   }
 };
 
-// Seed agencies
-const seedAgencies = async (accounts) => {
+// AI-NOTE: Updated seedAgencies to include createdBy field and accept createdBy parameter
+const seedAgencies = async (accounts, createdBy) => {
   try {
     console.log('🏪 Seeding agencies...');
     
     // Find the agency account (third account)
     const agencyAccount = accounts[2];
     
-    // Add accountId to agency data
+    // Add accountId and createdBy to agency data
     const agencyData = {
       ...seedData.agencies[0],
-      accountId: agencyAccount._id
+      accountId: agencyAccount._id,
+      createdBy: createdBy
     };
     
     const agencies = await Agency.insertMany([agencyData]);
@@ -321,8 +344,8 @@ const seedUsers = async (accounts, agencies) => {
     const usersToCreate = [];
     
     for (const userData of seedData.users) {
-      // Hash password
-      const hashedPassword = await bcrypt.hash(userData.password, 12);
+      // AI-NOTE: Fixed double hashing issue - let User model pre-save middleware handle hashing
+      const hashedPassword = userData.password;
       
       // Determine accountId based on portal type
       let accountId;
@@ -359,7 +382,8 @@ const seedUsers = async (accounts, agencies) => {
       usersToCreate.push(user);
     }
     
-    const users = await User.insertMany(usersToCreate);
+    // AI-NOTE: Changed from insertMany to create to trigger pre-save middleware for password hashing
+    const users = await User.create(usersToCreate);
     console.log(`✅ Created ${users.length} users`);
     return users;
   } catch (error) {
@@ -411,7 +435,7 @@ const displaySummary = (accounts, agencies, users) => {
   console.log('  • Superadmin: SuperAdmin123!');
 };
 
-// Main seeding function
+// AI-NOTE: Updated main seeding function to create superadmin first and pass createdBy to all functions
 const seedDatabase = async () => {
   try {
     console.log('🌱 Starting database seeding...\n');
@@ -422,9 +446,12 @@ const seedDatabase = async () => {
     // Clear existing data
     await clearDatabase();
     
-    // Seed data in order
-    const accounts = await seedAccounts();
-    const agencies = await seedAgencies(accounts);
+    // Seed superadmin user first (required for createdBy fields)
+    const superadminUser = await seedSuperadminUser();
+    
+    // Seed data in order with createdBy
+    const accounts = await seedAccounts(superadminUser._id);
+    const agencies = await seedAgencies(accounts, superadminUser._id);
     const users = await seedUsers(accounts, agencies);
     
     // Display summary
