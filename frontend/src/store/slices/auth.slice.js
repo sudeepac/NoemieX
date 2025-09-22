@@ -122,6 +122,70 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+export const refreshToken = createAsyncThunk(
+  'auth/refreshToken',
+  async (_, { rejectWithValue, getState }) => {
+    try {
+      const { refreshToken } = getState().auth;
+      
+      if (!refreshToken) {
+        throw new Error('No refresh token found');
+      }
+      
+      const response = await axios.post('/api/auth/refresh', {
+        refreshToken,
+      });
+      
+      const { token: newToken, refreshToken: newRefreshToken } = response.data.data;
+      
+      // Store new tokens in localStorage
+      localStorage.setItem('token', newToken);
+      localStorage.setItem('refreshToken', newRefreshToken);
+      
+      return { token: newToken, refreshToken: newRefreshToken };
+    } catch (error) {
+      // Clear invalid tokens
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      
+      return rejectWithValue(
+        error.response?.data?.message || 'Token refresh failed'
+      );
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  'auth/logout',
+  async (_, { rejectWithValue, getState }) => {
+    try {
+      const { token } = getState().auth;
+      
+      if (token) {
+        await axios.post('/api/auth/logout', {}, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+      
+      // Clear tokens from localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      
+      return true;
+    } catch (error) {
+      // Even if the API call fails, we should still clear local tokens
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      
+      return rejectWithValue(
+        error.response?.data?.message || 'Logout failed'
+      );
+    }
+  }
+);
+
 const initialState = {
   user: null,
   token: localStorage.getItem('token'),
@@ -231,6 +295,49 @@ const authSlice = createSlice({
       
       // Change Password
       .addCase(changePassword.rejected, (state, action) => {
+        state.error = action.payload;
+      })
+      
+      // Refresh Token
+      .addCase(refreshToken.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(refreshToken.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.token = action.payload.token;
+        state.refreshToken = action.payload.refreshToken;
+        state.error = null;
+      })
+      .addCase(refreshToken.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+        state.refreshToken = null;
+        state.error = action.payload;
+      })
+      
+      // Logout User
+      .addCase(logoutUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+        state.refreshToken = null;
+        state.error = null;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.isLoading = false;
+        // Even if logout fails, we should clear the state
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+        state.refreshToken = null;
         state.error = action.payload;
       });
   },
