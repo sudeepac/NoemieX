@@ -1,0 +1,547 @@
+/* OfferLetterStats Component Styles */
+
+/* Container */
+.container {
+  padding: 24px;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 0 4px;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerContent h2 {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading p {
+  color: #6b7280;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Error State */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+}
+
+.error h3 {
+  margin: 16px 0 8px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.error p {
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+.retryButton {
+  padding: 8px 16px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #b91c1c;
+}
+
+/* No Data State */
+.noData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.noData h3 {
+  margin: 16px 0 8px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.noData p {
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.metricCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.metricCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.metricIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.metricContent h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.metricDescription {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Charts Grid */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 1024px) {
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chartCard {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.chartHeader h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Status Chart */
+.statusChart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statusItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statusInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.statusStats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusCount {
+  font-weight: 600;
+  color: #111827;
+}
+
+.statusPercentage {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.statusBar {
+  height: 6px;
+  background: #f3f4f6;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.statusProgress {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Status Colors */
+.iconGray { color: #6b7280; }
+.iconBlue { color: #3b82f6; }
+.iconGreen { color: #10b981; }
+.iconRed { color: #ef4444; }
+.iconOrange { color: #f59e0b; }
+.iconPurple { color: #8b5cf6; }
+
+.progressGray { background: #6b7280; }
+.progressBlue { background: #3b82f6; }
+.progressGreen { background: #10b981; }
+.progressRed { background: #ef4444; }
+.progressOrange { background: #f59e0b; }
+.progressPurple { background: #8b5cf6; }
+
+/* Trend Chart */
+.trendChart {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  height: 200px;
+  padding: 0 8px;
+}
+
+.trendBar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.trendBarContainer {
+  flex: 1;
+  width: 100%;
+  background: #f3f4f6;
+  border-radius: 4px;
+  display: flex;
+  align-items: end;
+  min-height: 120px;
+}
+
+.trendBarFill {
+  width: 100%;
+  background: linear-gradient(to top, #3b82f6, #60a5fa);
+  border-radius: 4px;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+.trendLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.trendMonth {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.trendCount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Intake Section */
+.intakeSection {
+  margin-bottom: 32px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.intakeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.intakeCard {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.intakeCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.intakeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.intakeYear {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.intakeTerm {
+  font-size: 14px;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.intakeCount {
+  font-size: 24px;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+/* Replacement Section */
+.replacementSection {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.replacementList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.replacementItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #f3f4f6;
+}
+
+.replacementReason {
+  font-size: 14px;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.replacementCount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  background: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .headerContent h2 {
+    font-size: 1.5rem;
+  }
+  
+  .metricsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .metricCard {
+    padding: 20px;
+  }
+  
+  .metricValue {
+    font-size: 1.75rem;
+  }
+  
+  .chartCard {
+    padding: 20px;
+  }
+  
+  .trendChart {
+    gap: 12px;
+    height: 160px;
+  }
+  
+  .intakeGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .headerContent h2 {
+    font-size: 1.25rem;
+  }
+  
+  .metricCard {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .metricValue {
+    font-size: 1.5rem;
+  }
+  
+  .trendChart {
+    gap: 8px;
+    height: 140px;
+  }
+}
+
+/* AI-NOTE: Comprehensive styling for OfferLetterStats component with responsive design, interactive charts, status indicators, and modern card layouts for analytics dashboard */

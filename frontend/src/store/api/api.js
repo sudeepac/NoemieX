@@ -73,7 +73,28 @@ export const api = createApi({
     'BillingTransaction',
     'BillingEventHistory'
   ],
-  endpoints: () => ({}),
+  endpoints: (builder) => ({
+    // Get all agencies
+    getAgencies: builder.query({
+      query: (params = {}) => ({
+        url: '/agencies',
+        method: 'GET',
+        params,
+      }),
+      providesTags: (result) => [
+        { type: 'Agency', id: 'LIST' },
+        ...(result?.agencies || []).map(({ _id }) => ({
+          type: 'Agency',
+          id: _id,
+        })),
+      ],
+    }),
+  }),
 });
+
+// Export hooks for usage in functional components
+export const {
+  useGetAgenciesQuery,
+} = api;
 
 export default api;

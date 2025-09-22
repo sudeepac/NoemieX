@@ -1,0 +1,537 @@
+/* BillingTransactionsList Component Styles */
+/* AI-NOTE: Follows OfferLettersList.module.css pattern with billing-specific enhancements */
+
+.container {
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.createButton {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.createButton:hover {
+  background: #2563eb;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 250px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filterSelect,
+.filterInput {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 120px;
+  transition: border-color 0.2s;
+}
+
+.filterSelect:focus,
+.filterInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Results Info */
+.resultsInfo {
+  margin-bottom: 16px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Table */
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.table th {
+  background: #f9fafb;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  vertical-align: middle;
+}
+
+.tableRow:hover {
+  background: #f9fafb;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sortable:hover {
+  background: #f3f4f6;
+}
+
+.sortIcon {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Special Table Cell Styles */
+.reference {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  background: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.description {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amount {
+  font-weight: 600;
+  font-size: 14px;
+  color: #059669;
+  text-align: right;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.overdue {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+}
+
+.statusPending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusProcessing {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.statusPaid {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusPartiallyPaid {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.statusOverdue {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.statusDisputed {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.statusCancelled {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.statusRefunded {
+  background: #f0f9ff;
+  color: #0c4a6e;
+}
+
+/* Priority Badges */
+.priorityBadge {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.priorityLow {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.priorityMedium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priorityHigh {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.priorityUrgent {
+  background: #fee2e2;
+  color: #991b1b;
+  animation: pulse 2s infinite;
+}
+
+.overdueBadge {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.viewButton,
+.editButton,
+.deleteButton {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.viewButton {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.viewButton:hover {
+  background: #e5e7eb;
+}
+
+.editButton {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.editButton:hover {
+  background: #bfdbfe;
+}
+
+.deleteButton {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.deleteButton:hover {
+  background: #fecaca;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.paginationButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationInfo {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Loading and Error States */
+.loading,
+.error {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+.error {
+  color: #dc2626;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin: 16px;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.emptyState p {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .table {
+    font-size: 13px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px 12px;
+  }
+  
+  .description {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 8px;
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .filters {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .searchBox {
+    min-width: auto;
+  }
+  
+  .table {
+    font-size: 12px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 8px 10px;
+  }
+  
+  .description {
+    max-width: 120px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .viewButton,
+  .editButton,
+  .deleteButton {
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  
+  .reference {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+  
+  .statusBadge {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  
+  .priorityBadge {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tableContainer {
+    font-size: 11px;
+  }
+  
+  .pagination {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .filters {
+    gap: 8px;
+  }
+  
+  .filterSelect,
+  .filterInput {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .description {
+    max-width: 100px;
+  }
+  
+  .amount {
+    font-size: 12px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .container {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header,
+  .filters,
+  .pagination,
+  .actions {
+    display: none;
+  }
+  
+  .table {
+    font-size: 10px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 4px 6px;
+  }
+}
+
+/* AI-NOTE: Created comprehensive CSS module for BillingTransactionsList with responsive design, billing-specific badges, and enhanced table styling following project patterns */

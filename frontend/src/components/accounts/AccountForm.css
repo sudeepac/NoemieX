@@ -1,0 +1,478 @@
+/* AccountForm Component Styles */
+.account-form-container {
+  padding: 24px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.header-left h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.header-left p {
+  margin: 0;
+  color: #718096;
+  font-size: 16px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Form Container */
+.account-form {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.form-sections {
+  padding: 32px;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 40px;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section h3 {
+  margin: 0 0 24px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d3748;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.form-section h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Address Grid */
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.checkbox-grid label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+.checkbox-grid input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.form-group label input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+}
+
+/* Form Inputs */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: #e53e3e;
+  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+}
+
+/* Input Types */
+.form-group input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.form-group input[type="number"]::-webkit-outer-spin-button,
+.form-group input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-group input[type="date"] {
+  position: relative;
+}
+
+.form-group input[type="checkbox"] {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+}
+
+/* Textarea specific */
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Help Text */
+.help-text {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Error Text */
+.error-text {
+  font-size: 12px;
+  color: #e53e3e;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.error-text::before {
+  content: '⚠';
+  margin-right: 4px;
+}
+
+/* Form Actions */
+.form-actions {
+  padding: 24px 32px;
+  background: #f7fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #3182ce;
+  color: white;
+  border: 1px solid #3182ce;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2c5aa0;
+  border-color: #2c5aa0;
+}
+
+.btn-outline {
+  background: white;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+/* Custom Select Styling */
+.form-group select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+  appearance: none;
+}
+
+.form-group select:disabled {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%9ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Error Container */
+.error-container {
+  text-align: center;
+  padding: 40px 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.error-container h3 {
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+
+.error-container p {
+  color: #7f1d1d;
+  margin-bottom: 16px;
+}
+
+/* Form Section Animations */
+.form-section {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Validation States */
+.form-group.valid input,
+.form-group.valid select,
+.form-group.valid textarea {
+  border-color: #38a169;
+}
+
+.form-group.valid::after {
+  content: '✓';
+  color: #38a169;
+  font-size: 16px;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Focus Management */
+.form-group input:focus + .help-text,
+.form-group select:focus + .help-text,
+.form-group textarea:focus + .help-text {
+  color: #3182ce;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .address-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .account-form-container {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .form-sections {
+    padding: 24px 20px;
+  }
+  
+  .form-section h3 {
+    font-size: 18px;
+  }
+  
+  .form-actions {
+    padding: 20px;
+    flex-direction: column-reverse;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-form-container {
+    padding: 12px;
+  }
+  
+  .page-header,
+  .account-form {
+    margin-left: -12px;
+    margin-right: -12px;
+    border-radius: 0;
+  }
+  
+  .form-sections {
+    padding: 20px 16px;
+  }
+  
+  .form-grid {
+    gap: 16px;
+  }
+  
+  .form-section {
+    margin-bottom: 32px;
+  }
+  
+  .form-section h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .address-grid,
+  .checkbox-grid {
+    gap: 12px;
+  }
+}
+
+/* Subscription Plan Specific Styling */
+.form-group select[id="plan"] {
+  font-weight: 600;
+}
+
+.form-group select[id="plan"] option {
+  font-weight: normal;
+}
+
+/* Feature Checkboxes */
+.checkbox-grid label {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.checkbox-grid label:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.checkbox-grid input[type="checkbox"]:checked + span {
+  color: #3182ce;
+  font-weight: 600;
+}
+
+/* Date Input Styling */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 2px;
+  opacity: 0.6;
+  filter: invert(0.8);
+}
+
+.form-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* AI-NOTE: Comprehensive CSS styling for AccountForm component with account-specific features like subscription plans, billing information, address grids, feature checkboxes, and responsive design following the application's design system */

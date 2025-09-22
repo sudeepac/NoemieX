@@ -11,7 +11,9 @@ import {
   AlertTriangle,
   TrendingUp,
   Database,
-
+  Briefcase,
+  Calendar,
+  CreditCard,
   Menu,
   X,
   LogOut,
@@ -19,11 +21,45 @@ import {
   Bell
 } from 'lucide-react';
 import { logout } from '../../../store/slices/auth.slice';
+import UsersList from '../../../components/users/UsersList';
+import UserForm from '../../../components/users/UserForm';
+import UserDetail from '../../../components/users/UserDetail';
+import AccountsList from '../../../components/accounts/AccountsList';
+import AccountForm from '../../../components/accounts/AccountForm';
+import AccountDetail from '../../../components/accounts/AccountDetail';
+import AgenciesList from '../../../components/agencies/AgenciesList';
+import AgencyForm from '../../../components/agencies/AgencyForm';
+import AgencyDetail from '../../../components/agencies/AgencyDetail';
+import OfferLettersList from '../../../components/offer-letters/OfferLettersList';
+import OfferLetterForm from '../../../components/offer-letters/OfferLetterForm';
+import OfferLetterDetail from '../../../components/offer-letters/OfferLetterDetail';
+import PaymentSchedules from '../../../components/payment-schedules/PaymentSchedules';
+import BillingTransactionsList from '../../../components/billing-transactions/BillingTransactionsList';
+import BillingTransactionForm from '../../../components/billing-transactions/BillingTransactionForm';
+import BillingTransactionDetail from '../../../components/billing-transactions/BillingTransactionDetail';
 import '../portal.styles.css';
 
 const SuperadminPortal = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userView, setUserView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [accountView, setAccountView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedAccountId, setSelectedAccountId] = useState(null);
+  const [editingAccount, setEditingAccount] = useState(null);
+  const [agencyView, setAgencyView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedAgencyId, setSelectedAgencyId] = useState(null);
+  const [editingAgency, setEditingAgency] = useState(null);
+  const [offerLetterView, setOfferLetterView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedOfferLetterId, setSelectedOfferLetterId] = useState(null);
+  const [editingOfferLetter, setEditingOfferLetter] = useState(null);
+  const [paymentScheduleView, setPaymentScheduleView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedPaymentScheduleId, setSelectedPaymentScheduleId] = useState(null);
+  const [editingPaymentSchedule, setEditingPaymentSchedule] = useState(null);
+  const [billingTransactionView, setBillingTransactionView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedBillingTransactionId, setSelectedBillingTransactionId] = useState(null);
+  const [editingBillingTransaction, setEditingBillingTransaction] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -31,10 +67,340 @@ const SuperadminPortal = () => {
     dispatch(logout());
   };
 
+  // User management navigation helpers
+  const handleCreateUser = () => {
+    setEditingUser(null);
+    setUserView('form');
+  };
+
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setUserView('form');
+  };
+
+  const handleViewUser = (userId) => {
+    setSelectedUserId(userId);
+    setUserView('detail');
+  };
+
+  // Account management navigation helpers
+  const handleCreateAccount = () => {
+    setEditingAccount(null);
+    setAccountView('form');
+  };
+
+  const handleEditAccount = (account) => {
+    setEditingAccount(account);
+    setAccountView('form');
+  };
+
+  const handleViewAccount = (accountId) => {
+    setSelectedAccountId(accountId);
+    setAccountView('detail');
+  };
+
+  const handleBackToUsersList = () => {
+    setUserView('list');
+    setSelectedUserId(null);
+    setEditingUser(null);
+  };
+
+  const handleBackToAccountsList = () => {
+    setAccountView('list');
+    setSelectedAccountId(null);
+    setEditingAccount(null);
+  };
+
+  // Agency management navigation helpers
+  const handleCreateAgency = () => {
+    setEditingAgency(null);
+    setAgencyView('form');
+  };
+
+  const handleEditAgency = (agency) => {
+    setEditingAgency(agency);
+    setAgencyView('form');
+  };
+
+  const handleViewAgency = (agencyId) => {
+    setSelectedAgencyId(agencyId);
+    setAgencyView('detail');
+  };
+
+  const handleBackToAgenciesList = () => {
+    setAgencyView('list');
+    setSelectedAgencyId(null);
+    setEditingAgency(null);
+  };
+
+  // Offer letter management navigation helpers
+  const handleCreateOfferLetter = () => {
+    setEditingOfferLetter(null);
+    setOfferLetterView('form');
+  };
+
+  const handleEditOfferLetter = (offerLetter) => {
+    setEditingOfferLetter(offerLetter);
+    setOfferLetterView('form');
+  };
+
+  const handleViewOfferLetter = (offerLetterId) => {
+    setSelectedOfferLetterId(offerLetterId);
+    setOfferLetterView('detail');
+  };
+
+  const handleBackToOfferLettersList = () => {
+    setOfferLetterView('list');
+    setSelectedOfferLetterId(null);
+    setEditingOfferLetter(null);
+  };
+
+  // Payment schedule management navigation helpers
+  const handleCreatePaymentSchedule = () => {
+    setEditingPaymentSchedule(null);
+    setPaymentScheduleView('form');
+  };
+
+  const handleEditPaymentSchedule = (paymentSchedule) => {
+    setEditingPaymentSchedule(paymentSchedule);
+    setPaymentScheduleView('form');
+  };
+
+  const handleViewPaymentSchedule = (paymentScheduleId) => {
+    setSelectedPaymentScheduleId(paymentScheduleId);
+    setPaymentScheduleView('detail');
+  };
+
+  const handleBackToPaymentSchedulesList = () => {
+    setPaymentScheduleView('list');
+    setSelectedPaymentScheduleId(null);
+    setEditingPaymentSchedule(null);
+  };
+
+  // Billing transaction management navigation helpers
+  const handleCreateBillingTransaction = () => {
+    setEditingBillingTransaction(null);
+    setBillingTransactionView('form');
+  };
+
+  const handleEditBillingTransaction = (billingTransaction) => {
+    setEditingBillingTransaction(billingTransaction);
+    setBillingTransactionView('form');
+  };
+
+  const handleViewBillingTransaction = (billingTransactionId) => {
+    setSelectedBillingTransactionId(billingTransactionId);
+    setBillingTransactionView('detail');
+  };
+
+  const handleBackToBillingTransactionsList = () => {
+    setBillingTransactionView('list');
+    setSelectedBillingTransactionId(null);
+    setEditingBillingTransaction(null);
+  };
+
+  // Reset views when switching tabs
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (tabId !== 'users') {
+      setUserView('list');
+      setSelectedUserId(null);
+      setEditingUser(null);
+    }
+    if (tabId !== 'accounts') {
+      setAccountView('list');
+      setSelectedAccountId(null);
+      setEditingAccount(null);
+    }
+    if (tabId !== 'agencies') {
+      setAgencyView('list');
+      setSelectedAgencyId(null);
+      setEditingAgency(null);
+    }
+    if (tabId !== 'offer-letters') {
+      setOfferLetterView('list');
+      setSelectedOfferLetterId(null);
+      setEditingOfferLetter(null);
+    }
+    if (tabId !== 'billing-transactions') {
+      setBillingTransactionView('list');
+      setSelectedBillingTransactionId(null);
+      setEditingBillingTransaction(null);
+    }
+    setSidebarOpen(false);
+  };
+
+  // Render user management content
+  const renderUserManagement = () => {
+    switch (userView) {
+      case 'form':
+        return (
+          <UserForm
+            user={editingUser}
+            onCancel={handleBackToUsersList}
+            onSuccess={handleBackToUsersList}
+          />
+        );
+      case 'detail':
+        return (
+          <UserDetail
+            userId={selectedUserId}
+            onBack={handleBackToUsersList}
+            onEdit={handleEditUser}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <UsersList
+            onCreateUser={handleCreateUser}
+            onEditUser={handleEditUser}
+            onViewUser={handleViewUser}
+          />
+        );
+    }
+  };
+
+  // Render account management content
+  const renderAccountManagement = () => {
+    switch (accountView) {
+      case 'form':
+        return (
+          <AccountForm
+            account={editingAccount}
+            onCancel={handleBackToAccountsList}
+            onSuccess={handleBackToAccountsList}
+          />
+        );
+      case 'detail':
+        return (
+          <AccountDetail
+            accountId={selectedAccountId}
+            onBack={handleBackToAccountsList}
+            onEdit={handleEditAccount}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <AccountsList
+            onCreateAccount={handleCreateAccount}
+            onEditAccount={handleEditAccount}
+            onViewAccount={handleViewAccount}
+          />
+        );
+    }
+  };
+
+  // Render agency management content
+  const renderAgencyManagement = () => {
+    switch (agencyView) {
+      case 'form':
+        return (
+          <AgencyForm
+            agency={editingAgency}
+            onCancel={handleBackToAgenciesList}
+            onSuccess={handleBackToAgenciesList}
+          />
+        );
+      case 'detail':
+        return (
+          <AgencyDetail
+            agencyId={selectedAgencyId}
+            onBack={handleBackToAgenciesList}
+            onEdit={handleEditAgency}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <AgenciesList
+            onCreateAgency={handleCreateAgency}
+            onEditAgency={handleEditAgency}
+            onViewAgency={handleViewAgency}
+          />
+        );
+    }
+  };
+
+  // Render offer letter management content
+  const renderOfferLetterManagement = () => {
+    switch (offerLetterView) {
+      case 'form':
+        return (
+          <OfferLetterForm
+            offerLetter={editingOfferLetter}
+            onCancel={handleBackToOfferLettersList}
+            onSuccess={handleBackToOfferLettersList}
+          />
+        );
+      case 'detail':
+        return (
+          <OfferLetterDetail
+            offerLetterId={selectedOfferLetterId}
+            onBack={handleBackToOfferLettersList}
+            onEdit={handleEditOfferLetter}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <OfferLettersList
+            onCreateOfferLetter={handleCreateOfferLetter}
+            onEditOfferLetter={handleEditOfferLetter}
+            onViewOfferLetter={handleViewOfferLetter}
+          />
+        );
+    }
+  };
+
+  // Render payment schedule management content
+  const renderPaymentScheduleManagement = () => {
+    return (
+      <PaymentSchedules />
+    );
+  };
+
+  // Render billing transaction management content
+  const renderBillingTransactionManagement = () => {
+    switch (billingTransactionView) {
+      case 'form':
+        return (
+          <BillingTransactionForm
+            billingTransaction={editingBillingTransaction}
+            onCancel={handleBackToBillingTransactionsList}
+            onSuccess={handleBackToBillingTransactionsList}
+          />
+        );
+      case 'detail':
+        return (
+          <BillingTransactionDetail
+            billingTransactionId={selectedBillingTransactionId}
+            onBack={handleBackToBillingTransactionsList}
+            onEdit={handleEditBillingTransaction}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <BillingTransactionsList
+            portal="superadmin"
+            onCreateBillingTransaction={handleCreateBillingTransaction}
+            onEditBillingTransaction={handleEditBillingTransaction}
+            onViewBillingTransaction={handleViewBillingTransaction}
+          />
+        );
+    }
+  };
+
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5" /> },
     { id: 'users', label: 'User Management', icon: <Users className="w-5 h-5" /> },
     { id: 'accounts', label: 'Account Management', icon: <Building2 className="w-5 h-5" /> },
+    { id: 'agencies', label: 'Agency Management', icon: <Briefcase className="w-5 h-5" /> },
+    { id: 'offer-letters', label: 'Offer Letters', icon: <Database className="w-5 h-5" /> },
+    { id: 'payment-schedules', label: 'Payment Schedules', icon: <Calendar className="w-5 h-5" /> },
+    { id: 'billing-transactions', label: 'Billing Transactions', icon: <CreditCard className="w-5 h-5" /> },
     { id: 'security', label: 'Security Center', icon: <Shield className="w-5 h-5" /> },
     { id: 'system', label: 'System Settings', icon: <Settings className="w-5 h-5" /> },
     { id: 'analytics', label: 'Analytics', icon: <Activity className="w-5 h-5" /> }
@@ -227,21 +593,17 @@ const SuperadminPortal = () => {
       case 'dashboard':
         return renderDashboard();
       case 'users':
-        return (
-          <div className="content-placeholder">
-            <Users className="w-16 h-16" />
-            <h2>User Management</h2>
-            <p>Manage all users across the platform</p>
-          </div>
-        );
+        return renderUserManagement();
       case 'accounts':
-        return (
-          <div className="content-placeholder">
-            <Building2 className="w-16 h-16" />
-            <h2>Account Management</h2>
-            <p>Manage tenant accounts and organizations</p>
-          </div>
-        );
+        return renderAccountManagement();
+      case 'agencies':
+        return renderAgencyManagement();
+      case 'offer-letters':
+        return renderOfferLetterManagement();
+      case 'payment-schedules':
+        return renderPaymentScheduleManagement();
+      case 'billing-transactions':
+        return renderBillingTransactionManagement();
       case 'security':
         return (
           <div className="content-placeholder">
@@ -293,10 +655,7 @@ const SuperadminPortal = () => {
             <button
               key={item.id}
               className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
-              onClick={() => {
-                setActiveTab(item.id);
-                setSidebarOpen(false);
-              }}
+              onClick={() => handleTabChange(item.id)}
             >
               {item.icon}
               <span>{item.label}</span>

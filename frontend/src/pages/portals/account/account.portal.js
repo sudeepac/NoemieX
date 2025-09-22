@@ -21,11 +21,37 @@ import {
   Filter
 } from 'lucide-react';
 import { logout } from '../../../store/slices/auth.slice';
+import UsersList from '../../../components/users/UsersList';
+import UserForm from '../../../components/users/UserForm';
+import UserDetail from '../../../components/users/UserDetail';
+import AccountSelector from '../../../components/accounts/AccountSelector';
+import AgenciesList from '../../../components/agencies/AgenciesList';
+import AgencyForm from '../../../components/agencies/AgencyForm';
+import AgencyDetail from '../../../components/agencies/AgencyDetail';
+import OfferLettersList from '../../../components/offer-letters/OfferLettersList';
+import OfferLetterForm from '../../../components/offer-letters/OfferLetterForm';
+import OfferLetterDetail from '../../../components/offer-letters/OfferLetterDetail';
+import BillingTransactionsList from '../../../components/billing-transactions/BillingTransactionsList';
+import BillingTransactionForm from '../../../components/billing-transactions/BillingTransactionForm';
+import BillingTransactionDetail from '../../../components/billing-transactions/BillingTransactionDetail';
 import '../portal.styles.css';
 
 const AccountPortal = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userView, setUserView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [agencyView, setAgencyView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedAgencyId, setSelectedAgencyId] = useState(null);
+  const [editingAgency, setEditingAgency] = useState(null);
+  const [offerLetterView, setOfferLetterView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedOfferLetterId, setSelectedOfferLetterId] = useState(null);
+  const [editingOfferLetter, setEditingOfferLetter] = useState(null);
+  const [billingTransactionView, setBillingTransactionView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedBillingTransactionId, setSelectedBillingTransactionId] = useState(null);
+  const [editingBillingTransaction, setEditingBillingTransaction] = useState(null);
+  const [accountView, setAccountView] = useState('overview'); // 'overview', 'agencies', 'billing', 'settings'
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -33,8 +59,283 @@ const AccountPortal = () => {
     dispatch(logout());
   };
 
+  // User management navigation helpers
+  const handleCreateUser = () => {
+    setEditingUser(null);
+    setUserView('form');
+  };
+
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setUserView('form');
+  };
+
+  const handleViewUser = (userId) => {
+    setSelectedUserId(userId);
+    setUserView('detail');
+  };
+
+  const handleBackToUsersList = () => {
+    setUserView('list');
+    setSelectedUserId(null);
+    setEditingUser(null);
+  };
+
+  // Agency management navigation helpers
+  const handleCreateAgency = () => {
+    setEditingAgency(null);
+    setAgencyView('form');
+  };
+
+  const handleEditAgency = (agency) => {
+    setEditingAgency(agency);
+    setAgencyView('form');
+  };
+
+  const handleViewAgency = (agencyId) => {
+    setSelectedAgencyId(agencyId);
+    setAgencyView('detail');
+  };
+
+  const handleBackToAgenciesList = () => {
+    setAgencyView('list');
+    setSelectedAgencyId(null);
+    setEditingAgency(null);
+  };
+
+  // Offer letter management navigation helpers
+  const handleCreateOfferLetter = () => {
+    setEditingOfferLetter(null);
+    setOfferLetterView('form');
+  };
+
+  const handleEditOfferLetter = (offerLetter) => {
+    setEditingOfferLetter(offerLetter);
+    setOfferLetterView('form');
+  };
+
+  const handleViewOfferLetter = (offerLetterId) => {
+    setSelectedOfferLetterId(offerLetterId);
+    setOfferLetterView('detail');
+  };
+
+  const handleBackToOfferLettersList = () => {
+    setOfferLetterView('list');
+    setSelectedOfferLetterId(null);
+    setEditingOfferLetter(null);
+  };
+
+  // Billing transaction management navigation helpers
+  const handleCreateBillingTransaction = () => {
+    setEditingBillingTransaction(null);
+    setBillingTransactionView('form');
+  };
+
+  const handleEditBillingTransaction = (billingTransaction) => {
+    setEditingBillingTransaction(billingTransaction);
+    setBillingTransactionView('form');
+  };
+
+  const handleViewBillingTransaction = (billingTransactionId) => {
+    setSelectedBillingTransactionId(billingTransactionId);
+    setBillingTransactionView('detail');
+  };
+
+  const handleBackToBillingTransactionsList = () => {
+    setBillingTransactionView('list');
+    setSelectedBillingTransactionId(null);
+    setEditingBillingTransaction(null);
+  };
+
+  // Handle account view change from AccountSelector
+  const handleAccountViewChange = (view) => {
+    setAccountView(view);
+    // Update active tab based on account view
+    switch (view) {
+      case 'agencies':
+        setActiveTab('agencies');
+        break;
+      case 'billing':
+        setActiveTab('billing');
+        break;
+      case 'settings':
+        setActiveTab('settings');
+        break;
+      default:
+        setActiveTab('dashboard');
+        break;
+    }
+  };
+
+  // Reset user and agency views when switching tabs
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (tabId !== 'users') {
+      setUserView('list');
+      setSelectedUserId(null);
+      setEditingUser(null);
+    }
+    if (tabId !== 'agencies') {
+      setAgencyView('list');
+      setSelectedAgencyId(null);
+      setEditingAgency(null);
+    }
+    if (tabId !== 'offers') {
+      setOfferLetterView('list');
+      setSelectedOfferLetterId(null);
+      setEditingOfferLetter(null);
+    }
+    if (tabId !== 'billing') {
+      setBillingTransactionView('list');
+      setSelectedBillingTransactionId(null);
+      setEditingBillingTransaction(null);
+    }
+    // Update account view based on tab
+    switch (tabId) {
+      case 'agencies':
+        setAccountView('agencies');
+        break;
+      case 'billing':
+        setAccountView('billing');
+        break;
+      case 'settings':
+        setAccountView('settings');
+        break;
+      case 'dashboard':
+        setAccountView('overview');
+        break;
+    }
+    setSidebarOpen(false);
+  };
+
+  // Render user management content
+  const renderUserManagement = () => {
+    switch (userView) {
+      case 'form':
+        return (
+          <UserForm
+            user={editingUser}
+            onCancel={handleBackToUsersList}
+            onSuccess={handleBackToUsersList}
+          />
+        );
+      case 'detail':
+        return (
+          <UserDetail
+            userId={selectedUserId}
+            onBack={handleBackToUsersList}
+            onEdit={handleEditUser}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <UsersList
+            onCreateUser={handleCreateUser}
+            onEditUser={handleEditUser}
+            onViewUser={handleViewUser}
+          />
+        );
+    }
+  };
+
+  // Render agency management content
+  const renderAgencyManagement = () => {
+    switch (agencyView) {
+      case 'form':
+        return (
+          <AgencyForm
+            agency={editingAgency}
+            onCancel={handleBackToAgenciesList}
+            onSuccess={handleBackToAgenciesList}
+          />
+        );
+      case 'detail':
+        return (
+          <AgencyDetail
+            agencyId={selectedAgencyId}
+            onBack={handleBackToAgenciesList}
+            onEdit={handleEditAgency}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <AgenciesList
+            onCreateAgency={handleCreateAgency}
+            onEditAgency={handleEditAgency}
+            onViewAgency={handleViewAgency}
+          />
+        );
+    }
+  };
+
+  // Render offer letter management content
+  const renderOfferLetterManagement = () => {
+    switch (offerLetterView) {
+      case 'form':
+        return (
+          <OfferLetterForm
+            offerLetter={editingOfferLetter}
+            onCancel={handleBackToOfferLettersList}
+            onSuccess={handleBackToOfferLettersList}
+          />
+        );
+      case 'detail':
+        return (
+          <OfferLetterDetail
+            offerLetterId={selectedOfferLetterId}
+            onBack={handleBackToOfferLettersList}
+            onEdit={handleEditOfferLetter}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <OfferLettersList
+            onCreateOfferLetter={handleCreateOfferLetter}
+            onEditOfferLetter={handleEditOfferLetter}
+            onViewOfferLetter={handleViewOfferLetter}
+          />
+        );
+    }
+  };
+
+  // Render billing transaction management content
+  const renderBillingTransactionManagement = () => {
+    switch (billingTransactionView) {
+      case 'form':
+        return (
+          <BillingTransactionForm
+            billingTransaction={editingBillingTransaction}
+            onCancel={handleBackToBillingTransactionsList}
+            onSuccess={handleBackToBillingTransactionsList}
+          />
+        );
+      case 'detail':
+        return (
+          <BillingTransactionDetail
+            billingTransactionId={selectedBillingTransactionId}
+            onBack={handleBackToBillingTransactionsList}
+            onEdit={handleEditBillingTransaction}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <BillingTransactionsList
+            portal="account"
+            onCreateBillingTransaction={handleCreateBillingTransaction}
+            onEditBillingTransaction={handleEditBillingTransaction}
+            onViewBillingTransaction={handleViewBillingTransaction}
+          />
+        );
+    }
+  };
+
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5" /> },
+    { id: 'users', label: 'User Management', icon: <UserCheck className="w-5 h-5" /> },
     { id: 'agencies', label: 'Agency Management', icon: <Building2 className="w-5 h-5" /> },
     { id: 'students', label: 'Student Management', icon: <Users className="w-5 h-5" /> },
     { id: 'offers', label: 'Offer Letters', icon: <FileText className="w-5 h-5" /> },
@@ -174,6 +475,12 @@ const AccountPortal = () => {
 
   const renderDashboard = () => (
     <div className="dashboard-content">
+      {/* Account Context Selector */}
+      <AccountSelector 
+        selectedView={accountView}
+        onAccountChange={handleAccountViewChange}
+      />
+      
       <div className="dashboard-header">
         <h1>Institution Dashboard</h1>
         <p>Welcome back, {user?.firstName}! Manage your partner agencies and monitor student enrollment performance.</p>
@@ -342,29 +649,27 @@ const AccountPortal = () => {
     switch (activeTab) {
       case 'dashboard':
         return renderDashboard();
-      case 'tenants':
-        return renderTenants();
       case 'users':
+        return renderUserManagement();
+      case 'agencies':
+        return renderAgencyManagement();
+      case 'students':
         return (
           <div className="content-placeholder">
             <Users className="w-16 h-16" />
-            <h2>User Management</h2>
-            <p>Manage users across all your tenants</p>
+            <h2>Student Management</h2>
+            <p>Manage student applications and records</p>
           </div>
         );
+      case 'offers':
+        return renderOfferLetterManagement();
       case 'billing':
-        return (
-          <div className="content-placeholder">
-            <CreditCard className="w-16 h-16" />
-            <h2>Billing & Invoices</h2>
-            <p>View billing information and manage invoices</p>
-          </div>
-        );
+        return renderBillingTransactionManagement();
       case 'reports':
         return (
           <div className="content-placeholder">
-            <FileText className="w-16 h-16" />
-            <h2>Reports</h2>
+            <TrendingUp className="w-16 h-16" />
+            <h2>Reports & Analytics</h2>
             <p>Generate and view detailed reports</p>
           </div>
         );
@@ -372,7 +677,7 @@ const AccountPortal = () => {
         return (
           <div className="content-placeholder">
             <Settings className="w-16 h-16" />
-            <h2>Account Settings</h2>
+            <h2>Institution Settings</h2>
             <p>Configure your account preferences</p>
           </div>
         );
@@ -403,10 +708,7 @@ const AccountPortal = () => {
             <button
               key={item.id}
               className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
-              onClick={() => {
-                setActiveTab(item.id);
-                setSidebarOpen(false);
-              }}
+              onClick={() => handleTabChange(item.id)}
             >
               {item.icon}
               <span>{item.label}</span>

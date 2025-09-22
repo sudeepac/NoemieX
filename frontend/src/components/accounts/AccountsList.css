@@ -1,0 +1,524 @@
+/* AccountsList Component Styles */
+.accounts-list-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-left h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.header-left p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Filters Section */
+.filters-section {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.filters-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.filters-panel {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+/* Results Summary */
+.results-summary {
+  margin-bottom: 16px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Table Styles */
+.table-container {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accounts-table th {
+  background: #f9fafb;
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.accounts-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.accounts-table th.sortable:hover {
+  background: #f3f4f6;
+}
+
+.accounts-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: top;
+}
+
+.accounts-table tr:hover {
+  background: #f9fafb;
+}
+
+.accounts-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Account Info */
+.account-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.account-name {
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.account-id {
+  font-size: 12px;
+  color: #6b7280;
+  font-family: monospace;
+}
+
+/* Contact Info */
+.contact-info {
+  font-size: 14px;
+}
+
+.contact-info .phone {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Subscription Info */
+.subscription-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.plan-badge.plan-free {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.plan-badge.plan-basic {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.plan-badge.plan-professional {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.plan-badge.plan-enterprise {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.subscription-status {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.subscription-status.active {
+  color: #059669;
+}
+
+.subscription-status.trial {
+  color: #d97706;
+}
+
+.subscription-status.expired {
+  color: #dc2626;
+}
+
+.subscription-status.cancelled {
+  color: #6b7280;
+}
+
+.trial-info {
+  font-size: 11px;
+  color: #d97706;
+  font-weight: 500;
+}
+
+/* Billing Info */
+.billing-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.billing-status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.billing-status.current {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.billing-status.overdue {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.billing-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.revenue {
+  color: #059669;
+  font-weight: 500;
+}
+
+.outstanding {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Counts */
+.counts {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.pagination-info {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.btn-outline {
+  background: white;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #059669;
+  border-color: #059669;
+}
+
+.btn-warning {
+  background: #f59e0b;
+  color: white;
+  border-color: #f59e0b;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background: #d97706;
+  border-color: #d97706;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.icon {
+  font-size: 16px;
+}
+
+/* Error Container */
+.error-container {
+  text-align: center;
+  padding: 40px 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.error-container h3 {
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+
+.error-container p {
+  color: #7f1d1d;
+  margin-bottom: 16px;
+}
+
+/* No Data */
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .accounts-table {
+    font-size: 13px;
+  }
+  
+  .accounts-table th,
+  .accounts-table td {
+    padding: 12px 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .accounts-list-container {
+    padding: 16px;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .filters-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .search-box {
+    max-width: none;
+  }
+  
+  .filters-panel {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .accounts-table {
+    min-width: 800px;
+  }
+  
+  .pagination-container {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+/* AI-NOTE: Created comprehensive CSS for AccountsList with account-specific styling including subscription plan badges, billing status indicators, trial info, and responsive design following the application's design system */

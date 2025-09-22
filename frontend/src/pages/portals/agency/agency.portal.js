@@ -14,6 +14,7 @@ import {
   Building2,
   DollarSign,
   UserCheck,
+  CreditCard,
   Menu,
   X,
   LogOut,
@@ -24,11 +25,38 @@ import {
   Filter
 } from 'lucide-react';
 import { logout } from '../../../store/slices/auth.slice';
+import UsersList from '../../../components/users/UsersList';
+import UserForm from '../../../components/users/UserForm';
+import UserDetail from '../../../components/users/UserDetail';
+import AgencyForm from '../../../components/agencies/AgencyForm';
+import AgencyDetail from '../../../components/agencies/AgencyDetail';
+import AgencyStats from '../../../components/agencies/AgencyStats';
+import OfferLettersList from '../../../components/offer-letters/OfferLettersList';
+import OfferLetterForm from '../../../components/offer-letters/OfferLetterForm';
+import OfferLetterDetail from '../../../components/offer-letters/OfferLetterDetail';
+import PaymentSchedules from '../../../components/payment-schedules/PaymentSchedules';
+import BillingTransactionsList from '../../../components/billing-transactions/BillingTransactionsList';
+import BillingTransactionForm from '../../../components/billing-transactions/BillingTransactionForm';
+import BillingTransactionDetail from '../../../components/billing-transactions/BillingTransactionDetail';
 import '../portal.styles.css';
 
 const AgencyPortal = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userView, setUserView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [agencyView, setAgencyView] = useState('profile'); // 'profile', 'edit', 'stats'
+  const [editingAgency, setEditingAgency] = useState(false);
+  const [offerLetterView, setOfferLetterView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedOfferLetterId, setSelectedOfferLetterId] = useState(null);
+  const [editingOfferLetter, setEditingOfferLetter] = useState(null);
+  const [paymentScheduleView, setPaymentScheduleView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedPaymentScheduleId, setSelectedPaymentScheduleId] = useState(null);
+  const [editingPaymentSchedule, setEditingPaymentSchedule] = useState(null);
+  const [billingTransactionView, setBillingTransactionView] = useState('list'); // 'list', 'form', 'detail'
+  const [selectedBillingTransactionId, setSelectedBillingTransactionId] = useState(null);
+  const [editingBillingTransaction, setEditingBillingTransaction] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -36,10 +64,209 @@ const AgencyPortal = () => {
     dispatch(logout());
   };
 
+// AI-NOTE: Added comprehensive agency self-management capabilities including profile editing, stats viewing, and navigation helpers for agency portal
+
+  // User management navigation helpers
+  const handleCreateUser = () => {
+    setEditingUser(null);
+    setUserView('form');
+  };
+
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setUserView('form');
+  };
+
+  const handleViewUser = (userId) => {
+    setSelectedUserId(userId);
+    setUserView('detail');
+  };
+
+  const handleBackToUsersList = () => {
+    setUserView('list');
+    setSelectedUserId(null);
+    setEditingUser(null);
+  };
+
+  // Agency management navigation helpers
+  const handleEditAgencyProfile = () => {
+    setEditingAgency(true);
+    setAgencyView('edit');
+  };
+
+  const handleViewAgencyStats = () => {
+    setAgencyView('stats');
+  };
+
+  const handleBackToAgencyProfile = () => {
+    setAgencyView('profile');
+    setEditingAgency(false);
+  };
+
+  // Offer letter management navigation helpers
+  const handleCreateOfferLetter = () => {
+    setEditingOfferLetter(null);
+    setOfferLetterView('form');
+  };
+
+  const handleEditOfferLetter = (offerLetter) => {
+    setEditingOfferLetter(offerLetter);
+    setOfferLetterView('form');
+  };
+
+  const handleViewOfferLetter = (offerLetterId) => {
+    setSelectedOfferLetterId(offerLetterId);
+    setOfferLetterView('detail');
+  };
+
+  const handleBackToOfferLettersList = () => {
+    setOfferLetterView('list');
+    setSelectedOfferLetterId(null);
+    setEditingOfferLetter(null);
+  };
+
+  // Payment schedule management navigation helpers
+  const handleCreatePaymentSchedule = () => {
+    setEditingPaymentSchedule(null);
+    setPaymentScheduleView('form');
+  };
+
+  const handleEditPaymentSchedule = (paymentSchedule) => {
+    setEditingPaymentSchedule(paymentSchedule);
+    setPaymentScheduleView('form');
+  };
+
+  const handleViewPaymentSchedule = (paymentScheduleId) => {
+    setSelectedPaymentScheduleId(paymentScheduleId);
+    setPaymentScheduleView('detail');
+  };
+
+  const handleBackToPaymentSchedulesList = () => {
+    setPaymentScheduleView('list');
+    setSelectedPaymentScheduleId(null);
+    setEditingPaymentSchedule(null);
+  };
+
+  // Billing transaction management navigation helpers
+  const handleCreateBillingTransaction = () => {
+    setEditingBillingTransaction(null);
+    setBillingTransactionView('form');
+  };
+
+  const handleEditBillingTransaction = (billingTransaction) => {
+    setEditingBillingTransaction(billingTransaction);
+    setBillingTransactionView('form');
+  };
+
+  const handleViewBillingTransaction = (billingTransactionId) => {
+    setSelectedBillingTransactionId(billingTransactionId);
+    setBillingTransactionView('detail');
+  };
+
+  const handleBackToBillingTransactionsList = () => {
+    setBillingTransactionView('list');
+    setSelectedBillingTransactionId(null);
+    setEditingBillingTransaction(null);
+  };
+
+  // Tab change handler to reset user and agency views
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setSidebarOpen(false);
+    if (tabId !== 'users') {
+      setUserView('list');
+      setSelectedUserId(null);
+      setEditingUser(null);
+    }
+    if (tabId !== 'settings') {
+      setAgencyView('profile');
+      setEditingAgency(false);
+    }
+    if (tabId !== 'offers') {
+      setOfferLetterView('list');
+      setSelectedOfferLetterId(null);
+      setEditingOfferLetter(null);
+    }
+    if (tabId !== 'billing') {
+      setBillingTransactionView('list');
+      setSelectedBillingTransactionId(null);
+      setEditingBillingTransaction(null);
+    }
+  };
+
+  // Render user management content based on current view
+  const renderUserManagement = () => {
+    switch (userView) {
+      case 'form':
+        return (
+          <UserForm
+            user={editingUser}
+            onCancel={handleBackToUsersList}
+            onSuccess={handleBackToUsersList}
+          />
+        );
+      case 'detail':
+        return (
+          <UserDetail
+            userId={selectedUserId}
+            onBack={handleBackToUsersList}
+            onEdit={handleEditUser}
+          />
+        );
+      default:
+        return (
+          <UsersList
+            onCreateUser={handleCreateUser}
+            onEditUser={handleEditUser}
+            onViewUser={handleViewUser}
+          />
+        );
+    }
+  };
+
+  // Render agency management content for settings tab
+  const renderAgencyManagement = () => {
+    switch (agencyView) {
+      case 'edit':
+        return (
+          <AgencyForm
+            agency={user?.agency} // Current agency data from user context
+            onCancel={handleBackToAgencyProfile}
+            onSuccess={handleBackToAgencyProfile}
+            isOwnAgency={true} // Flag to indicate self-management
+          />
+        );
+      case 'stats':
+        return (
+          <AgencyStats
+            agency={user?.agency}
+            stats={null} // Will be fetched by component
+            loading={false}
+            error={null}
+          />
+        );
+      case 'profile':
+      default:
+        return (
+          <AgencyDetail
+            agencyId={user?.agency?.id}
+            onBack={null} // No back button for own agency
+            onEdit={handleEditAgencyProfile}
+            onViewStats={handleViewAgencyStats}
+            isOwnAgency={true} // Flag to indicate self-management
+          />
+        );
+    }
+  };
+
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: <BarChart3 className="w-5 h-5" /> },
+    { id: 'users', label: 'User Management', icon: <UserCheck className="w-5 h-5" /> },
     { id: 'students', label: 'Student Management', icon: <Users className="w-5 h-5" /> },
     { id: 'applications', label: 'Applications', icon: <FileText className="w-5 h-5" /> },
+    { id: 'offers', label: 'Offer Letters', icon: <FileText className="w-5 h-5" /> },
+    { id: 'payment-schedules', label: 'Payment Schedules', icon: <Calendar className="w-5 h-5" /> },
+    { id: 'billing', label: 'Billing & Transactions', icon: <CreditCard className="w-5 h-5" /> },
     { id: 'institutions', label: 'Partner Institutions', icon: <Building2 className="w-5 h-5" /> },
     { id: 'commissions', label: 'Commissions', icon: <DollarSign className="w-5 h-5" /> },
     { id: 'reports', label: 'Reports & Analytics', icon: <TrendingUp className="w-5 h-5" /> },
@@ -435,10 +662,88 @@ const AgencyPortal = () => {
     </div>
   );
 
+  // Render offer letter management content
+  const renderOfferLetterManagement = () => {
+    switch (offerLetterView) {
+      case 'form':
+        return (
+          <OfferLetterForm
+            offerLetter={editingOfferLetter}
+            onCancel={handleBackToOfferLettersList}
+            onSuccess={handleBackToOfferLettersList}
+          />
+        );
+      case 'detail':
+        return (
+          <OfferLetterDetail
+            offerLetterId={selectedOfferLetterId}
+            onBack={handleBackToOfferLettersList}
+            onEdit={handleEditOfferLetter}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <OfferLettersList
+            onCreateOfferLetter={handleCreateOfferLetter}
+            onEditOfferLetter={handleEditOfferLetter}
+            onViewOfferLetter={handleViewOfferLetter}
+          />
+        );
+    }
+  };
+
+  // Render payment schedule management content
+  const renderPaymentScheduleManagement = () => {
+    return (
+      <PaymentSchedules />
+    );
+  };
+
+  // Render billing transaction management content
+  const renderBillingTransactionManagement = () => {
+    switch (billingTransactionView) {
+      case 'form':
+        return (
+          <BillingTransactionForm
+            billingTransaction={editingBillingTransaction}
+            onCancel={handleBackToBillingTransactionsList}
+            onSuccess={handleBackToBillingTransactionsList}
+          />
+        );
+      case 'detail':
+        return (
+          <BillingTransactionDetail
+            billingTransactionId={selectedBillingTransactionId}
+            onBack={handleBackToBillingTransactionsList}
+            onEdit={handleEditBillingTransaction}
+          />
+        );
+      case 'list':
+      default:
+        return (
+          <BillingTransactionsList
+            portal="agency"
+            onCreateBillingTransaction={handleCreateBillingTransaction}
+            onEditBillingTransaction={handleEditBillingTransaction}
+            onViewBillingTransaction={handleViewBillingTransaction}
+          />
+        );
+    }
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
         return renderDashboard();
+      case 'users':
+        return renderUserManagement();
+      case 'offers':
+        return renderOfferLetterManagement();
+      case 'payment-schedules':
+        return renderPaymentScheduleManagement();
+      case 'billing':
+        return renderBillingTransactionManagement();
       case 'projects':
         return renderProjects();
       case 'clients':
@@ -474,13 +779,7 @@ const AgencyPortal = () => {
           </div>
         );
       case 'settings':
-        return (
-          <div className="content-placeholder">
-            <Settings className="w-16 h-16" />
-            <h2>Settings</h2>
-            <p>Configure your agency preferences</p>
-          </div>
-        );
+        return renderAgencyManagement();
       default:
         return renderDashboard();
     }
@@ -508,10 +807,7 @@ const AgencyPortal = () => {
             <button
               key={item.id}
               className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
-              onClick={() => {
-                setActiveTab(item.id);
-                setSidebarOpen(false);
-              }}
+              onClick={() => handleTabChange(item.id)}
             >
               {item.icon}
               <span>{item.label}</span>

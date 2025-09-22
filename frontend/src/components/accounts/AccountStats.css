@@ -1,0 +1,507 @@
+/* Account Stats Container */
+.account-stats-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Loading State */
+.stats-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #3182ce;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.stats-loading p {
+  color: #718096;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Error State */
+.stats-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #e53e3e;
+}
+
+.stats-error .w-6 {
+  margin-bottom: 1rem;
+}
+
+.stats-error p {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.error-message {
+  font-size: 0.875rem;
+  color: #a0aec0;
+  margin: 0;
+}
+
+/* Empty State */
+.stats-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #a0aec0;
+}
+
+.stats-empty .w-12 {
+  margin-bottom: 1rem;
+}
+
+.stats-empty p {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+/* Main Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent-color);
+}
+
+.stat-card.primary {
+  --accent-color: #3182ce;
+}
+
+.stat-card.success {
+  --accent-color: #38a169;
+}
+
+.stat-card.info {
+  --accent-color: #0bc5ea;
+}
+
+.stat-card.warning {
+  --accent-color: #ed8936;
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  background: rgba(var(--accent-color-rgb), 0.1);
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.stat-card.primary .stat-icon {
+  --accent-color-rgb: 49, 130, 206;
+}
+
+.stat-card.success .stat-icon {
+  --accent-color-rgb: 56, 161, 105;
+}
+
+.stat-card.info .stat-icon {
+  --accent-color-rgb: 11, 197, 234;
+}
+
+.stat-card.warning .stat-icon {
+  --accent-color-rgb: 237, 137, 54;
+}
+
+.stat-content {
+  margin-bottom: 0.75rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-change {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stat-change.up {
+  color: #38a169;
+}
+
+.stat-change.down {
+  color: #e53e3e;
+}
+
+.stat-description {
+  font-size: 0.75rem;
+  color: #718096;
+  line-height: 1.4;
+}
+
+/* Subscription Stats Section */
+.subscription-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+}
+
+.card-header .w-5 {
+  color: #718096;
+}
+
+/* Metrics List */
+.metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.metric-value.good {
+  color: #38a169;
+}
+
+.metric-value.warning {
+  color: #ed8936;
+}
+
+.metric-value.error {
+  color: #e53e3e;
+}
+
+.metric-value.neutral {
+  color: #4a5568;
+}
+
+.metric-indicator {
+  margin-left: 1rem;
+}
+
+.indicator-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: #e2e8f0;
+}
+
+.indicator-dot.good {
+  background: #38a169;
+}
+
+.indicator-dot.warning {
+  background: #ed8936;
+}
+
+.indicator-dot.error {
+  background: #e53e3e;
+}
+
+.indicator-dot.neutral {
+  background: #a0aec0;
+}
+
+/* Activity Summary */
+.activity-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+}
+
+.activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: #f7fafc;
+  color: #4a5568;
+}
+
+.activity-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.activity-label {
+  font-size: 0.875rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.activity-value {
+  font-size: 0.875rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+/* Warning Alerts */
+.trial-warning,
+.payment-warning {
+  background: #fef5e7;
+  border: 1px solid #f6ad55;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.payment-warning {
+  background: #fed7d7;
+  border-color: #fc8181;
+}
+
+.warning-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.warning-content .w-5 {
+  color: #ed8936;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.payment-warning .warning-content .w-5 {
+  color: #e53e3e;
+}
+
+.warning-text h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #744210;
+  margin: 0 0 0.25rem 0;
+}
+
+.payment-warning .warning-text h4 {
+  color: #742a2a;
+}
+
+.warning-text p {
+  font-size: 0.875rem;
+  color: #975a16;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.payment-warning .warning-text p {
+  color: #9b2c2c;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .subscription-stats {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .account-stats-container {
+    padding: 0 1rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+  }
+  
+  .stat-value {
+    font-size: 1.75rem;
+  }
+  
+  .stats-card {
+    padding: 1rem;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .metric-item {
+    padding: 0.5rem 0;
+  }
+  
+  .activity-item {
+    padding: 0.5rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-stats-container {
+    padding: 0 0.5rem;
+  }
+  
+  .stat-card,
+  .stats-card {
+    padding: 0.75rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .warning-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .warning-content .w-5 {
+    align-self: flex-start;
+  }
+}
+
+/* Animation */
+.stat-card,
+.stats-card {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* AI-NOTE: Comprehensive CSS styling for AccountStats component with main statistics grid, subscription/billing metrics, activity summary, warning alerts, and responsive design following existing portal dashboard patterns */
