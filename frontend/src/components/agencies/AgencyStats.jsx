@@ -15,7 +15,7 @@ import {
   Calendar
 } from 'lucide-react';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './AgencyStats.css';
+import styles from './AgencyStats.module.css';
 
 /**
  * AgencyStats Component
@@ -35,9 +35,9 @@ import './AgencyStats.css';
 const AgencyStats = ({ agency, stats, loading, error }) => {
   if (loading) {
     return (
-      <div className="agency-stats-container">
-        <div className="stats-loading">
-          <div className="loading-spinner"></div>
+      <div className={styles.agencyStatsContainer}>
+        <div className={styles.statsLoading}>
+          <div className={styles.loadingSpinner}></div>
           <p>Loading agency statistics...</p>
         </div>
       </div>
@@ -46,8 +46,8 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
 
   if (error) {
     return (
-      <div className="agency-stats-container">
-        <div className="stats-error">
+      <div className={styles.agencyStatsContainer}>
+        <div className={styles.statsError}>
           <AlertTriangle className="w-6 h-6" />
           <p>Failed to load agency statistics</p>
           <ErrorMessage error={error} variant="inline" type="error" />
@@ -58,8 +58,8 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
 
   if (!agency) {
     return (
-      <div className="agency-stats-container">
-        <div className="stats-empty">
+      <div className={styles.agencyStatsContainer}>
+        <div className={styles.statsEmpty}>
           <Building2 className="w-12 h-12" />
           <p>No agency data available</p>
         </div>
@@ -147,18 +147,18 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
   ];
 
   return (
-    <div className="agency-stats-container">
+    <div className={styles.agencyStatsContainer}>
       {/* Main Statistics Grid */}
-      <div className="stats-grid">
+      <div className={styles.statsGrid}>
         {mainStats.map((stat, index) => (
-          <div key={index} className={`stat-card ${stat.color}`}>
-            <div className="stat-icon">
+          <div key={index} className={`${styles.statCard} ${styles[stat.color]}`}>
+            <div className={styles.statIcon}>
               {stat.icon}
             </div>
-            <div className="stat-content">
-              <div className="stat-value">{stat.value}</div>
-              <div className="stat-title">{stat.title}</div>
-              <div className={`stat-change ${stat.trend}`}>
+            <div className={styles.statContent}>
+              <div className={styles.statValue}>{stat.value}</div>
+              <div className={styles.statTitle}>{stat.title}</div>
+              <div className={`${styles.statChange} ${styles[stat.trend]}`}>
                 {stat.trend === 'up' ? 
                   <TrendingUp className="w-4 h-4" /> : 
                   <TrendingDown className="w-4 h-4" />
@@ -166,29 +166,29 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
                 {stat.change}
               </div>
             </div>
-            <div className="stat-description">{stat.description}</div>
+            <div className={styles.statDescription}>{stat.description}</div>
           </div>
         ))}
       </div>
 
       {/* Performance & Activity Information */}
-      <div className="subscription-stats">
-        <div className="stats-card">
-          <div className="card-header">
+      <div className={styles.subscriptionStats}>
+        <div className={styles.statsCard}>
+          <div className={styles.cardHeader}>
             <h3>Performance Metrics</h3>
             <Target className="w-5 h-5" />
           </div>
-          <div className="metrics-list">
+          <div className={styles.metricsList}>
             {performanceStats.map((metric, index) => (
-              <div key={index} className="metric-item">
-                <div className="metric-info">
-                  <span className="metric-label">{metric.label}</span>
-                  <span className={`metric-value ${metric.status}`}>
+              <div key={index} className={styles.metricItem}>
+                <div className={styles.metricInfo}>
+                  <span className={styles.metricLabel}>{metric.label}</span>
+                  <span className={`${styles.metricValue} ${styles[metric.status]}`}>
                     {metric.value}
                   </span>
                 </div>
-                <div className="metric-indicator">
-                  <div className={`indicator-dot ${metric.status}`}></div>
+                <div className={styles.metricIndicator}>
+                  <div className={`${styles.indicatorDot} ${styles[metric.status]}`}></div>
                 </div>
               </div>
             ))}
@@ -196,19 +196,19 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
         </div>
 
         {/* Agency Activity Summary */}
-        <div className="stats-card">
-          <div className="card-header">
+        <div className={styles.statsCard}>
+          <div className={styles.cardHeader}>
             <h3>Agency Activity</h3>
             <Activity className="w-5 h-5" />
           </div>
-          <div className="activity-summary">
-            <div className="activity-item">
-              <div className="activity-icon">
+          <div className={styles.activitySummary}>
+            <div className={styles.activityItem}>
+              <div className={styles.activityIcon}>
                 <Clock className="w-4 h-4" />
               </div>
-              <div className="activity-content">
-                <span className="activity-label">Last Active</span>
-                <span className="activity-value">
+              <div className={styles.activityContent}>
+                <span className={styles.activityLabel}>Last Active</span>
+                <span className={styles.activityValue}>
                   {agency.lastActiveAt ? 
                     new Date(agency.lastActiveAt).toLocaleDateString() : 
                     'Never'
@@ -216,24 +216,24 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
                 </span>
               </div>
             </div>
-            <div className="activity-item">
-              <div className="activity-icon">
+            <div className={styles.activityItem}>
+              <div className={styles.activityIcon}>
                 <CheckCircle className="w-4 h-4" />
               </div>
-              <div className="activity-content">
-                <span className="activity-label">Agency Registered</span>
-                <span className="activity-value">
+              <div className={styles.activityContent}>
+                <span className={styles.activityLabel}>Agency Registered</span>
+                <span className={styles.activityValue}>
                   {new Date(agency.createdAt).toLocaleDateString()}
                 </span>
               </div>
             </div>
-            <div className="activity-item">
-              <div className="activity-icon">
+            <div className={styles.activityItem}>
+              <div className={styles.activityIcon}>
                 <Calendar className="w-4 h-4" />
               </div>
-              <div className="activity-content">
-                <span className="activity-label">Last Updated</span>
-                <span className="activity-value">
+              <div className={styles.activityContent}>
+                <span className={styles.activityLabel}>Last Updated</span>
+                <span className={styles.activityValue}>
                   {new Date(agency.updatedAt).toLocaleDateString()}
                 </span>
               </div>
@@ -244,10 +244,10 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
 
       {/* Performance Warning (if applicable) */}
       {placementRate < 60 && (
-        <div className="performance-warning">
-          <div className="warning-content">
+        <div className={styles.performanceWarning}>
+          <div className={styles.warningContent}>
             <AlertTriangle className="w-5 h-5" />
-            <div className="warning-text">
+            <div className={styles.warningText}>
               <h4>Low Placement Rate</h4>
               <p>
                 This agency's placement rate is below 60%. Consider reviewing 
@@ -260,10 +260,10 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
 
       {/* Inactive Agency Warning */}
       {agency.status !== 'active' && (
-        <div className="status-warning">
-          <div className="warning-content">
+        <div className={styles.statusWarning}>
+          <div className={styles.warningContent}>
             <Building2 className="w-5 h-5" />
-            <div className="warning-text">
+            <div className={styles.warningText}>
               <h4>Agency Inactive</h4>
               <p>
                 This agency is currently inactive. Contact the agency to 

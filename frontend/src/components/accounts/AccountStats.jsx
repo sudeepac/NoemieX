@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { accountHelpers } from '../../types/account.types';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './AccountStats.css';
+import styles from './AccountStats.module.css';
 
 /**
  * AccountStats Component
@@ -34,9 +34,9 @@ import './AccountStats.css';
 const AccountStats = ({ account, stats, loading, error }) => {
   if (loading) {
     return (
-      <div className="account-stats-container">
-        <div className="stats-loading">
-          <div className="loading-spinner"></div>
+      <div className={styles.accountStatsContainer}>
+        <div className={styles.statsLoading}>
+          <div className={styles.loadingSpinner}></div>
           <p>Loading account statistics...</p>
         </div>
       </div>
@@ -45,8 +45,8 @@ const AccountStats = ({ account, stats, loading, error }) => {
 
   if (error) {
     return (
-      <div className="account-stats-container">
-        <div className="stats-error">
+      <div className={styles.accountStatsContainer}>
+        <div className={styles.statsError}>
           <AlertTriangle className="w-6 h-6" />
           <p>Failed to load account statistics</p>
           <ErrorMessage error={error} variant="inline" type="error" />
@@ -57,8 +57,8 @@ const AccountStats = ({ account, stats, loading, error }) => {
 
   if (!account) {
     return (
-      <div className="account-stats-container">
-        <div className="stats-empty">
+      <div className={styles.accountStatsContainer}>
+        <div className={styles.statsEmpty}>
           <Building2 className="w-12 h-12" />
           <p>No account data available</p>
         </div>
@@ -149,18 +149,18 @@ const AccountStats = ({ account, stats, loading, error }) => {
   ];
 
   return (
-    <div className="account-stats-container">
+    <div className={styles.accountStatsContainer}>
       {/* Main Statistics Grid */}
-      <div className="stats-grid">
+      <div className={styles.statsGrid}>
         {mainStats.map((stat, index) => (
-          <div key={index} className={`stat-card ${stat.color}`}>
-            <div className="stat-icon">
+          <div key={index} className={`${styles.statCard} ${styles[stat.color]}`}>
+            <div className={styles.statIcon}>
               {stat.icon}
             </div>
-            <div className="stat-content">
-              <div className="stat-value">{stat.value}</div>
-              <div className="stat-title">{stat.title}</div>
-              <div className={`stat-change ${stat.trend}`}>
+            <div className={styles.statContent}>
+              <div className={styles.statValue}>{stat.value}</div>
+              <div className={styles.statTitle}>{stat.title}</div>
+              <div className={`${styles.statChange} ${styles[stat.trend]}`}>
                 {stat.trend === 'up' ? 
                   <TrendingUp className="w-4 h-4" /> : 
                   <TrendingDown className="w-4 h-4" />
@@ -168,29 +168,29 @@ const AccountStats = ({ account, stats, loading, error }) => {
                 {stat.change}
               </div>
             </div>
-            <div className="stat-description">{stat.description}</div>
+            <div className={styles.statDescription}>{stat.description}</div>
           </div>
         ))}
       </div>
 
       {/* Subscription & Billing Information */}
-      <div className="subscription-stats">
-        <div className="stats-card">
-          <div className="card-header">
+      <div className={styles.subscriptionStats}>
+        <div className={styles.statsCard}>
+          <div className={styles.cardHeader}>
             <h3>Subscription & Billing</h3>
             <CreditCard className="w-5 h-5" />
           </div>
-          <div className="metrics-list">
+          <div className={styles.metricsList}>
             {subscriptionStats.map((metric, index) => (
-              <div key={index} className="metric-item">
-                <div className="metric-info">
-                  <span className="metric-label">{metric.label}</span>
-                  <span className={`metric-value ${metric.status}`}>
+              <div key={index} className={styles.metricItem}>
+                <div className={styles.metricInfo}>
+                  <span className={styles.metricLabel}>{metric.label}</span>
+                  <span className={`${styles.metricValue} ${styles[metric.status]}`}>
                     {metric.value}
                   </span>
                 </div>
-                <div className="metric-indicator">
-                  <div className={`indicator-dot ${metric.status}`}></div>
+                <div className={styles.metricIndicator}>
+                  <div className={`${styles.indicatorDot} ${styles[metric.status]}`}></div>
                 </div>
               </div>
             ))}
@@ -198,19 +198,19 @@ const AccountStats = ({ account, stats, loading, error }) => {
         </div>
 
         {/* Account Activity Summary */}
-        <div className="stats-card">
-          <div className="card-header">
+        <div className={styles.statsCard}>
+          <div className={styles.cardHeader}>
             <h3>Account Activity</h3>
             <Activity className="w-5 h-5" />
           </div>
-          <div className="activity-summary">
-            <div className="activity-item">
-              <div className="activity-icon">
+          <div className={styles.activitySummary}>
+            <div className={styles.activityItem}>
+              <div className={styles.activityIcon}>
                 <Clock className="w-4 h-4" />
               </div>
-              <div className="activity-content">
-                <span className="activity-label">Last Login</span>
-                <span className="activity-value">
+              <div className={styles.activityContent}>
+                <span className={styles.activityLabel}>Last Login</span>
+                <span className={styles.activityValue}>
                   {account.lastLoginAt ? 
                     new Date(account.lastLoginAt).toLocaleDateString() : 
                     'Never'
@@ -218,24 +218,24 @@ const AccountStats = ({ account, stats, loading, error }) => {
                 </span>
               </div>
             </div>
-            <div className="activity-item">
-              <div className="activity-icon">
+            <div className={styles.activityItem}>
+              <div className={styles.activityIcon}>
                 <CheckCircle className="w-4 h-4" />
               </div>
-              <div className="activity-content">
-                <span className="activity-label">Account Created</span>
-                <span className="activity-value">
+              <div className={styles.activityContent}>
+                <span className={styles.activityLabel}>Account Created</span>
+                <span className={styles.activityValue}>
                   {new Date(account.createdAt).toLocaleDateString()}
                 </span>
               </div>
             </div>
-            <div className="activity-item">
-              <div className="activity-icon">
+            <div className={styles.activityItem}>
+              <div className={styles.activityIcon}>
                 <Calendar className="w-4 h-4" />
               </div>
-              <div className="activity-content">
-                <span className="activity-label">Last Updated</span>
-                <span className="activity-value">
+              <div className={styles.activityContent}>
+                <span className={styles.activityLabel}>Last Updated</span>
+                <span className={styles.activityValue}>
                   {new Date(account.updatedAt).toLocaleDateString()}
                 </span>
               </div>
@@ -246,10 +246,10 @@ const AccountStats = ({ account, stats, loading, error }) => {
 
       {/* Trial Warning (if applicable) */}
       {isTrialAccount && trialDaysLeft <= 7 && (
-        <div className="trial-warning">
-          <div className="warning-content">
+        <div className={styles.trialWarning}>
+          <div className={styles.warningContent}>
             <AlertTriangle className="w-5 h-5" />
-            <div className="warning-text">
+            <div className={styles.warningText}>
               <h4>Trial Expiring Soon</h4>
               <p>
                 This account's trial period expires in {trialDaysLeft} days. 
@@ -262,10 +262,10 @@ const AccountStats = ({ account, stats, loading, error }) => {
 
       {/* Payment Overdue Warning */}
       {isPaymentOverdue && (
-        <div className="payment-warning">
-          <div className="warning-content">
+        <div className={styles.paymentWarning}>
+          <div className={styles.warningContent}>
             <CreditCard className="w-5 h-5" />
-            <div className="warning-text">
+            <div className={styles.warningText}>
               <h4>Payment Overdue</h4>
               <p>
                 This account has overdue payments. Please update billing information 

@@ -5,24 +5,24 @@ import { selectFormOpen, selectDetailOpen } from '../../store/slices/paymentSche
 import PaymentSchedulesList from './PaymentSchedulesList';
 import PaymentScheduleForm from './PaymentScheduleForm';
 import PaymentScheduleDetail from './PaymentScheduleDetail';
-import './PaymentSchedules.css';
+import styles from './PaymentSchedules.module.css';
 
 const PaymentSchedules = () => {
   const activeView = useSelector(selectActiveView);
   const isFormOpen = useSelector(selectIsFormOpen);
 
   return (
-    <div className="payment-schedules">
+    <div className={styles.paymentSchedules}>
       {/* Main Content */}
-      <div className="payment-schedules-content">
+      <div className={styles.paymentSchedulesContent}>
         {activeView === 'list' && <PaymentSchedulesList />}
         {activeView === 'detail' && <PaymentScheduleDetail />}
       </div>
 
       {/* Form Modal/Sidebar */}
       {isFormOpen && (
-        <div className="payment-schedule-form-overlay">
-          <div className="payment-schedule-form-container">
+        <div className={styles.paymentScheduleFormOverlay}>
+          <div className={styles.paymentScheduleFormContainer}>
             <PaymentScheduleForm />
           </div>
         </div>

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useChangeUserPasswordMutation } from '../../store/api/api';
 import { validatePasswordChange } from '../../types/user.types';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './ChangePasswordModal.css';
+import styles from './ChangePasswordModal.module.css';
 
 // ChangePasswordModal component for password management
 function ChangePasswordModal({ userId, userName, onClose }) {
@@ -104,10 +104,10 @@ function ChangePasswordModal({ userId, userName, onClose }) {
   };
 
   return (
-    <div className="modal-overlay" onClick={handleBackdropClick}>
-      <div className="modal-content change-password-modal">
+    <div className={styles.modalOverlay} onClick={handleBackdropClick}>
+      <div className={`${styles.modalContent} ${styles.changePasswordModal}`}>
         {/* Header */}
-        <div className="modal-header">
+        <div className={styles.modalHeader}>
           <h3>Change Password</h3>
           <p>
             {isOwnPassword 
@@ -117,7 +117,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
           </p>
           <button 
             onClick={handleClose}
-            className="modal-close"
+            className={styles.modalClose}
             disabled={isLoading}
             aria-label="Close modal"
           >
@@ -126,18 +126,18 @@ function ChangePasswordModal({ userId, userName, onClose }) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="password-form">
+        <form onSubmit={handleSubmit} className={styles.passwordForm}>
           {/* Current Password (only for own password) */}
           {isOwnPassword && (
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="currentPassword">Current Password *</label>
-              <div className="password-input-wrapper">
+              <div className={styles.passwordInputWrapper}>
                 <input
                   type={showPasswords.current ? 'text' : 'password'}
                   id="currentPassword"
                   value={formData.currentPassword}
                   onChange={(e) => handleChange('currentPassword', e.target.value)}
-                  className={errors.currentPassword ? 'error' : ''}
+                  className={errors.currentPassword ? styles.error : ''}
                   placeholder="Enter your current password"
                   disabled={isLoading}
                   autoComplete="current-password"
@@ -145,7 +145,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility('current')}
-                  className="password-toggle"
+                  className={styles.passwordToggle}
                   disabled={isLoading}
                   aria-label={showPasswords.current ? 'Hide password' : 'Show password'}
                 >
@@ -159,15 +159,15 @@ function ChangePasswordModal({ userId, userName, onClose }) {
           )}
 
           {/* New Password */}
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="newPassword">New Password *</label>
-            <div className="password-input-wrapper">
+            <div className={styles.passwordInputWrapper}>
               <input
                 type={showPasswords.new ? 'text' : 'password'}
                 id="newPassword"
                 value={formData.newPassword}
                 onChange={(e) => handleChange('newPassword', e.target.value)}
-                className={errors.newPassword ? 'error' : ''}
+                className={errors.newPassword ? styles.error : ''}
                 placeholder="Enter new password"
                 disabled={isLoading}
                 autoComplete="new-password"
@@ -175,7 +175,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
               <button
                 type="button"
                 onClick={() => togglePasswordVisibility('new')}
-                className="password-toggle"
+                className={styles.passwordToggle}
                 disabled={isLoading}
                 aria-label={showPasswords.new ? 'Hide password' : 'Show password'}
               >
@@ -185,21 +185,21 @@ function ChangePasswordModal({ userId, userName, onClose }) {
             {errors.newPassword && (
               <ErrorMessage error={{message: errors.newPassword}} variant="inline" type="validation" />
             )}
-            <div className="password-requirements">
+            <div className={styles.passwordRequirements}>
               <small>Password must be at least 8 characters long</small>
             </div>
           </div>
 
           {/* Confirm Password */}
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label htmlFor="confirmPassword">Confirm New Password *</label>
-            <div className="password-input-wrapper">
+            <div className={styles.passwordInputWrapper}>
               <input
                 type={showPasswords.confirm ? 'text' : 'password'}
                 id="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                className={errors.confirmPassword ? 'error' : ''}
+                className={errors.confirmPassword ? styles.error : ''}
                 placeholder="Confirm new password"
                 disabled={isLoading}
                 autoComplete="new-password"
@@ -207,7 +207,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
               <button
                 type="button"
                 onClick={() => togglePasswordVisibility('confirm')}
-                className="password-toggle"
+                className={styles.passwordToggle}
                 disabled={isLoading}
                 aria-label={showPasswords.confirm ? 'Hide password' : 'Show password'}
               >
@@ -220,9 +220,9 @@ function ChangePasswordModal({ userId, userName, onClose }) {
           </div>
 
           {/* Security Notice */}
-          <div className="security-notice">
-            <div className="notice-icon">🔒</div>
-            <div className="notice-content">
+          <div className={styles.securityNotice}>
+            <div className={styles.noticeIcon}>🔒</div>
+            <div className={styles.noticeContent}>
               <strong>Security Notice:</strong>
               <ul>
                 <li>Choose a strong password with a mix of letters, numbers, and symbols</li>
@@ -234,18 +234,18 @@ function ChangePasswordModal({ userId, userName, onClose }) {
           </div>
 
           {/* Form Actions */}
-          <div className="modal-actions">
+          <div className={styles.modalActions}>
             <button 
               type="button" 
               onClick={handleClose}
-              className="btn btn-outline"
+              className={`${styles.btn} ${styles.btnOutline}`}
               disabled={isLoading}
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="btn btn-primary"
+              className={`${styles.btn} ${styles.btnPrimary}`}
               disabled={isLoading}
             >
               {isLoading ? 'Changing Password...' : 'Change Password'}

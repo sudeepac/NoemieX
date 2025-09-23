@@ -13,9 +13,9 @@ import {
   BILLING_STATUSES
 } from '../../types/account.types';
 import { PORTAL_TYPES } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './AccountsList.css';
+import styles from './AccountsList.module.css';
 
 // AccountsList component with comprehensive filtering and superadmin access
 function AccountsList() {
@@ -133,7 +133,7 @@ function AccountsList() {
         type="error"
         title="Error Loading Accounts"
       />
-      <button onClick={refetch} className="btn btn-primary">
+      <button onClick={refetch} className={`${styles.btn} ${styles.btnPrimary}`}>
         Try Again
       </button>
     );
@@ -142,58 +142,58 @@ function AccountsList() {
   const { accounts = [], pagination = {} } = accountsData?.data || {};
 
   return (
-    <div className="accounts-list-container">
+    <div className={styles.accountsListContainer}>
       {/* Header */}
-      <div className="page-header">
-        <div className="header-left">
-          <h1>Accounts Management</h1>
-          <p>Manage tenant accounts, subscriptions, and billing</p>
+      <div className={styles.pageHeader}>
+          <div className={styles.headerLeft}>
+            <h1>Accounts Management</h1>
+            <p>Manage tenant accounts, subscriptions, and billing</p>
+          </div>
+          <div className={styles.headerActions}>
+            {canManageAccounts() && (
+              <Link to="/accounts/new" className={`${styles.btn} ${styles.btnPrimary}`}>
+                <span className={styles.icon}>+</span>
+                Add Account
+              </Link>
+            )}
+          </div>
         </div>
-        <div className="header-actions">
-          {canManageAccounts() && (
-            <Link to="/accounts/new" className="btn btn-primary">
-              <span className="icon">+</span>
-              Add Account
-            </Link>
-          )}
-        </div>
-      </div>
 
       {/* Filters */}
-      <div className="filters-section">
-        <div className="filters-header">
-          <div className="search-box">
-            <input
-              type="text"
-              placeholder="Search accounts by name or email..."
-              value={filters.search}
-              onChange={handleSearch}
-              className="search-input"
-            />
-          </div>
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className="btn btn-outline"
-          >
-            <span className="icon">⚙</span>
-            Filters
-          </button>
-          {(filters.search || filters.isActive !== undefined) && (
-            <button onClick={resetFilters} className="btn btn-outline">
-              <span className="icon">✕</span>
-              Clear
+      <div className={styles.filtersSection}>
+          <div className={styles.filtersHeader}>
+            <div className={styles.searchBox}>
+              <input
+                type="text"
+                placeholder="Search accounts by name or email..."
+                value={filters.search}
+                onChange={handleSearch}
+                className={styles.searchInput}
+              />
+            </div>
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className={`${styles.btn} ${styles.btnOutline}`}
+            >
+              <span className={styles.icon}>⚙</span>
+              Filters
             </button>
-          )}
-        </div>
+            {(filters.search || filters.isActive !== undefined) && (
+              <button onClick={resetFilters} className={`${styles.btn} ${styles.btnOutline}`}>
+                <span className={styles.icon}>✕</span>
+                Clear
+              </button>
+            )}
+          </div>
 
         {showFilters && (
-          <div className="filters-panel">
-            <div className="filter-group">
+          <div className={styles.filtersPanel}>
+            <div className={styles.filterGroup}>
               <label>Status:</label>
               <select
                 value={filters.isActive === undefined ? '' : filters.isActive}
                 onChange={(e) => handleFilterChange('isActive', e.target.value === '' ? undefined : e.target.value === 'true')}
-                className="filter-select"
+                className={styles.filterSelect}
               >
                 <option value="">All Statuses</option>
                 <option value="true">Active</option>
@@ -201,12 +201,12 @@ function AccountsList() {
               </select>
             </div>
 
-            <div className="filter-group">
+            <div className={styles.filterGroup}>
               <label>Items per page:</label>
               <select
                 value={filters.limit}
                 onChange={(e) => handleFilterChange('limit', parseInt(e.target.value))}
-                className="filter-select"
+                className={styles.filterSelect}
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
@@ -219,28 +219,28 @@ function AccountsList() {
       </div>
 
       {/* Results Summary */}
-      <div className="results-summary">
+      <div className={styles.resultsSummary}>
         <span>Found {pagination.totalItems || 0} accounts</span>
       </div>
 
       {/* Accounts Table */}
-      <div className="table-container">
-        <table className="accounts-table">
+      <div className={styles.tableContainer}>
+        <table className={styles.accountsTable}>
           <thead>
             <tr>
-              <th onClick={() => handleSort('name')} className="sortable">
+              <th onClick={() => handleSort('name')} className={styles.sortable}>
                 Account {filters.sortBy === 'name' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
               <th>Contact Info</th>
-              <th onClick={() => handleSort('subscription.plan')} className="sortable">
+              <th onClick={() => handleSort('subscription.plan')} className={styles.sortable}>
                 Subscription {filters.sortBy === 'subscription.plan' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
               <th>Billing</th>
               <th>Users/Agencies</th>
-              <th onClick={() => handleSort('isActive')} className="sortable">
+              <th onClick={() => handleSort('isActive')} className={styles.sortable}>
                 Status {filters.sortBy === 'isActive' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
-              <th onClick={() => handleSort('createdAt')} className="sortable">
+              <th onClick={() => handleSort('createdAt')} className={styles.sortable}>
                 Created {filters.sortBy === 'createdAt' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
               <th>Actions</th>
@@ -249,7 +249,7 @@ function AccountsList() {
           <tbody>
             {accounts.length === 0 ? (
               <tr>
-                <td colSpan="8" className="no-data">
+                <td colSpan="8" className={styles.noData}>
                   No accounts found matching your criteria
                 </td>
               </tr>
@@ -257,73 +257,73 @@ function AccountsList() {
               accounts.map((account) => (
                 <tr key={account._id}>
                   <td>
-                    <div className="account-info">
-                      <div className="account-avatar">
+                    <div className={styles.accountInfo}>
+                      <div className={styles.accountAvatar}>
                         {account.name.charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="account-name">
+                        <div className={styles.accountName}>
                           {account.name}
                         </div>
-                        <div className="account-id">ID: {account._id}</div>
+                        <div className={styles.accountId}>ID: {account._id}</div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <div className="contact-info">
+                    <div className={styles.contactInfo}>
                       <div>{account.contactInfo?.email}</div>
                       {account.contactInfo?.phone && (
-                        <div className="phone">{account.contactInfo.phone}</div>
+                        <div className={styles.phone}>{account.contactInfo.phone}</div>
                       )}
                     </div>
                   </td>
                   <td>
-                    <div className="subscription-info">
-                      <span className={`plan-badge plan-${account.subscription?.plan}`}>
+                    <div className={styles.subscriptionInfo}>
+                      <span className={`${styles.planBadge} ${styles[`plan${account.subscription?.plan}`]}`}>
                         {accountHelpers.getPlanDisplayText(account.subscription?.plan)}
                       </span>
-                      <div className={`subscription-status ${accountHelpers.getSubscriptionStatusClass(account.subscription?.status)}`}>
+                      <div className={`${styles.subscriptionStatus} ${styles[accountHelpers.getSubscriptionStatusClass(account.subscription?.status)]}`}>
                         {accountHelpers.getSubscriptionStatusText(account.subscription?.status)}
                       </div>
                       {accountHelpers.isTrialAccount(account) && (
-                        <div className="trial-info">
+                        <div className={styles.trialInfo}>
                           {accountHelpers.getTrialDaysRemaining(account)} days left
                         </div>
                       )}
                     </div>
                   </td>
                   <td>
-                    <div className="billing-info">
-                      <span className={`billing-status ${accountHelpers.getBillingStatusClass(account.billing?.status)}`}>
+                    <div className={styles.billingInfo}>
+                      <span className={`${styles.billingStatus} ${styles[accountHelpers.getBillingStatusClass(account.billing?.status)]}`}>
                         {accountHelpers.getBillingStatusText(account.billing?.status)}
                       </span>
-                      <div className="revenue">
+                      <div className={styles.revenue}>
                         Revenue: {accountHelpers.formatCurrency(account.billing?.totalRevenue, account.settings?.currency)}
                       </div>
                       {account.billing?.outstandingBalance > 0 && (
-                        <div className="outstanding">
+                        <div className={styles.outstanding}>
                           Outstanding: {accountHelpers.formatCurrency(account.billing?.outstandingBalance, account.settings?.currency)}
                         </div>
                       )}
                     </div>
                   </td>
                   <td>
-                    <div className="counts">
+                    <div className={styles.counts}>
                       <div>Users: {account.usersCount || 0}</div>
                       <div>Agencies: {account.agenciesCount || 0}</div>
                     </div>
                   </td>
                   <td>
-                    <span className={`status-badge ${account.isActive ? 'active' : 'inactive'}`}>
+                    <span className={`${styles.statusBadge} ${account.isActive ? styles.active : styles.inactive}`}>
                       {account.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
                   <td>{new Date(account.createdAt).toLocaleDateString()}</td>
                   <td>
-                    <div className="action-buttons">
+                    <div className={styles.actionButtons}>
                       <Link 
                         to={`/accounts/${account._id}`} 
-                        className="btn btn-sm btn-outline"
+                        className={`${styles.btn} ${styles.btnSm} ${styles.btnOutline}`}
                         title="View Details"
                       >
                         View
@@ -331,7 +331,7 @@ function AccountsList() {
                       {canManageAccounts() && (
                         <Link 
                           to={`/accounts/${account._id}/edit`} 
-                          className="btn btn-sm btn-primary"
+                          className={`${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`}
                           title="Edit Account"
                         >
                           Edit
@@ -341,7 +341,7 @@ function AccountsList() {
                         <button
                           onClick={() => handleToggleStatus(account._id)}
                           disabled={isToggling}
-                          className={`btn btn-sm ${account.isActive ? 'btn-warning' : 'btn-success'}`}
+                          className={`${styles.btn} ${styles.btnSm} ${account.isActive ? styles.btnWarning : styles.btnSuccess}`}
                           title={account.isActive ? 'Deactivate Account' : 'Activate Account'}
                         >
                           {account.isActive ? 'Deactivate' : 'Activate'}
@@ -351,7 +351,7 @@ function AccountsList() {
                         <button
                           onClick={() => handleDeleteAccount(account._id)}
                           disabled={isDeleting}
-                          className="btn btn-sm btn-danger"
+                          className={`${styles.btn} ${styles.btnSm} ${styles.btnDanger}`}
                           title="Delete Account"
                         >
                           Delete
@@ -368,17 +368,17 @@ function AccountsList() {
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="pagination-container">
-          <div className="pagination-info">
+        <div className={styles.paginationContainer}>
+          <div className={styles.paginationInfo}>
             Showing {((pagination.page - 1) * pagination.limit) + 1} to{' '}
             {Math.min(pagination.page * pagination.limit, pagination.totalItems)} of{' '}
             {pagination.totalItems} accounts
           </div>
-          <div className="pagination-controls">
+          <div className={styles.paginationControls}>
             <button
               onClick={() => handlePageChange(pagination.page - 1)}
               disabled={pagination.page <= 1}
-              className="btn btn-outline btn-sm"
+              className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
             >
               Previous
             </button>
@@ -392,7 +392,7 @@ function AccountsList() {
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`btn btn-sm ${pageNum === pagination.page ? 'btn-primary' : 'btn-outline'}`}
+                  className={`${styles.btn} ${styles.btnSm} ${pageNum === pagination.page ? styles.btnPrimary : styles.btnOutline}`}
                 >
                   {pageNum}
                 </button>
@@ -402,7 +402,7 @@ function AccountsList() {
             <button
               onClick={() => handlePageChange(pagination.page + 1)}
               disabled={pagination.page >= pagination.totalPages}
-              className="btn btn-outline btn-sm"
+              className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
             >
               Next
             </button>

@@ -11,10 +11,10 @@ import {
   PORTAL_TYPES, 
   userHelpers 
 } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+import LoadingSpinner from '../common/LoadingSpinner';
 import ChangePasswordModal from './ChangePasswordModal';
 import ErrorMessage from '../shared/ErrorMessage';
-import './UserDetail.css';
+import styles from './UserDetail.module.css';
 
 // UserDetail component for displaying user information
 function UserDetail() {
@@ -117,11 +117,11 @@ function UserDetail() {
           type="page"
           title="Error Loading User"
         />
-        <div className="error-actions">
-          <button onClick={refetch} className="btn btn-primary">
+        <div className={styles.errorActions}>
+          <button onClick={refetch} className={`${styles.btn} ${styles.btnPrimary}`}>
             Try Again
           </button>
-          <button onClick={() => navigate('/users')} className="btn btn-outline">
+          <button onClick={() => navigate('/users')} className={`${styles.btn} ${styles.btnOutline}`}>
             Back to Users
           </button>
         </div>
@@ -140,7 +140,7 @@ function UserDetail() {
           type="page"
           title="User Not Found"
         />
-        <button onClick={() => navigate('/users')} className="btn btn-primary">
+        <button onClick={() => navigate('/users')} className={`${styles.btn} ${styles.btnPrimary}`}>
           Back to Users
         </button>
       </div>
@@ -148,38 +148,38 @@ function UserDetail() {
   }
 
   return (
-    <div className="user-detail-container">
+    <div className={styles.userDetailContainer}>
       {/* Header */}
-      <div className="page-header">
-        <div className="header-left">
-          <div className="breadcrumb">
-            <Link to="/users" className="breadcrumb-link">Users</Link>
-            <span className="breadcrumb-separator">›</span>
-            <span className="breadcrumb-current">{userHelpers.getFullName(user)}</span>
+      <div className={styles.pageHeader}>
+        <div className={styles.headerLeft}>
+          <div className={styles.breadcrumb}>
+            <Link to="/users" className={styles.breadcrumbLink}>Users</Link>
+            <span className={styles.breadcrumbSeparator}>›</span>
+            <span className={styles.breadcrumbCurrent}>{userHelpers.getFullName(user)}</span>
           </div>
           <h1>{userHelpers.getFullName(user)}</h1>
-          <div className="user-meta">
-            <span className={`status-badge ${user.isActive ? 'active' : 'inactive'}`}>
+          <div className={styles.userMeta}>
+            <span className={`${styles.statusBadge} ${user.isActive ? styles.active : styles.inactive}`}>
               {userHelpers.getStatusText(user.isActive)}
             </span>
-            <span className={`role-badge role-${user.role}`}>
+            <span className={`${styles.roleBadge} ${styles[`role${user.role.charAt(0).toUpperCase() + user.role.slice(1)}`]}`}>
               {userHelpers.getRoleDisplayText(user.role)}
             </span>
-            <span className={`portal-badge portal-${user.portalType}`}>
+            <span className={`${styles.portalBadge} ${styles[`portal${user.portalType.charAt(0).toUpperCase() + user.portalType.slice(1)}`]}`}>
               {userHelpers.getPortalDisplayText(user.portalType)}
             </span>
           </div>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           {canEditUser(user) && (
-            <Link to={`/users/${user._id}/edit`} className="btn btn-primary">
+            <Link to={`/users/${user._id}/edit`} className={`${styles.btn} ${styles.btnPrimary}`}>
               Edit User
             </Link>
           )}
           {canChangePassword(user) && (
             <button 
               onClick={() => setShowPasswordModal(true)}
-              className="btn btn-outline"
+              className={`${styles.btn} ${styles.btnOutline}`}
             >
               Change Password
             </button>
@@ -188,7 +188,7 @@ function UserDetail() {
             <button
               onClick={handleToggleStatus}
               disabled={isToggling}
-              className={`btn ${user.isActive ? 'btn-warning' : 'btn-success'}`}
+              className={`${styles.btn} ${user.isActive ? styles.btnWarning : styles.btnSuccess}`}
             >
               {user.isActive ? 'Deactivate' : 'Activate'}
             </button>
@@ -196,7 +196,7 @@ function UserDetail() {
           {canDeleteUser(user) && (
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="btn btn-danger"
+              className={`${styles.btn} ${styles.btnDanger}`}
             >
               Delete User
             </button>
@@ -205,37 +205,37 @@ function UserDetail() {
       </div>
 
       {/* User Information */}
-      <div className="user-detail-content">
+      <div className={styles.userDetailContent}>
         {/* Basic Information */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Basic Information</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Full Name</label>
-              <div className="detail-value">
-                <div className="user-avatar">
+              <div className={styles.detailValue}>
+                <div className={styles.userAvatar}>
                   {userHelpers.getFullName(user).charAt(0).toUpperCase()}
                 </div>
                 <span>{userHelpers.getFullName(user)}</span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Email Address</label>
-              <div className="detail-value">
-                <a href={`mailto:${user.email}`} className="email-link">
+              <div className={styles.detailValue}>
+                <a href={`mailto:${user.email}`} className={styles.emailLink}>
                   {user.email}
                 </a>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>User ID</label>
-              <div className="detail-value user-id">
+              <div className={`${styles.detailValue} ${styles.userId}`}>
                 {user._id}
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Account Created</label>
-              <div className="detail-value">
+              <div className={styles.detailValue}>
                 {new Date(user.createdAt).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
@@ -246,9 +246,9 @@ function UserDetail() {
               </div>
             </div>
             {user.updatedAt && user.updatedAt !== user.createdAt && (
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Last Updated</label>
-                <div className="detail-value">
+                <div className={styles.detailValue}>
                   {new Date(user.updatedAt).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -263,39 +263,39 @@ function UserDetail() {
         </div>
 
         {/* Role and Permissions */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Role and Permissions</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Role</label>
-              <div className="detail-value">
-                <span className={`role-badge role-${user.role}`}>
+              <div className={styles.detailValue}>
+                <span className={`${styles.roleBadge} ${styles[`role${user.role.charAt(0).toUpperCase() + user.role.slice(1)}`]}`}>
                   {userHelpers.getRoleDisplayText(user.role)}
                 </span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Portal Type</label>
-              <div className="detail-value">
-                <span className={`portal-badge portal-${user.portalType}`}>
+              <div className={styles.detailValue}>
+                <span className={`${styles.portalBadge} ${styles[`portal${user.portalType.charAt(0).toUpperCase() + user.portalType.slice(1)}`]}`}>
                   {userHelpers.getPortalDisplayText(user.portalType)}
                 </span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Status</label>
-              <div className="detail-value">
-                <span className={`status-badge ${user.isActive ? 'active' : 'inactive'}`}>
+              <div className={styles.detailValue}>
+                <span className={`${styles.statusBadge} ${user.isActive ? styles.active : styles.inactive}`}>
                   {userHelpers.getStatusText(user.isActive)}
                 </span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Permissions</label>
-              <div className="detail-value">
-                <div className="permissions-list">
+              <div className={styles.detailValue}>
+                <div className={styles.permissionsList}>
                   {userHelpers.getUserPermissions(user).map((permission, index) => (
-                    <span key={index} className="permission-tag">
+                    <span key={index} className={styles.permissionTag}>
                       {permission}
                     </span>
                   ))}
@@ -306,32 +306,32 @@ function UserDetail() {
         </div>
 
         {/* Organization */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Organization</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Account</label>
-              <div className="detail-value">
+              <div className={styles.detailValue}>
                 {user.accountId ? (
-                  <div className="org-info">
-                    <span className="org-name">{user.accountId.name}</span>
-                    <span className="org-id">ID: {user.accountId._id}</span>
+                  <div className={styles.orgInfo}>
+                    <span className={styles.orgName}>{user.accountId.name}</span>
+                    <span className={styles.orgId}>ID: {user.accountId._id}</span>
                   </div>
                 ) : (
-                  <span className="no-data">Not assigned</span>
+                  <span className={styles.noData}>Not assigned</span>
                 )}
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Agency</label>
-              <div className="detail-value">
+              <div className={styles.detailValue}>
                 {user.agencyId ? (
-                  <div className="org-info">
-                    <span className="org-name">{user.agencyId.name}</span>
-                    <span className="org-id">ID: {user.agencyId._id}</span>
+                  <div className={styles.orgInfo}>
+                    <span className={styles.orgName}>{user.agencyId.name}</span>
+                    <span className={styles.orgId}>ID: {user.agencyId._id}</span>
                   </div>
                 ) : (
-                  <span className="no-data">Not assigned</span>
+                  <span className={styles.noData}>Not assigned</span>
                 )}
               </div>
             </div>
@@ -340,43 +340,43 @@ function UserDetail() {
 
         {/* Profile Information */}
         {user.profile && Object.values(user.profile).some(value => value) && (
-          <div className="detail-section">
+          <div className={styles.detailSection}>
             <h3>Profile Information</h3>
-            <div className="detail-grid">
+            <div className={styles.detailGrid}>
               {user.profile.phone && (
-                <div className="detail-item">
+                <div className={styles.detailItem}>
                   <label>Phone Number</label>
-                  <div className="detail-value">
-                    <a href={`tel:${user.profile.phone}`} className="phone-link">
+                  <div className={styles.detailValue}>
+                    <a href={`tel:${user.profile.phone}`} className={styles.phoneLink}>
                       {user.profile.phone}
                     </a>
                   </div>
                 </div>
               )}
               {user.profile.department && (
-                <div className="detail-item">
+                <div className={styles.detailItem}>
                   <label>Department</label>
-                  <div className="detail-value">{user.profile.department}</div>
+                  <div className={styles.detailValue}>{user.profile.department}</div>
                 </div>
               )}
               {user.profile.position && (
-                <div className="detail-item">
+                <div className={styles.detailItem}>
                   <label>Position</label>
-                  <div className="detail-value">{user.profile.position}</div>
+                  <div className={styles.detailValue}>{user.profile.position}</div>
                 </div>
               )}
               {user.profile.address && (
-                <div className="detail-item full-width">
+                <div className={`${styles.detailItem} ${styles.fullWidth}`}>
                   <label>Address</label>
-                  <div className="detail-value address">
+                  <div className={`${styles.detailValue} ${styles.address}`}>
                     {user.profile.address}
                   </div>
                 </div>
               )}
               {user.profile.notes && (
-                <div className="detail-item full-width">
+                <div className={`${styles.detailItem} ${styles.fullWidth}`}>
                   <label>Notes</label>
-                  <div className="detail-value notes">
+                  <div className={`${styles.detailValue} ${styles.notes}`}>
                     {user.profile.notes}
                   </div>
                 </div>
@@ -386,29 +386,29 @@ function UserDetail() {
         )}
 
         {/* Activity Summary */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Activity Summary</h3>
-          <div className="activity-stats">
-            <div className="stat-item">
-              <div className="stat-value">
+          <div className={styles.activityStats}>
+            <div className={styles.statItem}>
+              <div className={styles.statValue}>
                 {user.subordinates?.length || 0}
               </div>
-              <div className="stat-label">Subordinates</div>
+              <div className={styles.statLabel}>Subordinates</div>
             </div>
-            <div className="stat-item">
-              <div className="stat-value">
+            <div className={styles.statItem}>
+              <div className={styles.statValue}>
                 {user.lastLoginAt ? 
                   new Date(user.lastLoginAt).toLocaleDateString() : 
                   'Never'
                 }
               </div>
-              <div className="stat-label">Last Login</div>
+              <div className={styles.statLabel}>Last Login</div>
             </div>
-            <div className="stat-item">
-              <div className="stat-value">
+            <div className={styles.statItem}>
+              <div className={styles.statValue}>
                 {Math.floor((new Date() - new Date(user.createdAt)) / (1000 * 60 * 60 * 24))}
               </div>
-              <div className="stat-label">Days Active</div>
+              <div className={styles.statLabel}>Days Active</div>
             </div>
           </div>
         </div>
@@ -425,24 +425,24 @@ function UserDetail() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
             <h3>Delete User</h3>
             <p>
               Are you sure you want to delete <strong>{userHelpers.getFullName(user)}</strong>?
               This action cannot be undone and will permanently remove all user data.
             </p>
-            <div className="modal-actions">
+            <div className={styles.modalActions}>
               <button 
                 onClick={() => setShowDeleteConfirm(false)}
-                className="btn btn-outline"
+                className={`${styles.btn} ${styles.btnOutline}`}
                 disabled={isDeleting}
               >
                 Cancel
               </button>
               <button 
                 onClick={handleDeleteUser}
-                className="btn btn-danger"
+                className={`${styles.btn} ${styles.btnDanger}`}
                 disabled={isDeleting}
               >
                 {isDeleting ? 'Deleting...' : 'Delete User'}

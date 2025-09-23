@@ -16,9 +16,9 @@ import {
   PORTAL_TYPES, 
   userHelpers 
 } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './UserForm.css';
+import styles from './UserForm.module.css';
 
 // UserForm component for creating and editing users
 function UserForm() {
@@ -213,7 +213,7 @@ function UserForm() {
         type="error"
         title="Error Loading User"
       />
-      <button onClick={() => navigate('/users')} className="btn btn-primary">
+      <button onClick={() => navigate('/users')} className={`${styles.btn} ${styles.btnPrimary}`}>
         Back to Users
       </button>
     );
@@ -227,24 +227,24 @@ function UserForm() {
         type="error"
         title="Access Denied"
       />
-      <button onClick={() => navigate('/users')} className="btn btn-primary">
+      <button onClick={() => navigate('/users')} className={`${styles.btn} ${styles.btnPrimary}`}>
         Back to Users
       </button>
     );
   }
 
   return (
-    <div className="user-form-container">
+    <div className={styles.userFormContainer}>
       {/* Header */}
-      <div className="page-header">
-        <div className="header-left">
+      <div className={styles.pageHeader}>
+        <div className={styles.headerLeft}>
           <h1>{isEditing ? 'Edit User' : 'Create New User'}</h1>
           <p>{isEditing ? 'Update user information and permissions' : 'Add a new user to the system'}</p>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           <button 
             onClick={() => navigate('/users')} 
-            className="btn btn-outline"
+            className={`${styles.btn} ${styles.btnOutline}`}
           >
             Cancel
           </button>
@@ -252,13 +252,13 @@ function UserForm() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="user-form">
-        <div className="form-sections">
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.userForm}>
+        <div className={styles.formSections}>
           {/* Basic Information */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Basic Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="email">Email Address *</label>
                 <input
                   type="email"
@@ -271,13 +271,13 @@ function UserForm() {
                     }
                   })}
                   disabled={isFieldDisabled('email')}
-                  className={errors.email ? 'error' : ''}
+                  className={errors.email ? styles.error : ''}
                   placeholder="user@example.com"
                 />
                 <ErrorMessage error={errors.email} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="firstName">First Name *</label>
                 <input
                   type="text"
@@ -290,13 +290,13 @@ function UserForm() {
                     }
                   })}
                   disabled={isFieldDisabled('firstName')}
-                  className={errors.firstName ? 'error' : ''}
+                  className={errors.firstName ? styles.error : ''}
                   placeholder="John"
                 />
                 <ErrorMessage error={errors.firstName} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="lastName">Last Name *</label>
                 <input
                   type="text"
@@ -309,7 +309,7 @@ function UserForm() {
                     }
                   })}
                   disabled={isFieldDisabled('lastName')}
-                  className={errors.lastName ? 'error' : ''}
+                  className={errors.lastName ? styles.error : ''}
                   placeholder="Doe"
                 />
                 <ErrorMessage error={errors.lastName} variant="inline" type="validation" />
@@ -318,10 +318,10 @@ function UserForm() {
           </div>
 
           {/* Role and Permissions */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Role and Permissions</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="role">Role *</label>
                 <select
                   id="role"
@@ -329,7 +329,7 @@ function UserForm() {
                     required: 'Role is required'
                   })}
                   disabled={isFieldDisabled('role')}
-                  className={errors.role ? 'error' : ''}
+                  className={errors.role ? styles.error : ''}
                 >
                   {getAvailableRoles().map(role => (
                     <option key={role} value={role}>
@@ -340,7 +340,7 @@ function UserForm() {
                 <ErrorMessage error={errors.role} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="portalType">Portal Type *</label>
                 <select
                   id="portalType"
@@ -348,7 +348,7 @@ function UserForm() {
                     required: 'Portal type is required'
                   })}
                   disabled={isFieldDisabled('portalType')}
-                  className={errors.portalType ? 'error' : ''}
+                  className={errors.portalType ? styles.error : ''}
                 >
                   {getAvailablePortalTypes().map(portal => (
                     <option key={portal} value={portal}>
@@ -359,7 +359,7 @@ function UserForm() {
                 <ErrorMessage error={errors.portalType} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="isActive">Status</label>
                 <select
                   id="isActive"
@@ -376,10 +376,10 @@ function UserForm() {
           </div>
 
           {/* Organization */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Organization</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="accountId">Account</label>
                 <input
                   type="text"
@@ -388,12 +388,12 @@ function UserForm() {
                   disabled={isFieldDisabled('accountId')}
                   placeholder="Account ID (will be auto-assigned based on portal)"
                 />
-                <small className="help-text">
+                <small className={styles.helpText}>
                   Account will be automatically assigned based on your portal access
                 </small>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="agencyId">Agency</label>
                 <input
                   type="text"
@@ -402,7 +402,7 @@ function UserForm() {
                   disabled={isFieldDisabled('agencyId')}
                   placeholder="Agency ID (optional for account-level users)"
                 />
-                <small className="help-text">
+                <small className={styles.helpText}>
                   Required for agency portal users, optional for account-level users
                 </small>
               </div>
@@ -410,10 +410,10 @@ function UserForm() {
           </div>
 
           {/* Profile Information */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Profile Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="phone">Phone Number</label>
                 <input
                   type="tel"
@@ -424,7 +424,7 @@ function UserForm() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="department">Department</label>
                 <input
                   type="text"
@@ -435,7 +435,7 @@ function UserForm() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="position">Position</label>
                 <input
                   type="text"
@@ -446,7 +446,7 @@ function UserForm() {
                 />
               </div>
 
-              <div className="form-group full-width">
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                 <label htmlFor="address">Address</label>
                 <textarea
                   id="address"
@@ -457,7 +457,7 @@ function UserForm() {
                 />
               </div>
 
-              <div className="form-group full-width">
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                 <label htmlFor="notes">Notes</label>
                 <textarea
                   id="notes"
@@ -472,10 +472,10 @@ function UserForm() {
 
           {/* Password Section */}
           {(!isEditing || (isEditing && currentUser._id === userData?.data?._id)) && (
-            <div className="form-section">
+            <div className={styles.formSection}>
               <h3>{isEditing ? 'Change Password' : 'Password'}</h3>
-              <div className="form-grid">
-                <div className="form-group">
+              <div className={styles.formGrid}>
+                <div className={styles.formGroup}>
                   <label htmlFor="password">
                     {isEditing ? 'New Password' : 'Password'} {!isEditing && '*'}
                   </label>
@@ -489,18 +489,18 @@ function UserForm() {
                         message: 'Password must be at least 8 characters long'
                       }
                     })}
-                    className={errors.password ? 'error' : ''}
+                    className={errors.password ? styles.error : ''}
                     placeholder={isEditing ? 'Leave blank to keep current password' : 'Enter password'}
                   />
                   <ErrorMessage error={errors.password} variant="inline" type="validation" />
                   {!isEditing && (
-                    <small className="help-text">
+                    <small className={styles.helpText}>
                       Password must be at least 8 characters long
                     </small>
                   )}
                 </div>
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="confirmPassword">
                     Confirm {isEditing ? 'New ' : ''}Password {!isEditing && '*'}
                   </label>
@@ -520,7 +520,7 @@ function UserForm() {
                         return true;
                       }
                     })}
-                    className={errors.confirmPassword ? 'error' : ''}
+                    className={errors.confirmPassword ? styles.error : ''}
                     placeholder="Confirm password"
                   />
                   <ErrorMessage error={errors.confirmPassword} variant="inline" type="validation" />
@@ -531,18 +531,18 @@ function UserForm() {
         </div>
 
         {/* Form Actions */}
-        <div className="form-actions">
+        <div className={styles.formActions}>
           <button 
             type="button" 
             onClick={() => navigate('/users')} 
-            className="btn btn-outline"
+            className={`${styles.btn} ${styles.btnOutline}`}
             disabled={isSubmitting}
           >
             Cancel
           </button>
           <button 
             type="submit" 
-            className="btn btn-primary"
+            className={`${styles.btn} ${styles.btnPrimary}`}
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Saving...' : (isEditing ? 'Update User' : 'Create User')}

@@ -14,9 +14,9 @@ import {
   clearError
 } from '../../store/slices/agenciesUi.slice';
 import { PORTAL_TYPES } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './AgencyForm.css';
+import styles from './AgencyForm.module.css';
 
 /**
  * Create default form data for agency
@@ -243,7 +243,7 @@ function AgencyForm() {
   // Loading states
   if (isEditing && isLoadingAgency) {
     return (
-      <div className="agency-form-container">
+      <div className={styles.agencyFormContainer}>
         <LoadingSpinner message="Loading agency..." />
       </div>
     );
@@ -251,7 +251,7 @@ function AgencyForm() {
 
   if (isLoadingAccounts && currentUser?.portalType === PORTAL_TYPES.SUPERADMIN) {
     return (
-      <div className="agency-form-container">
+      <div className={styles.agencyFormContainer}>
         <LoadingSpinner message="Loading accounts..." />
       </div>
     );
@@ -260,14 +260,14 @@ function AgencyForm() {
   // Error states
   if (isEditing && isAgencyError) {
     return (
-      <div className="agency-form-container">
+      <div className={styles.agencyFormContainer}>
         <ErrorMessage 
           error={{message: "Failed to load agency data for editing"}} 
           variant="page" 
           type="error"
           title="Error Loading Agency"
         />
-        <button onClick={() => navigate('/agencies')} className="btn btn-primary">
+        <button onClick={() => navigate('/agencies')} className={`${styles.btn} ${styles.btnPrimary}`}>
           Back to Agencies
         </button>
       </div>
@@ -276,14 +276,14 @@ function AgencyForm() {
 
   if (!canSubmitForm()) {
     return (
-      <div className="agency-form-container">
+      <div className={styles.agencyFormContainer}>
         <ErrorMessage 
           error={{message: `You do not have permission to ${isEditing ? 'edit agencies' : 'create agencies'}`}} 
           variant="page" 
           type="error"
           title="Access Denied"
         />
-        <button onClick={() => navigate('/agencies')} className="btn btn-primary">
+        <button onClick={() => navigate('/agencies')} className={`${styles.btn} ${styles.btnPrimary}`}>
           Back to Agencies
         </button>
       </div>
@@ -293,10 +293,10 @@ function AgencyForm() {
   const availableAccounts = getAvailableAccounts();
 
   return (
-    <div className="agency-form-container">
+    <div className={styles.agencyFormContainer}>
       {/* Header */}
-      <div className="form-header">
-        <div className="header-content">
+      <div className={styles.formHeader}>
+        <div className={styles.headerContent}>
           <h1>{isEditing ? 'Edit Agency' : 'Create New Agency'}</h1>
           <p>
             {isEditing 
@@ -305,10 +305,10 @@ function AgencyForm() {
             }
           </p>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           <button 
             onClick={() => navigate('/agencies')} 
-            className="btn btn-secondary"
+            className={`${styles.btn} ${styles.btnSecondary}`}
             type="button"
           >
             Cancel
@@ -318,20 +318,20 @@ function AgencyForm() {
 
       {/* Error Display */}
       {error && (
-        <div className="error-banner">
+        <div className={styles.errorBanner}>
           <span>{error}</span>
           <button onClick={() => dispatch(clearError())} type="button">×</button>
         </div>
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="agency-form">
-        <div className="form-sections">
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.agencyForm}>
+        <div className={styles.formSections}>
           {/* Basic Information */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Basic Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="name">Agency Name *</label>
                 <input
                   type="text"
@@ -348,14 +348,14 @@ function AgencyForm() {
                     },
                     validate: value => value.trim().length > 0 || 'Agency name is required'
                   })}
-                  className={errors.name ? 'error' : ''}
+                  className={errors.name ? styles.error : ''}
                   placeholder="Enter agency name"
                   maxLength={100}
                 />
                 <ErrorMessage error={errors.name} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="isActive">Status</label>
                 <select
                   id="isActive"
@@ -368,7 +368,7 @@ function AgencyForm() {
                 </select>
               </div>
 
-              <div className="form-group full-width">
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                 <label htmlFor="description">Description</label>
                 <textarea
                   id="description"
@@ -378,13 +378,13 @@ function AgencyForm() {
                       message: 'Description must be less than 500 characters'
                     }
                   })}
-                  className={errors.description ? 'error' : ''}
+                  className={errors.description ? styles.error : ''}
                   placeholder="Optional description of the agency"
                   rows={3}
                   maxLength={500}
                 />
                 <ErrorMessage error={errors.description} variant="inline" type="validation" />
-                <small className="field-hint">
+                <small className={styles.fieldHint}>
                   {(formData.description || '').length}/500 characters
                 </small>
               </div>
@@ -392,12 +392,12 @@ function AgencyForm() {
           </div>
 
           {/* Commission Settings */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Commission Settings</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="commissionSplitPercent">Commission Split Percentage *</label>
-                <div className="input-with-suffix">
+                <div className={styles.inputWithSuffix}>
                   <input
                     type="number"
                     id="commissionSplitPercent"
@@ -413,16 +413,16 @@ function AgencyForm() {
                       },
                       setValueAs: value => value === '' ? '' : Number(value)
                     })}
-                    className={errors.commissionSplitPercent ? 'error' : ''}
+                    className={errors.commissionSplitPercent ? styles.error : ''}
                     placeholder="50"
                     min="0"
                     max="100"
                     step="0.01"
                   />
-                  <span className="input-suffix">%</span>
+                  <span className={styles.inputSuffix}>%</span>
                 </div>
                 <ErrorMessage error={errors.commissionSplitPercent} variant="inline" type="validation" />
-                <small className="field-hint">
+                <small className={styles.fieldHint}>
                   Percentage of commission this agency receives (0-100%)
                 </small>
               </div>
@@ -430,18 +430,18 @@ function AgencyForm() {
           </div>
 
           {/* Account Assignment */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Account Assignment</h3>
-            <div className="form-grid">
+            <div className={styles.formGrid}>
               {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN ? (
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="accountId">Account *</label>
                   <select
                     id="accountId"
                     {...register('accountId', {
                       required: 'Account is required'
                     })}
-                    className={errors.accountId ? 'error' : ''}
+                    className={errors.accountId ? styles.error : ''}
                   >
                     <option value="">Select an account</option>
                     {availableAccounts.map((account) => (
@@ -453,16 +453,16 @@ function AgencyForm() {
                   <ErrorMessage error={errors.accountId} variant="inline" type="validation" />
                 </div>
               ) : (
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label>Account</label>
-                  <div className="readonly-field">
+                  <div className={styles.readonlyField}>
                     {currentUser?.accountId ? (
                       <span>Current Account (Auto-assigned)</span>
                     ) : (
-                      <span className="text-muted">No account assigned</span>
+                      <span className={styles.textMuted}>No account assigned</span>
                     )}
                   </div>
-                  <small className="field-hint">
+                  <small className={styles.fieldHint}>
                     Agency will be created under your current account
                   </small>
                 </div>
@@ -472,18 +472,18 @@ function AgencyForm() {
         </div>
 
         {/* Form Actions */}
-        <div className="form-actions">
+        <div className={styles.formActions}>
           <button 
             type="button"
             onClick={() => navigate('/agencies')} 
-            className="btn btn-secondary"
+            className={`${styles.btn} ${styles.btnSecondary}`}
             disabled={isSubmitting}
           >
             Cancel
           </button>
           <button 
             type="submit" 
-            className="btn btn-primary"
+            className={`${styles.btn} ${styles.btnPrimary}`}
             disabled={isSubmitting}
           >
             {isSubmitting 

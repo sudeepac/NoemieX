@@ -19,8 +19,8 @@ import {
   BILLING_STATUSES,
   accountHelpers 
 } from '../../types/account.types';
-import LoadingSpinner from '../common/loading-spinner.component';
-import './AccountSelector.css';
+import LoadingSpinner from '../common/LoadingSpinner';
+import styles from './AccountSelector.module.css';
 
 // AccountSelector component for account context display and basic account info
 function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
@@ -90,7 +90,7 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
   // Loading state
   if (isLoading) {
     return (
-      <div className="account-selector loading">
+      <div className={`${styles.accountSelector} ${styles.loading}`}>
         <LoadingSpinner size="sm" />
         <span>Loading account...</span>
       </div>
@@ -100,7 +100,7 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
   // Error state
   if (isError) {
     return (
-      <div className="account-selector error">
+      <div className={`${styles.accountSelector} ${styles.error}`}>
         <AlertCircle className="w-4 h-4" />
         <span>Error loading account</span>
       </div>
@@ -113,7 +113,7 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
 
   if (!account) {
     return (
-      <div className="account-selector error">
+      <div className={`${styles.accountSelector} ${styles.error}`}>
         <AlertCircle className="w-4 h-4" />
         <span>Account not found</span>
       </div>
@@ -145,21 +145,21 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
   };
 
   return (
-    <div className="account-selector">
+    <div className={styles.accountSelector}>
       {/* Account Context Header */}
-      <div className="account-context">
-        <div className="account-info">
-          <div className="account-main">
-            <div className="account-name">
+      <div className={styles.accountContext}>
+        <div className={styles.accountInfo}>
+          <div className={styles.accountMain}>
+            <div className={styles.accountName}>
               <Building2 className="w-5 h-5" />
               <span>{account.name}</span>
               {getStatusIcon()}
             </div>
-            <div className="account-meta">
-              <span className={`subscription-badge ${account.subscription?.status}`}>
+            <div className={styles.accountMeta}>
+              <span className={`${styles.subscriptionBadge} ${styles[account.subscription?.status]}`}>
                 {accountHelpers.formatSubscriptionStatus(account.subscription?.status)}
               </span>
-              <span className={`billing-badge ${getBillingStatusColor()}`}>
+              <span className={`${styles.billingBadge} ${styles[getBillingStatusColor()]}`}>
                 {accountHelpers.formatBillingStatus(account.billing?.status)}
               </span>
             </div>
@@ -167,16 +167,16 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
           
           {/* Quick Stats */}
           {!isLoadingStats && stats && (
-            <div className="account-stats">
-              <div className="stat-item">
+            <div className={styles.accountStats}>
+              <div className={styles.statItem}>
                 <Users className="w-4 h-4" />
                 <span>{stats.totalUsers || 0} Users</span>
               </div>
-              <div className="stat-item">
+              <div className={styles.statItem}>
                 <Building2 className="w-4 h-4" />
                 <span>{stats.totalAgencies || 0} Agencies</span>
               </div>
-              <div className="stat-item">
+              <div className={styles.statItem}>
                 <DollarSign className="w-4 h-4" />
                 <span>${accountHelpers.formatCurrency(stats.monthlyRevenue || 0)}</span>
               </div>
@@ -186,13 +186,13 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
       </div>
 
       {/* View Selector */}
-      <div className="view-selector">
+      <div className={styles.viewSelector}>
         <button 
-          className="view-selector-trigger"
+          className={styles.viewSelectorTrigger}
           onClick={() => setIsExpanded(!isExpanded)}
           aria-expanded={isExpanded}
         >
-          <div className="current-view">
+          <div className={styles.currentView}>
             {currentView?.icon}
             <span>{currentView?.label}</span>
           </div>
@@ -200,19 +200,19 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
         </button>
 
         {isExpanded && (
-          <div className="view-dropdown">
+          <div className={styles.viewDropdown}>
             {accountViews.map((view) => (
               <button
                 key={view.id}
-                className={`view-option ${selectedAccountView === view.id ? 'active' : ''}`}
+                className={`${styles.viewOption} ${selectedAccountView === view.id ? styles.active : ''}`}
                 onClick={() => handleViewChange(view.id)}
               >
-                <div className="view-option-content">
-                  <div className="view-option-header">
+                <div className={styles.viewOptionContent}>
+                  <div className={styles.viewOptionHeader}>
                     {view.icon}
-                    <span className="view-option-label">{view.label}</span>
+                    <span className={styles.viewOptionLabel}>{view.label}</span>
                   </div>
-                  <p className="view-option-description">{view.description}</p>
+                  <p className={styles.viewOptionDescription}>{view.description}</p>
                 </div>
               </button>
             ))}
@@ -222,7 +222,7 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
 
       {/* Account Alerts */}
       {account.subscription?.status === SUBSCRIPTION_STATUSES.TRIAL && (
-        <div className="account-alert trial">
+        <div className={`${styles.accountAlert} ${styles.trial}`}>
           <Clock className="w-4 h-4" />
           <span>
             Trial expires {accountHelpers.formatDate(account.subscription?.trialEndDate)}
@@ -231,7 +231,7 @@ function AccountSelector({ onAccountChange, selectedView = 'overview' }) {
       )}
 
       {account.billing?.status === BILLING_STATUSES.OVERDUE && (
-        <div className="account-alert overdue">
+        <div className={`${styles.accountAlert} ${styles.overdue}`}>
           <AlertCircle className="w-4 h-4" />
           <span>
             Payment overdue - ${accountHelpers.formatCurrency(account.billing?.outstandingBalance || 0)}

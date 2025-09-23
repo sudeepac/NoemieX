@@ -3,7 +3,7 @@ import { usePermissions } from '../../shared/hooks/usePermissions';
 import PaymentCard from './PaymentCard';
 import { Search, Filter, Plus, DollarSign } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatters';
-import './PaymentsList.css';
+import styles from './PaymentsList.module.css';
 
 /**
  * PaymentsList - Domain component for displaying payments and billing
@@ -65,8 +65,8 @@ const PaymentsList = ({
 
   if (loading) {
     return (
-      <div className="payments-list-loading">
-        <div className="loading-spinner" />
+      <div className={styles.paymentsListLoading}>
+        <div className={styles.loadingSpinner} />
         <p>Loading payments...</p>
       </div>
     );
@@ -74,9 +74,9 @@ const PaymentsList = ({
 
   if (error) {
     return (
-      <div className="payments-list-error">
+      <div className={styles.paymentsListError}>
         <p>Error loading payments: {error.message}</p>
-        <button onClick={refetch} className="retry-button">
+        <button onClick={refetch} className={styles.retryButton}>
           Try Again
         </button>
       </div>
@@ -84,76 +84,76 @@ const PaymentsList = ({
   }
 
   return (
-    <div className={`payments-list ${compact ? 'compact' : ''}`}>
+    <div className={`${styles.paymentsList} ${compact ? styles.compact : ''}`}>
       {showSummary && summary && (
-        <div className="payments-summary">
-          <div className="summary-card">
+        <div className={styles.paymentsSummary}>
+          <div className={styles.summaryCard}>
             <h3>Total Outstanding</h3>
-            <div className="summary-value outstanding">
+            <div className={`${styles.summaryValue} ${styles.outstanding}`}>
               {formatCurrency(summary.totalOutstanding)}
             </div>
           </div>
           
-          <div className="summary-card">
+          <div className={styles.summaryCard}>
             <h3>Total Paid</h3>
-            <div className="summary-value paid">
+            <div className={`${styles.summaryValue} ${styles.paid}`}>
               {formatCurrency(summary.totalPaid)}
             </div>
           </div>
           
-          <div className="summary-card">
+          <div className={styles.summaryCard}>
             <h3>Pending Claims</h3>
-            <div className="summary-value pending">
+            <div className={`${styles.summaryValue} ${styles.pending}`}>
               {formatCurrency(summary.totalPending)}
             </div>
           </div>
           
-          <div className="summary-card">
+          <div className={styles.summaryCard}>
             <h3>Disputed</h3>
-            <div className="summary-value disputed">
+            <div className={`${styles.summaryValue} ${styles.disputed}`}>
               {formatCurrency(summary.totalDisputed)}
             </div>
           </div>
         </div>
       )}
 
-      <div className="payments-list-header">
-        <div className="view-type-selector">
+      <div className={styles.paymentsListHeader}>
+        <div className={styles.viewTypeSelector}>
           <button 
-            className={viewType === 'all' ? 'active' : ''}
+            className={viewType === 'all' ? styles.active : ''}
             onClick={() => setViewType('all')}
           >
             All
           </button>
           <button 
-            className={viewType === 'schedules' ? 'active' : ''}
+            className={viewType === 'schedules' ? styles.active : ''}
             onClick={() => setViewType('schedules')}
           >
             Schedules
           </button>
           <button 
-            className={viewType === 'transactions' ? 'active' : ''}
+            className={viewType === 'transactions' ? styles.active : ''}
             onClick={() => setViewType('transactions')}
           >
             Transactions
           </button>
         </div>
 
-        <div className="search-section">
-          <div className="search-input-wrapper">
-            <Search size={20} className="search-icon" />
+        <div className={styles.searchSection}>
+          <div className={styles.searchInputWrapper}>
+            <Search size={20} className={styles.searchIcon} />
             <input
               type="text"
               placeholder="Search payments..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
+              className={styles.searchInput}
             />
           </div>
           
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className={`filter-button ${showFilters ? 'active' : ''}`}
+            className={`${styles.filterButton} ${showFilters ? styles.active : ''}`}
           >
             <Filter size={20} />
             Filters
@@ -163,7 +163,7 @@ const PaymentsList = ({
         {showActions && canCreatePayments && (
           <button 
             onClick={onCreatePayment}
-            className="create-payment-button"
+            className={styles.createPaymentButton}
           >
             <Plus size={20} />
             Add Payment
@@ -172,8 +172,8 @@ const PaymentsList = ({
       </div>
 
       {showFilters && (
-        <div className="filters-panel">
-          <div className="filter-group">
+        <div className={styles.filtersPanel}>
+          <div className={styles.filterGroup}>
             <label>Status:</label>
             <select>
               <option value="">All Statuses</option>
@@ -185,37 +185,37 @@ const PaymentsList = ({
             </select>
           </div>
           
-          <div className="filter-group">
+          <div className={styles.filterGroup}>
             <label>Amount Range:</label>
-            <div className="amount-range">
+            <div className={styles.amountRange}>
               <input type="number" placeholder="Min" />
               <span>to</span>
               <input type="number" placeholder="Max" />
             </div>
           </div>
 
-          <div className="filter-group">
+          <div className={styles.filterGroup}>
             <label>Date Range:</label>
-            <div className="date-range">
+            <div className={styles.dateRange}>
               <input type="date" />
               <span>to</span>
               <input type="date" />
             </div>
           </div>
 
-          <button className="reset-filters-button">
+          <button className={styles.resetFiltersButton}>
             Reset Filters
           </button>
         </div>
       )}
 
-      <div className="payments-grid">
+      <div className={styles.paymentsGrid}>
         {filteredPayments.length === 0 ? (
-          <div className="no-payments">
-            <DollarSign size={48} className="no-payments-icon" />
+          <div className={styles.noPayments}>
+            <DollarSign size={48} className={styles.noPaymentsIcon} />
             <p>No payments found</p>
             {canCreatePayments && (
-              <button onClick={onCreatePayment} className="create-first-payment">
+              <button onClick={onCreatePayment} className={styles.createFirstPayment}>
                 Create your first payment
               </button>
             )}
@@ -235,7 +235,7 @@ const PaymentsList = ({
       </div>
 
       {pagination && pagination.totalPages > 1 && (
-        <div className="pagination">
+        <div className={styles.pagination}>
           <button 
             disabled={pagination.currentPage === 1}
           >

@@ -13,9 +13,9 @@ import {
   BILLING_STATUSES,
   accountHelpers 
 } from '../../types/account.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './AccountDetail.css';
+import styles from './AccountDetail.module.css';
 
 // AccountDetail component for displaying comprehensive account information
 function AccountDetail() {
@@ -80,7 +80,7 @@ function AccountDetail() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="account-detail-container">
+      <div className={styles.accountDetailContainer}>
         <LoadingSpinner />
       </div>
     );
@@ -89,18 +89,18 @@ function AccountDetail() {
   // Error state
   if (isError) {
     return (
-      <div className="account-detail-container">
+      <div className={styles.accountDetailContainer}>
         <ErrorMessage 
           error={{message: error?.data?.message || 'Failed to load account details'}} 
           variant="page" 
           type="error"
           title="Error Loading Account"
         />
-        <div className="error-actions">
-          <button onClick={() => refetch()} className="btn btn-primary">
+        <div className={styles.errorActions}>
+          <button onClick={() => refetch()} className={`${styles.btn} ${styles.btnPrimary}`}>
             Try Again
           </button>
-          <Link to="/accounts" className="btn btn-outline">
+          <Link to="/accounts" className={`${styles.btn} ${styles.btnOutline}`}>
             Back to Accounts
           </Link>
         </div>
@@ -113,15 +113,15 @@ function AccountDetail() {
 
   if (!account) {
     return (
-      <div className="account-detail-container">
+      <div className={styles.accountDetailContainer}>
         <ErrorMessage 
           error={{message: "The requested account could not be found."}} 
           variant="page" 
           type="error"
           title="Account Not Found"
         />
-        <div className="error-actions">
-          <Link to="/accounts" className="btn btn-primary">
+        <div className={styles.errorActions}>
+          <Link to="/accounts" className={`${styles.btn} ${styles.btnPrimary}`}>
             Back to Accounts
           </Link>
         </div>
@@ -130,38 +130,38 @@ function AccountDetail() {
   }
 
   return (
-    <div className="account-detail-container">
+    <div className={styles.accountDetailContainer}>
       {/* Page Header */}
-      <div className="page-header">
-        <div className="header-left">
-          <div className="breadcrumb">
-            <Link to="/accounts" className="breadcrumb-link">Accounts</Link>
-            <span className="breadcrumb-separator">›</span>
-            <span className="breadcrumb-current">{account.name}</span>
+      <div className={styles.pageHeader}>
+        <div className={styles.headerLeft}>
+          <div className={styles.breadcrumb}>
+            <Link to="/accounts" className={styles.breadcrumbLink}>Accounts</Link>
+            <span className={styles.breadcrumbSeparator}>›</span>
+            <span className={styles.breadcrumbCurrent}>{account.name}</span>
           </div>
           <h1>{account.name}</h1>
-          <div className="account-meta">
-            <span className={`status-badge ${account.subscription?.status === SUBSCRIPTION_STATUSES.ACTIVE ? 'active' : 'inactive'}`}>
+          <div className={styles.accountMeta}>
+            <span className={`${styles.statusBadge} ${account.subscription?.status === SUBSCRIPTION_STATUSES.ACTIVE ? styles.active : styles.inactive}`}>
               {accountHelpers.getSubscriptionStatusText(account.subscription?.status)}
             </span>
-            <span className={`plan-badge plan-${account.subscription?.plan}`}>
+            <span className={`${styles.planBadge} ${styles[`plan${account.subscription?.plan}`]}`}>
               {accountHelpers.getPlanDisplayText(account.subscription?.plan)}
             </span>
-            <span className={`billing-badge ${accountHelpers.getBillingStatusClass(account.billing?.status)}`}>
+            <span className={`${styles.billingBadge} ${styles[accountHelpers.getBillingStatusClass(account.billing?.status)]}`}>
               {accountHelpers.getBillingStatusText(account.billing?.status)}
             </span>
           </div>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           {canEditAccount() && (
-            <Link to={`/accounts/${account._id}/edit`} className="btn btn-primary">
+            <Link to={`/accounts/${account._id}/edit`} className={`${styles.btn} ${styles.btnPrimary}`}>
               Edit Account
             </Link>
           )}
           {canToggleStatus() && (
             <button 
               onClick={handleToggleStatus}
-              className={`btn ${account.subscription?.status === SUBSCRIPTION_STATUSES.ACTIVE ? 'btn-warning' : 'btn-success'}`}
+              className={`${styles.btn} ${account.subscription?.status === SUBSCRIPTION_STATUSES.ACTIVE ? styles.btnWarning : styles.btnSuccess}`}
               disabled={isToggling}
             >
               {isToggling ? 'Updating...' : 
@@ -172,7 +172,7 @@ function AccountDetail() {
           {canDeleteAccount() && (
             <button 
               onClick={() => setShowDeleteConfirm(true)}
-              className="btn btn-danger"
+              className={`${styles.btn} ${styles.btnDanger}`}
               disabled={isDeleting}
             >
               Delete Account
@@ -181,44 +181,44 @@ function AccountDetail() {
         </div>
       </div>
 
-      <div className="account-detail-content">
+      <div className={styles.accountDetailContent}>
         {/* Basic Information */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Basic Information</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Account Name</label>
-              <div className="detail-value">{account.name}</div>
+              <div className={styles.detailValue}>{account.name}</div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Contact Email</label>
-              <div className="detail-value">
-                <a href={`mailto:${account.contactInfo?.email}`} className="email-link">
+              <div className={styles.detailValue}>
+                <a href={`mailto:${account.contactInfo?.email}`} className={styles.emailLink}>
                   {account.contactInfo?.email}
                 </a>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Contact Phone</label>
-              <div className="detail-value">
+              <div className={styles.detailValue}>
                 {account.contactInfo?.phone ? (
-                  <a href={`tel:${account.contactInfo.phone}`} className="phone-link">
+                  <a href={`tel:${account.contactInfo.phone}`} className={styles.phoneLink}>
                     {account.contactInfo.phone}
                   </a>
                 ) : (
-                  <span className="no-data">Not provided</span>
+                  <span className={styles.noData}>Not provided</span>
                 )}
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Account ID</label>
-              <div className="detail-value account-id">
+              <div className={`${styles.detailValue} ${styles.accountId}`}>
                 {account._id}
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Created</label>
-              <div className="detail-value">
+              <div className={styles.detailValue}>
                 {new Date(account.createdAt).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
@@ -229,9 +229,9 @@ function AccountDetail() {
               </div>
             </div>
             {account.updatedAt && account.updatedAt !== account.createdAt && (
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Last Updated</label>
-                <div className="detail-value">
+                <div className={styles.detailValue}>
                   {new Date(account.updatedAt).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -247,83 +247,83 @@ function AccountDetail() {
 
         {/* Contact Address */}
         {account.contactInfo?.address && Object.values(account.contactInfo.address).some(value => value) && (
-          <div className="detail-section">
+          <div className={styles.detailSection}>
             <h3>Contact Address</h3>
-            <div className="detail-grid">
-              <div className="detail-item">
+            <div className={styles.detailGrid}>
+              <div className={styles.detailItem}>
                 <label>Street Address</label>
-                <div className="detail-value">{account.contactInfo.address.street || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.contactInfo.address.street || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>City</label>
-                <div className="detail-value">{account.contactInfo.address.city || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.contactInfo.address.city || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>State</label>
-                <div className="detail-value">{account.contactInfo.address.state || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.contactInfo.address.state || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>ZIP Code</label>
-                <div className="detail-value">{account.contactInfo.address.zipCode || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.contactInfo.address.zipCode || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Country</label>
-                <div className="detail-value">{account.contactInfo.address.country || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.contactInfo.address.country || 'Not provided'}</div>
               </div>
             </div>
           </div>
         )}
 
         {/* Subscription Details */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Subscription Details</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Plan</label>
-              <div className="detail-value">
-                <span className={`plan-badge plan-${account.subscription?.plan}`}>
+              <div className={styles.detailValue}>
+                <span className={`${styles.planBadge} ${styles[`plan${account.subscription?.plan}`]}`}>
                   {accountHelpers.getPlanDisplayText(account.subscription?.plan)}
                 </span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Status</label>
-              <div className="detail-value">
-                <span className={`status-badge ${accountHelpers.getSubscriptionStatusClass(account.subscription?.status)}`}>
+              <div className={styles.detailValue}>
+                <span className={`${styles.statusBadge} ${styles[accountHelpers.getSubscriptionStatusClass(account.subscription?.status)]}`}>
                   {accountHelpers.getSubscriptionStatusText(account.subscription?.status)}
                 </span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Billing Cycle</label>
-              <div className="detail-value">
+              <div className={styles.detailValue}>
                 {account.subscription?.billingCycle ? 
                   account.subscription.billingCycle.charAt(0).toUpperCase() + account.subscription.billingCycle.slice(1) :
                   'Not set'
                 }
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Max Users</label>
-              <div className="detail-value">{account.subscription?.maxUsers || 'Unlimited'}</div>
+              <div className={styles.detailValue}>{account.subscription?.maxUsers || 'Unlimited'}</div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Max Agencies</label>
-              <div className="detail-value">{account.subscription?.maxAgencies || 'Unlimited'}</div>
+              <div className={styles.detailValue}>{account.subscription?.maxAgencies || 'Unlimited'}</div>
             </div>
             {accountHelpers.isTrialAccount(account) && (
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Trial Ends</label>
-                <div className="detail-value">
+                <div className={styles.detailValue}>
                   {account.subscription?.trialEndDate ? (
-                    <span className={accountHelpers.isTrialExpired(account) ? 'trial-expired' : 'trial-active'}>
+                    <span className={accountHelpers.isTrialExpired(account) ? styles.trialExpired : styles.trialActive}>
                       {new Date(account.subscription.trialEndDate).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
                       })}
                       {!accountHelpers.isTrialExpired(account) && (
-                        <span className="trial-days"> ({accountHelpers.getTrialDaysRemaining(account)} days left)</span>
+                        <span className={styles.trialDays}> ({accountHelpers.getTrialDaysRemaining(account)} days left)</span>
                       )}
                     </span>
                   ) : (
@@ -336,29 +336,29 @@ function AccountDetail() {
         </div>
 
         {/* Billing Information */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Billing Information</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Billing Status</label>
-              <div className="detail-value">
-                <span className={`billing-badge ${accountHelpers.getBillingStatusClass(account.billing?.status)}`}>
+              <div className={styles.detailValue}>
+                <span className={`${styles.billingBadge} ${styles[accountHelpers.getBillingStatusClass(account.billing?.status)]}`}>
                   {accountHelpers.getBillingStatusText(account.billing?.status)}
                 </span>
               </div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Company Name</label>
-              <div className="detail-value">{account.billing?.companyName || 'Not provided'}</div>
+              <div className={styles.detailValue}>{account.billing?.companyName || 'Not provided'}</div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Tax ID</label>
-              <div className="detail-value">{account.billing?.taxId || 'Not provided'}</div>
+              <div className={styles.detailValue}>{account.billing?.taxId || 'Not provided'}</div>
             </div>
             {account.billing?.nextBillingDate && (
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Next Billing Date</label>
-                <div className="detail-value">
+                <div className={styles.detailValue}>
                   {new Date(account.billing.nextBillingDate).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -368,9 +368,9 @@ function AccountDetail() {
               </div>
             )}
             {account.billing?.amount && (
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Billing Amount</label>
-                <div className="detail-value">
+                <div className={styles.detailValue}>
                   {accountHelpers.formatCurrency(account.billing.amount, account.settings?.currency)}
                 </div>
               </div>
@@ -380,91 +380,91 @@ function AccountDetail() {
 
         {/* Billing Address */}
         {account.billing?.address && Object.values(account.billing.address).some(value => value) && (
-          <div className="detail-section">
+          <div className={styles.detailSection}>
             <h3>Billing Address</h3>
-            <div className="detail-grid">
-              <div className="detail-item">
+            <div className={styles.detailGrid}>
+              <div className={styles.detailItem}>
                 <label>Street Address</label>
-                <div className="detail-value">{account.billing.address.street || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.billing.address.street || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>City</label>
-                <div className="detail-value">{account.billing.address.city || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.billing.address.city || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>State</label>
-                <div className="detail-value">{account.billing.address.state || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.billing.address.state || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>ZIP Code</label>
-                <div className="detail-value">{account.billing.address.zipCode || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.billing.address.zipCode || 'Not provided'}</div>
               </div>
-              <div className="detail-item">
+              <div className={styles.detailItem}>
                 <label>Country</label>
-                <div className="detail-value">{account.billing.address.country || 'Not provided'}</div>
+                <div className={styles.detailValue}>{account.billing.address.country || 'Not provided'}</div>
               </div>
             </div>
           </div>
         )}
 
         {/* Account Settings */}
-        <div className="detail-section">
+        <div className={styles.detailSection}>
           <h3>Account Settings</h3>
-          <div className="detail-grid">
-            <div className="detail-item">
+          <div className={styles.detailGrid}>
+            <div className={styles.detailItem}>
               <label>Timezone</label>
-              <div className="detail-value">{account.settings?.timezone || 'UTC'}</div>
+              <div className={styles.detailValue}>{account.settings?.timezone || 'UTC'}</div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Currency</label>
-              <div className="detail-value">{account.settings?.currency || 'USD'}</div>
+              <div className={styles.detailValue}>{account.settings?.currency || 'USD'}</div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Date Format</label>
-              <div className="detail-value">{account.settings?.dateFormat || 'MM/DD/YYYY'}</div>
+              <div className={styles.detailValue}>{account.settings?.dateFormat || 'MM/DD/YYYY'}</div>
             </div>
-            <div className="detail-item">
+            <div className={styles.detailItem}>
               <label>Language</label>
-              <div className="detail-value">{account.settings?.language || 'English'}</div>
+              <div className={styles.detailValue}>{account.settings?.language || 'English'}</div>
             </div>
           </div>
         </div>
 
         {/* Account Statistics */}
         {!isLoadingStats && stats && (
-          <div className="detail-section">
+          <div className={styles.detailSection}>
             <h3>Account Statistics</h3>
-            <div className="activity-stats">
-              <div className="stat-item">
-                <div className="stat-value">{stats.totalUsers || 0}</div>
-                <div className="stat-label">Total Users</div>
+            <div className={styles.activityStats}>
+              <div className={styles.statItem}>
+                <div className={styles.statValue}>{stats.totalUsers || 0}</div>
+                <div className={styles.statLabel}>Total Users</div>
               </div>
-              <div className="stat-item">
-                <div className="stat-value">{stats.activeUsers || 0}</div>
-                <div className="stat-label">Active Users</div>
+              <div className={styles.statItem}>
+                <div className={styles.statValue}>{stats.activeUsers || 0}</div>
+                <div className={styles.statLabel}>Active Users</div>
               </div>
-              <div className="stat-item">
-                <div className="stat-value">{stats.totalAgencies || 0}</div>
-                <div className="stat-label">Total Agencies</div>
+              <div className={styles.statItem}>
+                <div className={styles.statValue}>{stats.totalAgencies || 0}</div>
+                <div className={styles.statLabel}>Total Agencies</div>
               </div>
-              <div className="stat-item">
-                <div className="stat-value">{stats.activeAgencies || 0}</div>
-                <div className="stat-label">Active Agencies</div>
+              <div className={styles.statItem}>
+                <div className={styles.statValue}>{stats.activeAgencies || 0}</div>
+                <div className={styles.statLabel}>Active Agencies</div>
               </div>
               {stats.monthlyRevenue && (
-                <div className="stat-item">
-                  <div className="stat-value">
+                <div className={styles.statItem}>
+                  <div className={styles.statValue}>
                     {accountHelpers.formatCurrency(stats.monthlyRevenue, account.settings?.currency)}
                   </div>
-                  <div className="stat-label">Monthly Revenue</div>
+                  <div className={styles.statLabel}>Monthly Revenue</div>
                 </div>
               )}
               {stats.totalRevenue && (
-                <div className="stat-item">
-                  <div className="stat-value">
+                <div className={styles.statItem}>
+                  <div className={styles.statValue}>
                     {accountHelpers.formatCurrency(stats.totalRevenue, account.settings?.currency)}
                   </div>
-                  <div className="stat-label">Total Revenue</div>
+                  <div className={styles.statLabel}>Total Revenue</div>
                 </div>
               )}
             </div>
@@ -474,23 +474,23 @@ function AccountDetail() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="modal-overlay" onClick={() => setShowDeleteConfirm(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
+          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
             <h3>Delete Account</h3>
             <p>
               Are you sure you want to delete the account "{account.name}"? 
               This action cannot be undone and will permanently remove all associated data.
             </p>
-            <div className="modal-actions">
+            <div className={styles.modalActions}>
               <button 
                 onClick={() => setShowDeleteConfirm(false)}
-                className="btn btn-outline"
+                className={`${styles.btn} ${styles.btnOutline}`}
               >
                 Cancel
               </button>
               <button 
                 onClick={handleDeleteAccount}
-                className="btn btn-danger"
+                className={`${styles.btn} ${styles.btnDanger}`}
                 disabled={isDeleting}
               >
                 {isDeleting ? 'Deleting...' : 'Delete Account'}

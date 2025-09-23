@@ -12,9 +12,9 @@ import {
   PORTAL_TYPES, 
   userHelpers 
 } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../../shared/components/ErrorMessage';
-import './UsersList.css';
+import styles from './UsersList.module.css';
 
 // UsersList component with comprehensive filtering and role-based access
 function UsersList() {
@@ -160,7 +160,7 @@ function UsersList() {
         type="error"
         title="Error Loading Users"
       />
-      <button onClick={refetch} className="btn btn-primary">
+      <button onClick={refetch} className={`${styles.btn} ${styles.btnPrimary}`}>
         Try Again
       </button>
     );
@@ -169,17 +169,17 @@ function UsersList() {
   const { users = [], pagination = {} } = usersData?.data || {};
 
   return (
-    <div className="users-list-container">
+    <div className={styles.usersListContainer}>
       {/* Header */}
-      <div className="page-header">
-        <div className="header-left">
+      <div className={styles.pageHeader}>
+        <div className={styles.headerLeft}>
           <h1>Users Management</h1>
           <p>Manage users, roles, and permissions</p>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           {canCreateUsers() && (
-            <Link to="/users/new" className="btn btn-primary">
-              <span className="icon">+</span>
+            <Link to="/users/new" className={`${styles.btn} ${styles.btnPrimary}`}>
+              <span className={styles.icon}>+</span>
               Add User
             </Link>
           )}
@@ -187,29 +187,29 @@ function UsersList() {
       </div>
 
       {/* Filters */}
-      <div className="filters-section">
-        <div className="filters-header">
-          <div className="search-box">
+      <div className={styles.filtersSection}>
+        <div className={styles.filtersHeader}>
+          <div className={styles.searchBox}>
             <input
               type="text"
               placeholder="Search users by name or email..."
               value={filters.search}
               onChange={handleSearch}
-              className="search-input"
+              className={styles.searchInput}
             />
           </div>
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className="btn btn-outline"
+            className={`${styles.btn} ${styles.btnOutline}`}
           >
             Filters {showFilters ? '▲' : '▼'}
           </button>
         </div>
 
         {showFilters && (
-          <div className="filters-panel">
-            <div className="filter-row">
-              <div className="filter-group">
+          <div className={styles.filtersPanel}>
+            <div className={styles.filterRow}>
+              <div className={styles.filterGroup}>
                 <label>Role</label>
                 <select
                   value={filters.role}
@@ -225,7 +225,7 @@ function UsersList() {
               </div>
 
               {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN && (
-                <div className="filter-group">
+                <div className={styles.filterGroup}>
                   <label>Portal Type</label>
                   <select
                     value={filters.portalType}
@@ -241,7 +241,7 @@ function UsersList() {
                 </div>
               )}
 
-              <div className="filter-group">
+              <div className={styles.filterGroup}>
                 <label>Status</label>
                 <select
                   value={filters.isActive === undefined ? '' : filters.isActive.toString()}
@@ -255,7 +255,7 @@ function UsersList() {
                 </select>
               </div>
 
-              <div className="filter-group">
+              <div className={styles.filterGroup}>
                 <label>Items per page</label>
                 <select
                   value={filters.limit}
@@ -268,8 +268,8 @@ function UsersList() {
                 </select>
               </div>
 
-              <div className="filter-actions">
-                <button onClick={resetFilters} className="btn btn-outline">
+              <div className={styles.filterActions}>
+                <button onClick={resetFilters} className={`${styles.btn} ${styles.btnOutline}`}>
                   Reset
                 </button>
               </div>
@@ -279,17 +279,17 @@ function UsersList() {
       </div>
 
       {/* Users Table */}
-      <div className="table-container">
-        <table className="users-table">
+      <div className={styles.tableContainer}>
+        <table className={styles.usersTable}>
           <thead>
             <tr>
-              <th onClick={() => handleSort('firstName')} className="sortable">
+              <th onClick={() => handleSort('firstName')} className={styles.sortable}>
                 Name {filters.sortBy === 'firstName' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
-              <th onClick={() => handleSort('email')} className="sortable">
+              <th onClick={() => handleSort('email')} className={styles.sortable}>
                 Email {filters.sortBy === 'email' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
-              <th onClick={() => handleSort('role')} className="sortable">
+              <th onClick={() => handleSort('role')} className={styles.sortable}>
                 Role {filters.sortBy === 'role' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
               {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN && (
@@ -300,10 +300,10 @@ function UsersList() {
                 currentUser?.portalType === PORTAL_TYPES.ACCOUNT) && (
                 <th>Agency</th>
               )}
-              <th onClick={() => handleSort('isActive')} className="sortable">
+              <th onClick={() => handleSort('isActive')} className={styles.sortable}>
                 Status {filters.sortBy === 'isActive' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
-              <th onClick={() => handleSort('createdAt')} className="sortable">
+              <th onClick={() => handleSort('createdAt')} className={styles.sortable}>
                 Created {filters.sortBy === 'createdAt' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
               </th>
               <th>Actions</th>
@@ -312,7 +312,7 @@ function UsersList() {
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan="9" className="no-data">
+                <td colSpan="9" className={styles.noData}>
                   No users found matching your criteria
                 </td>
               </tr>
@@ -320,27 +320,27 @@ function UsersList() {
               users.map((user) => (
                 <tr key={user._id}>
                   <td>
-                    <div className="user-info">
-                      <div className="user-avatar">
+                    <div className={styles.userInfo}>
+                      <div className={styles.userAvatar}>
                         {userHelpers.getFullName(user).charAt(0).toUpperCase()}
                       </div>
                       <div>
-                        <div className="user-name">
+                        <div className={styles.userName}>
                           {userHelpers.getFullName(user)}
                         </div>
-                        <div className="user-id">ID: {user._id}</div>
+                        <div className={styles.userId}>ID: {user._id}</div>
                       </div>
                     </div>
                   </td>
                   <td>{user.email}</td>
                   <td>
-                    <span className={`role-badge role-${user.role}`}>
+                    <span className={`${styles.roleBadge} ${styles[`role${user.role.charAt(0).toUpperCase() + user.role.slice(1)}`]}`}>
                       {userHelpers.getRoleDisplayText(user.role)}
                     </span>
                   </td>
                   {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN && (
                     <td>
-                      <span className={`portal-badge portal-${user.portalType}`}>
+                      <span className={`${styles.portalBadge} ${styles[`portal${user.portalType.charAt(0).toUpperCase() + user.portalType.slice(1)}`]}`}>
                         {userHelpers.getPortalDisplayText(user.portalType)}
                       </span>
                     </td>
@@ -351,16 +351,16 @@ function UsersList() {
                     <td>{user.agencyId?.name || 'N/A'}</td>
                   )}
                   <td>
-                    <span className={`status-badge ${user.isActive ? 'active' : 'inactive'}`}>
+                    <span className={`${styles.statusBadge} ${user.isActive ? styles.active : styles.inactive}`}>
                       {userHelpers.getStatusText(user.isActive)}
                     </span>
                   </td>
                   <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                   <td>
-                    <div className="action-buttons">
+                    <div className={styles.actionButtons}>
                       <Link 
                         to={`/users/${user._id}`} 
-                        className="btn btn-sm btn-outline"
+                        className={`${styles.btn} ${styles.btnSm} ${styles.btnOutline}`}
                         title="View Details"
                       >
                         View
@@ -368,7 +368,7 @@ function UsersList() {
                       {canEditUser(user) && (
                         <Link 
                           to={`/users/${user._id}/edit`} 
-                          className="btn btn-sm btn-primary"
+                          className={`${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`}
                           title="Edit User"
                         >
                           Edit
@@ -378,7 +378,7 @@ function UsersList() {
                         <button
                           onClick={() => handleToggleStatus(user._id)}
                           disabled={isToggling}
-                          className={`btn btn-sm ${user.isActive ? 'btn-warning' : 'btn-success'}`}
+                          className={`${styles.btn} ${styles.btnSm} ${user.isActive ? styles.btnWarning : styles.btnSuccess}`}
                           title={user.isActive ? 'Deactivate User' : 'Activate User'}
                         >
                           {user.isActive ? 'Deactivate' : 'Activate'}
@@ -388,7 +388,7 @@ function UsersList() {
                         <button
                           onClick={() => handleDeleteUser(user._id)}
                           disabled={isDeleting}
-                          className="btn btn-sm btn-danger"
+                          className={`${styles.btn} ${styles.btnSm} ${styles.btnDanger}`}
                           title="Delete User"
                         >
                           Delete
@@ -405,17 +405,17 @@ function UsersList() {
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="pagination-container">
-          <div className="pagination-info">
+        <div className={styles.paginationContainer}>
+          <div className={styles.paginationInfo}>
             Showing {((pagination.currentPage - 1) * pagination.itemsPerPage) + 1} to{' '}
             {Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems)} of{' '}
             {pagination.totalItems} users
           </div>
-          <div className="pagination-controls">
+          <div className={styles.paginationControls}>
             <button
               onClick={() => handlePageChange(pagination.currentPage - 1)}
               disabled={!pagination.hasPrevPage}
-              className="btn btn-outline btn-sm"
+              className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
             >
               Previous
             </button>
@@ -429,7 +429,7 @@ function UsersList() {
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`btn btn-sm ${pageNum === pagination.currentPage ? 'btn-primary' : 'btn-outline'}`}
+                  className={`${styles.btn} ${styles.btnSm} ${pageNum === pagination.currentPage ? styles.btnPrimary : styles.btnOutline}`}
                 >
                   {pageNum}
                 </button>
@@ -439,7 +439,7 @@ function UsersList() {
             <button
               onClick={() => handlePageChange(pagination.currentPage + 1)}
               disabled={!pagination.hasNextPage}
-              className="btn btn-outline btn-sm"
+              className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
             >
               Next
             </button>

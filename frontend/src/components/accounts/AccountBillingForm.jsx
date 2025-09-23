@@ -5,7 +5,7 @@ import { useGetAccountQuery, useUpdateAccountMutation } from '../../store/api/ap
 import ErrorMessage from '../../shared/components/ErrorMessage';
 import { BILLING_CYCLES, BILLING_STATUSES, CURRENCIES } from '../../types/account.types';
 import { useAuth } from '../../hooks/useAuth';
-import './AccountBillingForm.css';
+import styles from './AccountBillingForm.module.css';
 
 /**
  * AccountBillingForm component for updating account billing information
@@ -148,7 +148,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   // Check permissions
   if (!canAccessBilling()) {
     return (
-      <div className="billing-form-container">
+      <div className={styles.billingFormContainer}>
         <ErrorMessage 
           error={{message: "You do not have permission to access billing information."}} 
           variant="page" 
@@ -161,15 +161,15 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
 
   if (isLoading) {
     return (
-      <div className="billing-form-container">
-        <div className="loading-message">Loading account data...</div>
+      <div className={styles.billingFormContainer}>
+        <div className={styles.loadingMessage}>Loading account data...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="billing-form-container">
+      <div className={styles.billingFormContainer}>
         <ErrorMessage 
           error={{message: error.data?.message || error.message}} 
           variant="page" 
@@ -181,23 +181,23 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   }
 
   return (
-    <div className="billing-form-container">
-      <div className="billing-form-header">
+    <div className={styles.billingFormContainer}>
+      <div className={styles.billingFormHeader}>
         <h2>Update Billing Information</h2>
         <p>Manage billing details for {accountData?.account?.name}</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="billing-form">
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.billingForm}>
         {/* Billing Cycle & Status */}
-        <div className="form-section">
+        <div className={styles.formSection}>
           <h3>Billing Settings</h3>
-          <div className="form-grid">
-            <div className="form-group">
+          <div className={styles.formGrid}>
+            <div className={styles.formGroup}>
               <label htmlFor="billingCycle">Billing Cycle *</label>
               <select
                 id="billingCycle"
                 {...register('billing.cycle', { required: 'Billing cycle is required' })}
-                className={errors.billing?.cycle ? 'error' : ''}
+                className={errors.billing?.cycle ? styles.error : ''}
               >
                 <option value={BILLING_CYCLES.MONTHLY}>Monthly</option>
                 <option value={BILLING_CYCLES.QUARTERLY}>Quarterly</option>
@@ -206,12 +206,12 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <ErrorMessage error={errors.billing?.cycle} variant="inline" type="validation" />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="billingStatus">Billing Status *</label>
               <select
                 id="billingStatus"
                 {...register('billing.status', { required: 'Billing status is required' })}
-                className={errors.billing?.status ? 'error' : ''}
+                className={errors.billing?.status ? styles.error : ''}
               >
                 <option value={BILLING_STATUSES.CURRENT}>Current</option>
                 <option value={BILLING_STATUSES.OVERDUE}>Overdue</option>
@@ -220,7 +220,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <ErrorMessage error={errors.billing?.status} variant="inline" type="validation" />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="nextBillingDate">Next Billing Date</label>
               <input
                 type="date"
@@ -229,7 +229,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="currency">Currency *</label>
               <select
                 id="currency"
@@ -245,10 +245,10 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
         </div>
 
         {/* Payment Method */}
-        <div className="form-section">
+        <div className={styles.formSection}>
           <h3>Payment Method</h3>
-          <div className="form-grid">
-            <div className="form-group">
+          <div className={styles.formGrid}>
+            <div className={styles.formGroup}>
               <label htmlFor="paymentType">Payment Type *</label>
               <select
                 id="paymentType"
@@ -264,19 +264,19 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
 
             {watch('billing.paymentMethod.type') === 'credit_card' && (
               <>
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="cardholderName">Cardholder Name *</label>
                   <input
                     type="text"
                     id="cardholderName"
                     {...register('billing.paymentMethod.cardholderName', { required: 'Cardholder name is required' })}
-                    className={errors.billing?.paymentMethod?.cardholderName ? 'error' : ''}
+                    className={errors.billing?.paymentMethod?.cardholderName ? styles.error : ''}
                     placeholder="Full name on card"
                   />
                   <ErrorMessage error={errors.billing?.paymentMethod?.cardholderName} variant="inline" type="validation" />
                 </div>
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="lastFour">Last Four Digits *</label>
                   <input
                     type="text"
@@ -288,19 +288,19 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
                         message: 'Must be 4 digits'
                       }
                     })}
-                    className={errors.billing?.paymentMethod?.lastFour ? 'error' : ''}
+                    className={errors.billing?.paymentMethod?.lastFour ? styles.error : ''}
                     placeholder="1234"
                     maxLength="4"
                   />
                   <ErrorMessage error={errors.billing?.paymentMethod?.lastFour} variant="inline" type="validation" />
                 </div>
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="expiryMonth">Expiry Month *</label>
                   <select
                     id="expiryMonth"
                     {...register('billing.paymentMethod.expiryMonth', { required: 'Expiry month is required' })}
-                    className={errors.billing?.paymentMethod?.expiryMonth ? 'error' : ''}
+                    className={errors.billing?.paymentMethod?.expiryMonth ? styles.error : ''}
                   >
                     <option value="">Select Month</option>
                     {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
@@ -312,12 +312,12 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
                   <ErrorMessage error={errors.billing?.paymentMethod?.expiryMonth} variant="inline" type="validation" />
                 </div>
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="expiryYear">Expiry Year *</label>
                   <select
                     id="expiryYear"
                     {...register('billing.paymentMethod.expiryYear', { required: 'Expiry year is required' })}
-                    className={errors.billing?.paymentMethod?.expiryYear ? 'error' : ''}
+                    className={errors.billing?.paymentMethod?.expiryYear ? styles.error : ''}
                   >
                     <option value="">Select Year</option>
                     {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() + i).map(year => (
@@ -334,63 +334,63 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
         </div>
 
         {/* Billing Address */}
-        <div className="form-section">
+        <div className={styles.formSection}>
           <h3>Billing Address</h3>
-          <div className="form-grid">
-            <div className="form-group form-group-full">
+          <div className={styles.formGrid}>
+            <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
               <label htmlFor="street">Street Address *</label>
               <input
                 type="text"
                 id="street"
                 {...register('billing.billingAddress.street', { required: 'Street address is required' })}
-                className={errors.billing?.billingAddress?.street ? 'error' : ''}
+                className={errors.billing?.billingAddress?.street ? styles.error : ''}
                 placeholder="123 Main Street"
               />
               <ErrorMessage error={errors.billing?.billingAddress?.street} variant="inline" type="validation" />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="city">City *</label>
               <input
                 type="text"
                 id="city"
                 {...register('billing.billingAddress.city', { required: 'City is required' })}
-                className={errors.billing?.billingAddress?.city ? 'error' : ''}
+                className={errors.billing?.billingAddress?.city ? styles.error : ''}
                 placeholder="New York"
               />
               <ErrorMessage error={errors.billing?.billingAddress?.city} variant="inline" type="validation" />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="state">State/Province *</label>
               <input
                 type="text"
                 id="state"
                 {...register('billing.billingAddress.state', { required: 'State is required' })}
-                className={errors.billing?.billingAddress?.state ? 'error' : ''}
+                className={errors.billing?.billingAddress?.state ? styles.error : ''}
                 placeholder="NY"
               />
               <ErrorMessage error={errors.billing?.billingAddress?.state} variant="inline" type="validation" />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="zipCode">ZIP/Postal Code *</label>
               <input
                 type="text"
                 id="zipCode"
                 {...register('billing.billingAddress.zipCode', { required: 'ZIP code is required' })}
-                className={errors.billing?.billingAddress?.zipCode ? 'error' : ''}
+                className={errors.billing?.billingAddress?.zipCode ? styles.error : ''}
                 placeholder="10001"
               />
               <ErrorMessage error={errors.billing?.billingAddress?.zipCode} variant="inline" type="validation" />
             </div>
 
-            <div className="form-group">
+            <div className={styles.formGroup}>
               <label htmlFor="country">Country *</label>
               <select
                 id="country"
                 {...register('billing.billingAddress.country', { required: 'Country is required' })}
-                className={errors.billing?.billingAddress?.country ? 'error' : ''}
+                className={errors.billing?.billingAddress?.country ? styles.error : ''}
               >
                 <option value="US">United States</option>
                 <option value="CA">Canada</option>
@@ -407,18 +407,18 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
         </div>
 
         {/* Form Actions */}
-        <div className="form-actions">
+        <div className={styles.formActions}>
           <button
             type="button"
             onClick={handleCancel}
-            className="btn btn-secondary"
+            className={`${styles.btn} ${styles.btnSecondary}`}
             disabled={isSubmitting || isUpdating}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="btn btn-primary"
+            className={`${styles.btn} ${styles.btnPrimary}`}
             disabled={isSubmitting || isUpdating}
           >
             {isSubmitting || isUpdating ? 'Updating...' : 'Update Billing Information'}

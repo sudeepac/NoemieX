@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCheckAuthQuery } from './store/api/authApi';
 import { setCredentials, setLoading, initializeAuth, clearCredentials } from './store/slices/auth.slice';
-import LoadingSpinner from './components/common/loading-spinner.component';
+import LoadingSpinner from './components/common/LoadingSpinner';
 
 // Main routing component
 import { AppRoutes } from './router';

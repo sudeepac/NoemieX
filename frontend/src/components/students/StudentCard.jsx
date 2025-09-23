@@ -1,7 +1,7 @@
 import React from 'react';
 import { User, Mail, Phone, MapPin, Calendar, GraduationCap } from 'lucide-react';
 import { formatDate } from '../../utils/formatters';
-import './StudentCard.css';
+import styles from './StudentCard.module.css';
 
 /**
  * StudentCard - Individual student display component
@@ -36,11 +36,11 @@ const StudentCard = ({
 
   return (
     <div 
-      className={`student-card ${compact ? 'compact' : ''} ${onClick ? 'clickable' : ''}`}
+      className={`${styles.studentCard} ${compact ? styles.compact : ''} ${onClick ? styles.clickable : ''}`}
       onClick={onClick}
     >
-      <div className="student-card-header">
-        <div className="student-avatar">
+      <div className={styles.studentCardHeader}>
+        <div className={styles.studentAvatar}>
           {student.profileImage ? (
             <img src={student.profileImage} alt={student.name} />
           ) : (
@@ -48,17 +48,17 @@ const StudentCard = ({
           )}
         </div>
         
-        <div className="student-info">
-          <h3 className="student-name">{student.name}</h3>
-          <div className="student-meta">
+        <div className={styles.studentInfo}>
+          <h3 className={styles.studentName}>{student.name}</h3>
+          <div className={styles.studentMeta}>
             <span 
-              className="status-badge"
+              className={styles.statusBadge}
               style={{ backgroundColor: getStatusColor(student.status) }}
             >
               {student.status}
             </span>
             {student.stage && (
-              <span className="stage-badge">
+              <span className={styles.stageBadge}>
                 {getStageDisplay(student.stage)}
               </span>
             )}
@@ -67,22 +67,22 @@ const StudentCard = ({
       </div>
 
       {!compact && (
-        <div className="student-card-body">
-          <div className="contact-info">
-            <div className="contact-item">
+        <div className={styles.studentCardBody}>
+          <div className={styles.contactInfo}>
+            <div className={styles.contactItem}>
               <Mail size={16} />
               <span>{student.email}</span>
             </div>
             
             {student.phone && (
-              <div className="contact-item">
+              <div className={styles.contactItem}>
                 <Phone size={16} />
                 <span>{student.phone}</span>
               </div>
             )}
             
             {student.location && (
-              <div className="contact-item">
+              <div className={styles.contactItem}>
                 <MapPin size={16} />
                 <span>{student.location}</span>
               </div>
@@ -90,20 +90,20 @@ const StudentCard = ({
           </div>
 
           {student.program && (
-            <div className="program-info">
+            <div className={styles.programInfo}>
               <GraduationCap size={16} />
               <span>{student.program}</span>
             </div>
           )}
 
-          <div className="dates-info">
-            <div className="date-item">
+          <div className={styles.datesInfo}>
+            <div className={styles.dateItem}>
               <Calendar size={16} />
               <span>Created: {formatDate(student.createdAt)}</span>
             </div>
             
             {student.lastActivity && (
-              <div className="date-item">
+              <div className={styles.dateItem}>
                 <span>Last Activity: {formatDate(student.lastActivity)}</span>
               </div>
             )}
@@ -112,13 +112,13 @@ const StudentCard = ({
       )}
 
       {showActions && (
-        <div className="student-card-actions">
-          <button className="action-button primary">
+        <div className={styles.studentCardActions}>
+          <button className={`${styles.actionButton} ${styles.primary}`}>
             View Details
           </button>
           
           {portalType !== 'agency' && (
-            <button className="action-button secondary">
+            <button className={`${styles.actionButton} ${styles.secondary}`}>
               Edit
             </button>
           )}
@@ -127,12 +127,12 @@ const StudentCard = ({
 
       {/* Portal-specific indicators */}
       {portalType === 'superadmin' && student.accountName && (
-        <div className="portal-indicator">
-          <span className="account-badge">
+        <div className={styles.portalIndicator}>
+          <span className={styles.accountBadge}>
             {student.accountName}
           </span>
           {student.agencyName && (
-            <span className="agency-badge">
+            <span className={styles.agencyBadge}>
               {student.agencyName}
             </span>
           )}
@@ -140,8 +140,8 @@ const StudentCard = ({
       )}
 
       {portalType === 'account' && student.agencyName && (
-        <div className="portal-indicator">
-          <span className="agency-badge">
+        <div className={styles.portalIndicator}>
+          <span className={styles.agencyBadge}>
             {student.agencyName}
           </span>
         </div>

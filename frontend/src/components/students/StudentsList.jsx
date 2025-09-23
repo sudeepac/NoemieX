@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { usePermissions } from '../../shared/hooks/usePermissions';
 import StudentCard from './StudentCard';
 import { Search, Filter, Plus } from 'lucide-react';
-import './StudentsList.css';
+import styles from './StudentsList.module.css';
 
 /**
  * StudentsList - Domain component for displaying students
@@ -63,8 +63,8 @@ const StudentsList = ({
 
   if (loading) {
     return (
-      <div className="students-list-loading">
-        <div className="loading-spinner" />
+      <div className={styles.studentsListLoading}>
+        <div className={styles.loadingSpinner} />
         <p>Loading students...</p>
       </div>
     );
@@ -72,9 +72,9 @@ const StudentsList = ({
 
   if (error) {
     return (
-      <div className="students-list-error">
+      <div className={styles.studentsListError}>
         <p>Error loading students: {error.message}</p>
-        <button onClick={refetch} className="retry-button">
+        <button onClick={refetch} className={styles.retryButton}>
           Try Again
         </button>
       </div>
@@ -82,23 +82,23 @@ const StudentsList = ({
   }
 
   return (
-    <div className={`students-list ${compact ? 'compact' : ''}`}>
-      <div className="students-list-header">
-        <div className="search-section">
-          <div className="search-input-wrapper">
-            <Search size={20} className="search-icon" />
+    <div className={`${styles.studentsList} ${compact ? styles.compact : ''}`}>
+      <div className={styles.studentsListHeader}>
+        <div className={styles.searchSection}>
+          <div className={styles.searchInputWrapper}>
+            <Search size={20} className={styles.searchIcon} />
             <input
               type="text"
               placeholder="Search students..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
+              className={styles.searchInput}
             />
           </div>
           
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className={`filter-button ${showFilters ? 'active' : ''}`}
+            className={`${styles.filterButton} ${showFilters ? styles.active : ''}`}
           >
             <Filter size={20} />
             Filters
@@ -108,7 +108,7 @@ const StudentsList = ({
         {showActions && canCreateStudents && (
           <button 
             onClick={onCreateStudent}
-            className="create-student-button"
+            className={styles.createStudentButton}
           >
             <Plus size={20} />
             Add Student
@@ -117,8 +117,8 @@ const StudentsList = ({
       </div>
 
       {showFilters && (
-        <div className="filters-panel">
-          <div className="filter-group">
+        <div className={styles.filtersPanel}>
+          <div className={styles.filterGroup}>
             <label>Status:</label>
             <select 
               value={filters.status || ''} 
@@ -132,7 +132,7 @@ const StudentsList = ({
             </select>
           </div>
           
-          <div className="filter-group">
+          <div className={styles.filterGroup}>
             <label>Application Stage:</label>
             <select 
               value={filters.stage || ''} 
@@ -146,18 +146,18 @@ const StudentsList = ({
             </select>
           </div>
 
-          <button onClick={resetFilters} className="reset-filters-button">
+          <button onClick={resetFilters} className={styles.resetFiltersButton}>
             Reset Filters
           </button>
         </div>
       )}
 
-      <div className="students-grid">
+      <div className={styles.studentsGrid}>
         {filteredStudents.length === 0 ? (
-          <div className="no-students">
+          <div className={styles.noStudents}>
             <p>No students found</p>
             {canCreateStudents && (
-              <button onClick={onCreateStudent} className="create-first-student">
+              <button onClick={onCreateStudent} className={styles.createFirstStudent}>
                 Create your first student
               </button>
             )}
@@ -177,7 +177,7 @@ const StudentsList = ({
       </div>
 
       {pagination && pagination.totalPages > 1 && (
-        <div className="pagination">
+        <div className={styles.pagination}>
           <button 
             disabled={pagination.currentPage === 1}
             onClick={() => updateFilter('page', pagination.currentPage - 1)}

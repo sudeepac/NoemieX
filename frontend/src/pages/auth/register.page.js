@@ -16,7 +16,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { registerUser, clearError } from '../../store/slices/auth.slice';
-import LoadingSpinner from '../../components/common/loading-spinner.component';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 import styles from './auth.module.css';
 
 const RegisterPage = () => {

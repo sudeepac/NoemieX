@@ -19,7 +19,7 @@ import {
 } from '../../constants/accountConstants';
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import { LoadingSpinner, ErrorMessage, Button } from '../../shared/components';
-import './AccountForm.css';
+import styles from './AccountForm.module.css';
 
 // AccountForm component for creating and editing accounts
 function AccountForm() {
@@ -238,29 +238,29 @@ function AccountForm() {
 
   if (isEditing && isLoadingAccount) {
     return (
-      <div className="account-form-container">
-        <LoadingSpinner message="Loading account data..." />
-      </div>
+      <div className={styles.accountFormContainer}>
+      <LoadingSpinner message="Loading account data..." />
+    </div>
     );
   }
 
   if (isEditing && isAccountError) {
     return (
-      <div className="account-form-container">
-        <ErrorMessage 
-          message="Failed to load account data for editing"
-          variant="block"
-          type="network"
-        />
-        <div className="form-actions">
-          <Button 
-            variant="secondary" 
-            onClick={() => navigate('/accounts')}
-          >
-            Back to Accounts
-          </Button>
-        </div>
+      <div className={styles.accountFormContainer}>
+      <ErrorMessage 
+        message="Failed to load account data for editing"
+        variant="block"
+        type="network"
+      />
+      <div className={styles.formActions}>
+        <Button 
+          variant="secondary" 
+          onClick={() => navigate('/accounts')}
+        >
+          Back to Accounts
+        </Button>
       </div>
+    </div>
     );
   }
 
@@ -272,24 +272,24 @@ function AccountForm() {
         type="error"
         title="Access Denied"
       />
-      <button onClick={() => navigate('/accounts')} className="btn btn-primary">
+      <button onClick={() => navigate('/accounts')} className={styles.btn + ' ' + styles.btnPrimary}>
         Back to Accounts
       </button>
     );
   }
 
   return (
-    <div className="account-form-container">
+    <div className={styles.accountFormContainer}>
       {/* Header */}
-      <div className="page-header">
-        <div className="header-left">
+      <div className={styles.pageHeader}>
+        <div className={styles.headerLeft}>
           <h1>{isEditing ? 'Edit Account' : 'Create New Account'}</h1>
           <p>{isEditing ? 'Update account information and settings' : 'Add a new tenant account to the system'}</p>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           <button 
             onClick={() => navigate('/accounts')} 
-            className="btn btn-outline"
+            className={styles.btn + ' ' + styles.btnOutline}
           >
             Cancel
           </button>
@@ -297,26 +297,26 @@ function AccountForm() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="account-form">
-        <div className="form-sections">
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.accountForm}>
+        <div className={styles.formSections}>
           {/* Basic Information */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Basic Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="name">Account Name *</label>
                 <input
                   type="text"
                   id="name"
                   {...register('name', { required: 'Account name is required' })}
                   disabled={isFieldDisabled('name')}
-                  className={errors.name ? 'error' : ''}
+                  className={errors.name ? styles.error : ''}
                   placeholder="Company or Organization Name"
                 />
                 <ErrorMessage error={errors.name} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="isActive">Account Status</label>
                 <select
                   id="isActive"
@@ -331,10 +331,10 @@ function AccountForm() {
           </div>
 
           {/* Contact Information */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Contact Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="contactEmail">Email Address *</label>
                 <input
                   type="email"
@@ -347,13 +347,13 @@ function AccountForm() {
                     }
                   })}
                   disabled={isFieldDisabled('contactInfo.email')}
-                  className={errors.contactInfo?.email ? 'error' : ''}
+                  className={errors.contactInfo?.email ? styles.error : ''}
                   placeholder="contact@company.com"
                 />
                 <ErrorMessage error={errors.contactInfo?.email} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="contactPhone">Phone Number</label>
                 <input
                   type="tel"
@@ -364,7 +364,7 @@ function AccountForm() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="website">Website</label>
                 <input
                   type="url"
@@ -376,16 +376,16 @@ function AccountForm() {
                     }
                   })}
                   disabled={isFieldDisabled('contactInfo.website')}
-                  className={errors.contactInfo?.website ? 'error' : ''}
+                  className={errors.contactInfo?.website ? styles.error : ''}
                   placeholder="https://www.company.com"
                 />
                 <ErrorMessage error={errors.contactInfo?.website} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group full-width">
+              <div className={styles.formGroup + ' ' + styles.fullWidth}>
                 <h4>Address</h4>
-                <div className="address-grid">
-                  <div className="form-group">
+                <div className={styles.addressGrid}>
+                  <div className={styles.formGroup}>
                     <label htmlFor="street">Street Address</label>
                     <input
                       type="text"
@@ -395,7 +395,7 @@ function AccountForm() {
                       placeholder="123 Main Street"
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles.formGroup}>
                     <label htmlFor="city">City</label>
                     <input
                       type="text"
@@ -405,7 +405,7 @@ function AccountForm() {
                       placeholder="New York"
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles.formGroup}>
                     <label htmlFor="state">State/Province</label>
                     <input
                       type="text"
@@ -415,7 +415,7 @@ function AccountForm() {
                       placeholder="NY"
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles.formGroup}>
                     <label htmlFor="zipCode">ZIP/Postal Code</label>
                     <input
                       type="text"
@@ -425,7 +425,7 @@ function AccountForm() {
                       placeholder="10001"
                     />
                   </div>
-                  <div className="form-group">
+                  <div className={styles.formGroup}>
                     <label htmlFor="country">Country</label>
                     <select
                       id="country"
@@ -448,16 +448,16 @@ function AccountForm() {
           </div>
 
           {/* Subscription */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Subscription</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="plan">Subscription Plan *</label>
                 <select
                   id="plan"
                   {...register('subscription.plan', { required: 'Subscription plan is required' })}
                   disabled={isFieldDisabled('subscription.plan')}
-                  className={errors.subscription?.plan ? 'error' : ''}
+                  className={errors.subscription?.plan ? styles.error : ''}
                 >
                   <option value={SUBSCRIPTION_PLANS.FREE}>Free</option>
                   <option value={SUBSCRIPTION_PLANS.BASIC}>Basic</option>
@@ -467,7 +467,7 @@ function AccountForm() {
                 <ErrorMessage error={errors.subscription?.plan} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="status">Status</label>
                 <select
                   id="status"
@@ -481,7 +481,7 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="maxUsers">Max Users</label>
                 <input
                   type="number"
@@ -493,14 +493,14 @@ function AccountForm() {
                     valueAsNumber: true
                   })}
                   disabled={isFieldDisabled('subscription.maxUsers')}
-                  className={errors.subscription?.maxUsers ? 'error' : ''}
+                  className={errors.subscription?.maxUsers ? styles.error : ''}
                   min="1"
                   placeholder="5"
                 />
                 <ErrorMessage error={errors.subscription?.maxUsers} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="maxAgencies">Max Agencies</label>
                 <input
                   type="number"
@@ -512,14 +512,14 @@ function AccountForm() {
                     valueAsNumber: true
                   })}
                   disabled={isFieldDisabled('subscription.maxAgencies')}
-                  className={errors.subscription?.maxAgencies ? 'error' : ''}
+                  className={errors.subscription?.maxAgencies ? styles.error : ''}
                   min="1"
                   placeholder="1"
                 />
                 <ErrorMessage error={errors.subscription?.maxAgencies} variant="inline" type="validation" />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="startDate">Start Date</label>
                 <input
                   type="date"
@@ -529,7 +529,7 @@ function AccountForm() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="endDate">End Date</label>
                 <input
                   type="date"
@@ -539,7 +539,7 @@ function AccountForm() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="trialEndDate">Trial End Date</label>
                 <input
                   type="date"
@@ -549,7 +549,7 @@ function AccountForm() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label>
                   <input
                     type="checkbox"
@@ -563,10 +563,10 @@ function AccountForm() {
           </div>
 
           {/* Billing */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Billing Information</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="billingCycle">Billing Cycle</label>
                 <select
                   id="billingCycle"
@@ -579,7 +579,7 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="billingStatus">Billing Status</label>
                 <select
                   id="billingStatus"
@@ -592,7 +592,7 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="nextBillingDate">Next Billing Date</label>
                 <input
                   type="date"
@@ -605,10 +605,10 @@ function AccountForm() {
           </div>
 
           {/* Settings */}
-          <div className="form-section">
+          <div className={styles.formSection}>
             <h3>Account Settings</h3>
-            <div className="form-grid">
-              <div className="form-group">
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
                 <label htmlFor="timezone">Timezone</label>
                 <select
                   id="timezone"
@@ -621,7 +621,7 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="currency">Currency</label>
                 <select
                   id="currency"
@@ -634,7 +634,7 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="dateFormat">Date Format</label>
                 <select
                   id="dateFormat"
@@ -647,7 +647,7 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="language">Language</label>
                 <select
                   id="language"
@@ -662,9 +662,9 @@ function AccountForm() {
                 </select>
               </div>
 
-              <div className="form-group full-width">
+              <div className={styles.formGroup + ' ' + styles.fullWidth}>
                 <h4>Features</h4>
-                <div className="checkbox-grid">
+                <div className={styles.checkboxGrid}>
                   <label>
                     <input
                       type="checkbox"
@@ -704,7 +704,7 @@ function AccountForm() {
         </div>
 
         {/* Form Actions */}
-        <div className="form-actions">
+        <div className={styles.formActions}>
           <Button 
             type="button" 
             variant="secondary"

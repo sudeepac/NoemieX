@@ -22,8 +22,8 @@ import {
   clearError
 } from '../../store/slices/agenciesUi.slice';
 import { PORTAL_TYPES } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
-import './AgenciesList.css';
+import LoadingSpinner from '../common/LoadingSpinner';
+import styles from './AgenciesList.module.css';
 
 /**
  * AgenciesList component with comprehensive filtering and role-based access
@@ -215,7 +215,7 @@ function AgenciesList() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="agencies-list-container">
+      <div className={styles.agenciesListContainer}>
         <LoadingSpinner message="Loading agencies..." />
       </div>
     );
@@ -228,26 +228,26 @@ function AgenciesList() {
   const hasSelection = selectedAgencies.length > 0;
 
   return (
-    <div className="agencies-list-container">
+    <div className={styles.agenciesListContainer}>
       {/* Header */}
-      <div className="list-header">
-        <div className="header-content">
+      <div className={styles.listHeader}>
+        <div className={styles.headerContent}>
           <h2>Agencies</h2>
-          <p className="header-subtitle">
+          <p className={styles.headerSubtitle}>
             {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN 
               ? 'Manage all agencies across accounts'
               : 'Manage your account agencies'
             }
           </p>
         </div>
-        <div className="header-actions">
+        <div className={styles.headerActions}>
           <button 
-            className="btn btn-secondary"
+            className={`${styles.btn} ${styles.btnSecondary}`}
             onClick={() => dispatch(toggleFilters())}
           >
             Filters {showFilters ? '▼' : '▶'}
           </button>
-          <Link to="/agencies/new" className="btn btn-primary">
+          <Link to="/agencies/new" className={`${styles.btn} ${styles.btnPrimary}`}>
             + Add Agency
           </Link>
         </div>
@@ -255,7 +255,7 @@ function AgenciesList() {
 
       {/* Error Display */}
       {error && (
-        <div className="error-banner">
+        <div className={styles.errorBanner}>
           <span>{error}</span>
           <button onClick={() => dispatch(clearError())}>×</button>
         </div>
@@ -263,27 +263,27 @@ function AgenciesList() {
 
       {/* Filters */}
       {showFilters && (
-        <div className="filters-panel">
-          <div className="filters-grid">
-            <div className="filter-group">
+        <div className={styles.filtersPanel}>
+          <div className={styles.filtersGrid}>
+            <div className={styles.filterGroup}>
               <label>Search</label>
               <input
                 type="text"
                 placeholder="Search agencies..."
                 defaultValue={filters.search}
                 onChange={handleSearchChange}
-                className="filter-input"
+                className={styles.filterInput}
               />
             </div>
             
-            <div className="filter-group">
+            <div className={styles.filterGroup}>
               <label>Status</label>
               <select
                 value={filters.isActive || ''}
                 onChange={(e) => handleFilterChange({ 
                   isActive: e.target.value === '' ? undefined : e.target.value === 'true'
                 })}
-                className="filter-select"
+                className={styles.filterSelect}
               >
                 <option value="">All Statuses</option>
                 <option value="true">Active</option>
@@ -291,12 +291,12 @@ function AgenciesList() {
               </select>
             </div>
 
-            <div className="filter-group">
+            <div className={styles.filterGroup}>
               <label>Sort By</label>
               <select
                 value={filters.sortBy}
                 onChange={(e) => handleFilterChange({ sortBy: e.target.value })}
-                className="filter-select"
+                className={styles.filterSelect}
               >
                 <option value="createdAt">Created Date</option>
                 <option value="name">Name</option>
@@ -305,12 +305,12 @@ function AgenciesList() {
               </select>
             </div>
 
-            <div className="filter-group">
+            <div className={styles.filterGroup}>
               <label>Order</label>
               <select
                 value={filters.sortOrder}
                 onChange={(e) => handleFilterChange({ sortOrder: e.target.value })}
-                className="filter-select"
+                className={styles.filterSelect}
               >
                 <option value="desc">Descending</option>
                 <option value="asc">Ascending</option>
@@ -318,9 +318,9 @@ function AgenciesList() {
             </div>
           </div>
           
-          <div className="filters-actions">
+          <div className={styles.filtersActions}>
             <button 
-              className="btn btn-secondary"
+              className={`${styles.btn} ${styles.btnSecondary}`}
               onClick={handleResetFilters}
             >
               Reset Filters
@@ -331,18 +331,18 @@ function AgenciesList() {
 
       {/* Bulk Actions */}
       {hasSelection && (
-        <div className="bulk-actions">
+        <div className={styles.bulkActions}>
           <span>{selectedAgencies.length} selected</span>
-          <div className="bulk-buttons">
+          <div className={styles.bulkButtons}>
             <button 
-              className="btn btn-secondary"
+              className={`${styles.btn} ${styles.btnSecondary}`}
               onClick={() => dispatch(showStatusConfirmation(selectedAgencies))}
               disabled={isToggling}
             >
               Toggle Status
             </button>
             <button 
-              className="btn btn-danger"
+              className={`${styles.btn} ${styles.btnDanger}`}
               onClick={() => dispatch(showDeleteConfirmation(selectedAgencies))}
               disabled={isDeleting}
             >
@@ -354,8 +354,8 @@ function AgenciesList() {
 
       {/* Agencies Table */}
       {hasAgencies ? (
-        <div className="table-container">
-          <table className="agencies-table">
+        <div className={styles.tableContainer}>
+          <table className={styles.agenciesTable}>
             <thead>
               <tr>
                 <th>
@@ -366,19 +366,19 @@ function AgenciesList() {
                   />
                 </th>
                 <th 
-                  className="sortable"
+                  className={styles.sortable}
                   onClick={() => handleSort('name')}
                 >
                   Name {filters.sortBy === 'name' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
                 </th>
                 <th 
-                  className="sortable"
+                  className={styles.sortable}
                   onClick={() => handleSort('commissionSplitPercent')}
                 >
                   Commission {filters.sortBy === 'commissionSplitPercent' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
                 </th>
                 <th 
-                  className="sortable"
+                  className={styles.sortable}
                   onClick={() => handleSort('usersCount')}
                 >
                   Users {filters.sortBy === 'usersCount' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
@@ -386,7 +386,7 @@ function AgenciesList() {
                 <th>Status</th>
                 {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN && <th>Account</th>}
                 <th 
-                  className="sortable"
+                  className={styles.sortable}
                   onClick={() => handleSort('createdAt')}
                 >
                   Created {filters.sortBy === 'createdAt' && (filters.sortOrder === 'asc' ? '↑' : '↓')}
@@ -396,7 +396,7 @@ function AgenciesList() {
             </thead>
             <tbody>
               {agencies.map((agency) => (
-                <tr key={agency._id} className="agency-row">
+                <tr key={agency._id} className={styles.agencyRow}>
                   <td>
                     <input
                       type="checkbox"
@@ -405,20 +405,20 @@ function AgenciesList() {
                     />
                   </td>
                   <td>
-                    <div className="agency-name">
+                    <div className={styles.agencyName}>
                       <strong>{agency.name}</strong>
                       {agency.description && (
-                        <div className="agency-description">{agency.description}</div>
+                        <div className={styles.agencyDescription}>{agency.description}</div>
                       )}
                     </div>
                   </td>
                   <td>
-                    <span className="commission-badge">
+                    <span className={styles.commissionBadge}>
                       {formatCommission(agency.commissionSplitPercent)}
                     </span>
                   </td>
                   <td>
-                    <span className="users-count">{agency.usersCount || 0}</span>
+                    <span className={styles.usersCount}>{agency.usersCount || 0}</span>
                   </td>
                   <td>
                     <span className={getStatusBadgeClass(agency.isActive)}>
@@ -427,34 +427,34 @@ function AgenciesList() {
                   </td>
                   {currentUser?.portalType === PORTAL_TYPES.SUPERADMIN && (
                     <td>
-                      <span className="account-name">
+                      <span className={styles.accountName}>
                         {agency.accountId?.name || 'N/A'}
                       </span>
                     </td>
                   )}
                   <td>
-                    <span className="created-date">
+                    <span className={styles.createdDate}>
                       {new Date(agency.createdAt).toLocaleDateString()}
                     </span>
                   </td>
                   <td>
-                    <div className="action-buttons">
+                    <div className={styles.actionButtons}>
                       <button 
-                        className="btn btn-sm btn-secondary"
+                        className={`${styles.btn} ${styles.btnSm} ${styles.btnSecondary}`}
                         onClick={() => handleViewAgency(agency._id)}
                         title="View Details"
                       >
                         View
                       </button>
                       <button 
-                        className="btn btn-sm btn-primary"
+                        className={`${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`}
                         onClick={() => handleEditAgency(agency)}
                         title="Edit Agency"
                       >
                         Edit
                       </button>
                       <button 
-                        className="btn btn-sm btn-warning"
+                        className={`${styles.btn} ${styles.btnSm} ${styles.btnWarning}`}
                         onClick={() => dispatch(showStatusConfirmation(agency._id))}
                         disabled={isToggling}
                         title={agency.isActive ? 'Deactivate' : 'Activate'}
@@ -462,7 +462,7 @@ function AgenciesList() {
                         {agency.isActive ? 'Deactivate' : 'Activate'}
                       </button>
                       <button 
-                        className="btn btn-sm btn-danger"
+                        className={`${styles.btn} ${styles.btnSm} ${styles.btnDanger}`}
                         onClick={() => dispatch(showDeleteConfirmation(agency._id))}
                         disabled={isDeleting}
                         title="Delete Agency"
@@ -477,10 +477,10 @@ function AgenciesList() {
           </table>
         </div>
       ) : (
-        <div className="empty-state">
+        <div className={styles.emptyState}>
           <h3>No agencies found</h3>
           <p>Get started by creating your first agency.</p>
-          <Link to="/agencies/new" className="btn btn-primary">
+          <Link to="/agencies/new" className={`${styles.btn} ${styles.btnPrimary}`}>
             Create Agency
           </Link>
         </div>
@@ -488,22 +488,22 @@ function AgenciesList() {
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="pagination">
+        <div className={styles.pagination}>
           <button 
-            className="btn btn-secondary"
+            className={`${styles.btn} ${styles.btnSecondary}`}
             onClick={() => handlePageChange(pagination.currentPage - 1)}
             disabled={pagination.currentPage <= 1}
           >
             Previous
           </button>
           
-          <span className="pagination-info">
+          <span className={styles.paginationInfo}>
             Page {pagination.currentPage} of {pagination.totalPages}
             ({pagination.totalAgencies} total)
           </span>
           
           <button 
-            className="btn btn-secondary"
+            className={`${styles.btn} ${styles.btnSecondary}`}
             onClick={() => handlePageChange(pagination.currentPage + 1)}
             disabled={pagination.currentPage >= pagination.totalPages}
           >
@@ -514,8 +514,8 @@ function AgenciesList() {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>Confirm Deletion</h3>
             <p>
               Are you sure you want to delete {Array.isArray(agencyToDelete) 
@@ -523,16 +523,16 @@ function AgenciesList() {
                 : 'this agency'
               }? This action cannot be undone.
             </p>
-            <div className="modal-actions">
+            <div className={styles.modalActions}>
               <button 
-                className="btn btn-secondary"
+                className={`${styles.btn} ${styles.btnSecondary}`}
                 onClick={() => dispatch(hideDeleteConfirmation())}
                 disabled={isDeleting}
               >
                 Cancel
               </button>
               <button 
-                className="btn btn-danger"
+                className={`${styles.btn} ${styles.btnDanger}`}
                 onClick={handleDeleteAgency}
                 disabled={isDeleting}
               >
@@ -545,8 +545,8 @@ function AgenciesList() {
 
       {/* Status Toggle Confirmation Modal */}
       {showStatusModal && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
             <h3>Confirm Status Change</h3>
             <p>
               Are you sure you want to toggle the status of {Array.isArray(agencyToToggle) 
@@ -554,16 +554,16 @@ function AgenciesList() {
                 : 'this agency'
               }?
             </p>
-            <div className="modal-actions">
+            <div className={styles.modalActions}>
               <button 
-                className="btn btn-secondary"
+                className={`${styles.btn} ${styles.btnSecondary}`}
                 onClick={() => dispatch(hideStatusConfirmation())}
                 disabled={isToggling}
               >
                 Cancel
               </button>
               <button 
-                className="btn btn-primary"
+                className={`${styles.btn} ${styles.btnPrimary}`}
                 onClick={handleToggleStatus}
                 disabled={isToggling}
               >
