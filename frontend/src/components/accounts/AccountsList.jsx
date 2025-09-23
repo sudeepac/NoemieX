@@ -5,7 +5,7 @@ import {
   useGetAccountsQuery,
   useDeleteAccountMutation,
   useToggleAccountStatusMutation
-} from '../../store/api/api';
+} from '../../store/api/accountsApi';
 import { 
   accountHelpers,
   SUBSCRIPTION_PLANS,
@@ -13,8 +13,11 @@ import {
   BILLING_STATUSES
 } from '../../types/account.types';
 import { PORTAL_TYPES } from '../../types/user.types';
+import { Eye, Edit, Power, Trash2 } from 'lucide-react';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorMessage from '../../shared/components/ErrorMessage';
+import CreateAccountModal from './CreateAccountModal';
+import ConfirmationModal from '../common/ConfirmationModal';
 import styles from './AccountsList.module.css';
 
 // AccountsList component with comprehensive filtering and superadmin access
@@ -33,6 +36,17 @@ function AccountsList() {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedAccounts, setSelectedAccounts] = useState([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [confirmationModal, setConfirmationModal] = useState({
+    isOpen: false,
+    type: 'warning',
+    title: '',
+    message: '',
+    onConfirm: null,
+    isLoading: false,
+    showSuccess: false
+  });
+  const [editingAccount, setEditingAccount] = useState(null);
 
   // RTK Query hooks
   const { 
@@ -83,23 +97,78 @@ function AccountsList() {
   };
 
   // Handle account deletion
-  const handleDeleteAccount = async (accountId) => {
-    if (window.confirm('Are you sure you want to delete this account? This action cannot be undone and will affect all associated users and agencies.')) {
-      try {
-        await deleteAccount(accountId).unwrap();
-        alert('Account deleted successfully');
-      } catch (error) {
-        alert(`Error deleting account: ${error.data?.message || error.message}`);
-      }
+  const handleDeleteAccount = (accountId, accountName) => {
+    setConfirmationModal({
+      isOpen: true,
+      type: 'danger',
+      title: 'Delete Account',
+      message: `Are you sure you want to delete "${accountName}"? This action cannot be undone and will permanently remove all associated data.`,
+      onConfirm: () => confirmDeleteAccount(accountId),
+      isLoading: false,
+      showSuccess: false
+    });
+  };
+
+  const confirmDeleteAccount = async (accountId) => {
+    setConfirmationModal(prev => ({ ...prev, isLoading: true }));
+    
+    try {
+      await deleteAccount(accountId).unwrap();
+      
+      // Show success message
+      setConfirmationModal(prev => ({
+        ...prev,
+        isLoading: false,
+        showSuccess: true,
+        successMessage: 'Account deleted successfully!'
+      }));
+      
+      // Close modal after showing success
+      setTimeout(() => {
+        setConfirmationModal(prev => ({ ...prev, isOpen: false, showSuccess: false }));
+      }, 2000);
+    } catch (error) {
+      setConfirmationModal(prev => ({ ...prev, isLoading: false }));
+      alert(`Error deleting account: ${error.data?.message || error.message}`);
     }
   };
 
   // Handle account status toggle
-  const handleToggleStatus = async (accountId) => {
+  const handleToggleStatus = (accountId, accountName, isActive) => {
+    const action = isActive ? 'deactivate' : 'activate';
+    const actionTitle = isActive ? 'Deactivate Account' : 'Activate Account';
+    
+    setConfirmationModal({
+      isOpen: true,
+      type: isActive ? 'warning' : 'info',
+      title: actionTitle,
+      message: `Are you sure you want to ${action} "${accountName}"? ${isActive ? 'Users will lose access to this account.' : 'Users will regain access to this account.'}`,
+      onConfirm: () => confirmToggleStatus(accountId),
+      isLoading: false,
+      showSuccess: false
+    });
+  };
+
+  const confirmToggleStatus = async (accountId) => {
+    setConfirmationModal(prev => ({ ...prev, isLoading: true }));
+    
     try {
       await toggleAccountStatus(accountId).unwrap();
-      alert('Account status updated successfully');
+      
+      // Show success message
+      setConfirmationModal(prev => ({
+        ...prev,
+        isLoading: false,
+        showSuccess: true,
+        successMessage: 'Account status updated successfully!'
+      }));
+      
+      // Close modal after showing success
+      setTimeout(() => {
+        setConfirmationModal(prev => ({ ...prev, isOpen: false, showSuccess: false }));
+      }, 2000);
     } catch (error) {
+      setConfirmationModal(prev => ({ ...prev, isLoading: false }));
       alert(`Error updating account status: ${error.data?.message || error.message}`);
     }
   };
@@ -121,25 +190,35 @@ function AccountsList() {
     });
   };
 
+  // Handle edit account
+  const handleEditAccount = (account) => {
+    setEditingAccount(account);
+    setShowCreateModal(true);
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
   if (isError) {
     return (
-      <ErrorMessage 
-        error={{message: error?.data?.message || 'Failed to load accounts'}} 
-        variant="page" 
-        type="error"
-        title="Error Loading Accounts"
-      />
-      <button onClick={refetch} className={`${styles.btn} ${styles.btnPrimary}`}>
-        Try Again
-      </button>
+      <>
+        <ErrorMessage 
+          error={{message: error?.data?.message || 'Failed to load accounts'}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Accounts"
+        />
+        <button onClick={refetch} className={`${styles.btn} ${styles.btnPrimary}`}>
+          Try Again
+        </button>
+      </>
     );
   }
 
-  const { accounts = [], pagination = {} } = accountsData?.data || {};
+  // AI-NOTE: Fixed data structure - backend paginatedResponse puts accounts directly in data field
+  const accounts = accountsData?.data || [];
+  const pagination = accountsData?.pagination || {};
 
   return (
     <div className={styles.accountsListContainer}>
@@ -151,10 +230,13 @@ function AccountsList() {
           </div>
           <div className={styles.headerActions}>
             {canManageAccounts() && (
-              <Link to="/accounts/new" className={`${styles.btn} ${styles.btnPrimary}`}>
+              <button 
+                onClick={() => setShowCreateModal(true)}
+                className={`${styles.btn} ${styles.btnPrimary}`}
+              >
                 <span className={styles.icon}>+</span>
                 Add Account
-              </Link>
+              </button>
             )}
           </div>
         </div>
@@ -322,39 +404,39 @@ function AccountsList() {
                   <td>
                     <div className={styles.actionButtons}>
                       <Link 
-                        to={`/accounts/${account._id}`} 
-                        className={`${styles.btn} ${styles.btnSm} ${styles.btnOutline}`}
+                        to={`/superadmin/accounts/${account._id}`} 
+                        className={`${styles.iconBtn} ${styles.iconBtnOutline}`}
                         title="View Details"
                       >
-                        View
+                        <Eye size={16} />
                       </Link>
                       {canManageAccounts() && (
-                        <Link 
-                          to={`/accounts/${account._id}/edit`} 
-                          className={`${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`}
+                        <button
+                          onClick={() => handleEditAccount(account)}
+                          className={`${styles.iconBtn} ${styles.iconBtnPrimary}`}
                           title="Edit Account"
                         >
-                          Edit
-                        </Link>
-                      )}
-                      {canManageAccounts() && (
-                        <button
-                          onClick={() => handleToggleStatus(account._id)}
-                          disabled={isToggling}
-                          className={`${styles.btn} ${styles.btnSm} ${account.isActive ? styles.btnWarning : styles.btnSuccess}`}
-                          title={account.isActive ? 'Deactivate Account' : 'Activate Account'}
-                        >
-                          {account.isActive ? 'Deactivate' : 'Activate'}
+                          <Edit size={16} />
                         </button>
                       )}
                       {canManageAccounts() && (
                         <button
-                          onClick={() => handleDeleteAccount(account._id)}
+                          onClick={() => handleToggleStatus(account._id, account.name, account.isActive)}
+                          disabled={isToggling}
+                          className={`${styles.iconBtn} ${account.isActive ? styles.iconBtnWarning : styles.iconBtnSuccess}`}
+                          title={account.isActive ? 'Deactivate Account' : 'Activate Account'}
+                        >
+                          <Power size={16} />
+                        </button>
+                      )}
+                      {canManageAccounts() && (
+                        <button
+                          onClick={() => handleDeleteAccount(account._id, account.name)}
                           disabled={isDeleting}
-                          className={`${styles.btn} ${styles.btnSm} ${styles.btnDanger}`}
+                          className={`${styles.iconBtn} ${styles.iconBtnDanger}`}
                           title="Delete Account"
                         >
-                          Delete
+                          <Trash2 size={16} />
                         </button>
                       )}
                     </div>
@@ -370,14 +452,14 @@ function AccountsList() {
       {pagination.totalPages > 1 && (
         <div className={styles.paginationContainer}>
           <div className={styles.paginationInfo}>
-            Showing {((pagination.page - 1) * pagination.limit) + 1} to{' '}
-            {Math.min(pagination.page * pagination.limit, pagination.totalItems)} of{' '}
+            Showing {((pagination.currentPage - 1) * pagination.itemsPerPage) + 1} to{' '}
+            {Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems)} of{' '}
             {pagination.totalItems} accounts
           </div>
           <div className={styles.paginationControls}>
             <button
-              onClick={() => handlePageChange(pagination.page - 1)}
-              disabled={pagination.page <= 1}
+              onClick={() => handlePageChange(pagination.currentPage - 1)}
+              disabled={pagination.currentPage <= 1}
               className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
             >
               Previous
@@ -385,14 +467,14 @@ function AccountsList() {
             
             {/* Page numbers */}
             {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
-              const pageNum = Math.max(1, pagination.page - 2) + i;
+              const pageNum = Math.max(1, pagination.currentPage - 2) + i;
               if (pageNum > pagination.totalPages) return null;
               
               return (
                 <button
                   key={pageNum}
                   onClick={() => handlePageChange(pageNum)}
-                  className={`${styles.btn} ${styles.btnSm} ${pageNum === pagination.page ? styles.btnPrimary : styles.btnOutline}`}
+                  className={`${styles.btn} ${styles.btnSm} ${pageNum === pagination.currentPage ? styles.btnPrimary : styles.btnOutline}`}
                 >
                   {pageNum}
                 </button>
@@ -400,8 +482,8 @@ function AccountsList() {
             })}
             
             <button
-              onClick={() => handlePageChange(pagination.page + 1)}
-              disabled={pagination.page >= pagination.totalPages}
+              onClick={() => handlePageChange(pagination.currentPage + 1)}
+              disabled={pagination.currentPage >= pagination.totalPages}
               className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
             >
               Next
@@ -409,6 +491,36 @@ function AccountsList() {
           </div>
         </div>
       )}
+      
+      {/* Create Account Modal */}
+      {showCreateModal && (
+        <CreateAccountModal
+          isOpen={showCreateModal}
+          onClose={() => {
+            setShowCreateModal(false);
+            setEditingAccount(null);
+          }}
+          onSuccess={() => {
+            setShowCreateModal(false);
+            setEditingAccount(null);
+            refetch(); // Refresh the accounts list
+          }}
+          editingAccount={editingAccount}
+        />
+      )}
+      
+      {/* Confirmation Modal */}
+       <ConfirmationModal
+         isOpen={confirmationModal.isOpen}
+         type={confirmationModal.type}
+         title={confirmationModal.title}
+         message={confirmationModal.message}
+         onConfirm={confirmationModal.onConfirm}
+         onClose={() => setConfirmationModal(prev => ({ ...prev, isOpen: false }))}
+         isLoading={confirmationModal.isLoading}
+         showSuccess={confirmationModal.showSuccess}
+         successMessage={confirmationModal.successMessage}
+       />
     </div>
   );
 }
@@ -416,3 +528,5 @@ function AccountsList() {
 export default AccountsList;
 
 // AI-NOTE: Created comprehensive AccountsList component following UsersList pattern with account-specific features like subscription plans, billing status, trial management, and superadmin-only access controls. Includes search, filtering, pagination, and proper business rule enforcement.
+// AI-NOTE: Fixed pagination NaN values by using correct backend response properties (currentPage, itemsPerPage, totalItems) instead of (page, limit, totalItems)
+// AI-NOTE: Replaced text action buttons with icon buttons (Eye, Edit, Power, Trash2) to make table rows slimmer and more modern

@@ -1,0 +1,572 @@
+/* AI-NOTE: Comprehensive styling for CreateAccountModal with multi-step form design,
+   modern modal layout, responsive design, and consistent color scheme */
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Modal Content */
+.modalContent {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal Header */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headerIcon {
+  width: 32px;
+  height: 32px;
+  color: #171717;
+  flex-shrink: 0;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #171717;
+  line-height: 1.2;
+}
+
+.modalHeader p {
+  margin: 4px 0 0 0;
+  font-size: 0.875rem;
+  color: #737373;
+  line-height: 1.4;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #737373;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: #171717;
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Step Indicator */
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 32px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.step span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.step.active span {
+  background: #171717;
+  color: white;
+}
+
+.step label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+
+.step.active label {
+  color: #171717;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  height: calc(90vh - 200px);
+  min-height: 400px;
+}
+
+.stepContent {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.stepContent h3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 24px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.stepContent h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Form Groups */
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #171717;
+  box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.1);
+}
+
+.formGroup input:disabled,
+.formGroup select:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.formGroup input.error,
+.formGroup select.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.errorText {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: #ef4444;
+}
+
+/* Form Layout */
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.addressSection,
+.subscriptionSection,
+.settingsSection {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Modal Actions */
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 24px 32px;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.btnPrimary,
+.btnSecondary,
+.btnOutline {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnPrimary {
+  background: #171717;
+  color: white;
+  border-color: #171717;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: #404040;
+  border-color: #404040;
+  transform: translateY(-1px);
+}
+
+.btnSecondary {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.btnOutline {
+  background: white;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btnOutline:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btnPrimary:disabled,
+.btnSecondary:disabled,
+.btnOutline:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 16px;
+  }
+
+  .modalContent {
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .modalHeader {
+    padding: 20px 24px;
+  }
+
+  .modalHeader h2 {
+    font-size: 1.25rem;
+  }
+
+  .headerIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .stepIndicator {
+    padding: 20px 24px;
+    gap: 20px;
+  }
+
+  .step span {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .step label {
+    font-size: 0.75rem;
+  }
+
+  .stepContent {
+    padding: 24px;
+  }
+
+  .stepContent h3 {
+    font-size: 1.125rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .modalActions {
+    padding: 20px 24px;
+    flex-direction: column-reverse;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnOutline {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalOverlay {
+    padding: 12px;
+  }
+
+  .modalHeader {
+    padding: 16px 20px;
+  }
+
+  .stepIndicator {
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
+  .stepContent {
+    padding: 20px;
+  }
+
+  .modalActions {
+    padding: 16px 20px;
+  }
+
+  .step label {
+    display: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .modalContent {
+    background: #171717;
+    color: #fafafa;
+  }
+
+  .modalHeader {
+    background: #262626;
+    border-color: #404040;
+  }
+
+  .modalHeader h2 {
+    color: #fafafa;
+  }
+
+  .modalHeader p {
+    color: #a3a3a3;
+  }
+
+  .headerIcon {
+    color: #fafafa;
+  }
+
+  .closeButton {
+    color: #a3a3a3;
+  }
+
+  .closeButton:hover:not(:disabled) {
+    background: #404040;
+    color: #fafafa;
+  }
+
+  .stepIndicator {
+    background: #262626;
+    border-color: #404040;
+  }
+
+  .step span {
+    background: #404040;
+    color: #a3a3a3;
+  }
+
+  .step.active span {
+    background: #fafafa;
+    color: #171717;
+  }
+
+  .step label {
+    color: #a3a3a3;
+  }
+
+  .step.active label {
+    color: #fafafa;
+  }
+
+  .stepContent h3,
+  .stepContent h4 {
+    color: #fafafa;
+  }
+
+  .formGroup label {
+    color: #d4d4d8;
+  }
+
+  .formGroup input,
+  .formGroup select {
+    background: #262626;
+    border-color: #404040;
+    color: #fafafa;
+  }
+
+  .formGroup input:focus,
+  .formGroup select:focus {
+    border-color: #fafafa;
+    box-shadow: 0 0 0 3px rgba(250, 250, 250, 0.1);
+  }
+
+  .formGroup input:disabled,
+  .formGroup select:disabled {
+    background: #404040;
+    color: #737373;
+  }
+
+  .addressSection,
+  .subscriptionSection,
+  .settingsSection {
+    border-color: #404040;
+  }
+
+  .modalActions {
+    background: #262626;
+    border-color: #404040;
+  }
+
+  .btnPrimary {
+    background: #fafafa;
+    color: #171717;
+    border-color: #fafafa;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    background: #e5e5e5;
+    border-color: #e5e5e5;
+  }
+
+  .btnSecondary {
+    background: #404040;
+    color: #fafafa;
+    border-color: #525252;
+  }
+
+  .btnSecondary:hover:not(:disabled) {
+    background: #525252;
+    border-color: #737373;
+  }
+
+  .btnOutline {
+    background: #171717;
+    color: #fafafa;
+    border-color: #404040;
+  }
+
+  .btnOutline:hover:not(:disabled) {
+    background: #262626;
+    border-color: #525252;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .formGroup input,
+  .formGroup select {
+    border-width: 2px;
+  }
+
+  .modalContent {
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .modalContent {
+    animation: none;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    transform: none;
+  }
+
+  * {
+    transition: none;
+  }
+}
+
+/* AI-NOTE: Comprehensive CSS styling for CreateAccountModal with multi-step form design,
+   modern modal layout, responsive design, dark mode support, and accessibility features.
+   Follows existing modal patterns while providing enhanced UX for account creation. */

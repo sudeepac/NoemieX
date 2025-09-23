@@ -110,8 +110,8 @@ const SuperadminDashboard = () => {
     activeSubscriptions: 0
   };
 
-  // AI-NOTE: Extract activities array from API response structure
-  const recentActivity = recentActivityData?.recentActivity?.activities || [];
+  // AI-NOTE: Extract activities array from API response structure - fixed data path
+  const recentActivity = recentActivityData?.data?.activities || [];
 
   return (
     <div className={styles.dashboardContainer}>

@@ -43,7 +43,6 @@ const SuperadminRoutes = () => {
             <Route index element={<SuperadminDashboard />} />
             
             {/* Management Pages */}
-            <Route path="accounts" element={<SuperadminAccountManagement />} />
             <Route path="users" element={<SuperadminUserManagement />} />
             <Route path="settings" element={<SystemSettings />} />
             <Route path="security" element={<div>Security & Compliance - Coming Soon</div>} />

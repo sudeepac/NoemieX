@@ -27,6 +27,7 @@ import {
   Download,
   Eye
 } from 'lucide-react';
+import CreateAccountModal from '../../components/accounts/CreateAccountModal';
 import styles from './SuperadminAccountManagement.module.css';
 
 /**
@@ -65,7 +66,8 @@ const SuperadminAccountManagement = () => {
     sortOrder
   });
 
-  const [createAccount, { isLoading: createLoading }] = useCreateAccountMutation();
+  // Remove unused createAccount mutation since it's handled in the modal
+  // const [createAccount, { isLoading: createLoading }] = useCreateAccountMutation();
   const [updateAccount, { isLoading: updateLoading }] = useUpdateAccountMutation();
   const [deleteAccount, { isLoading: deleteLoading }] = useDeleteAccountMutation();
   const [toggleAccountStatus, { isLoading: toggleLoading }] = useToggleAccountStatusMutation();
@@ -75,15 +77,9 @@ const SuperadminAccountManagement = () => {
   const accounts = accountsData?.accounts || [];
   const pagination = accountsData?.pagination || {};
 
-  // Handle account creation
-  const handleCreateAccount = async (accountData) => {
-    try {
-      await createAccount(accountData).unwrap();
-      setShowCreateModal(false);
-      refetchAccounts();
-    } catch (error) {
-      console.error('Failed to create account:', error);
-    }
+  // Handle successful account creation
+  const handleAccountCreated = () => {
+    refetchAccounts();
   };
 
   // Handle account update
@@ -408,8 +404,15 @@ const SuperadminAccountManagement = () => {
         </div>
       )}
 
-      {/* Modals would be implemented here */}
-      {/* CreateAccountModal, EditAccountModal, DeleteAccountModal, BillingModal */}
+      {/* Create Account Modal */}
+      <CreateAccountModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={handleAccountCreated}
+      />
+
+      {/* Other modals would be implemented here */}
+      {/* EditAccountModal, DeleteAccountModal, BillingModal */}
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-// AI-NOTE: Commented out imports for non-existent pages to fix compilation errors
+import AccountsList from '../../components/accounts/AccountsList';
+// AI-NOTE: Imported AccountsList component to fix accounts page routing
+// Other components will be imported as they are created
 // import {
-//   AccountsList,
 //   AccountDetail,
 //   AccountCreate,
 //   AccountEdit,
@@ -30,9 +31,8 @@ const AccountsRoutes = () => {
   return (
     <Suspense fallback={<div className="loading-spinner">Loading Accounts...</div>}>
       <Routes>
-        {/* Temporarily commented out until pages are created */}
         {/* List View - GET /accounts */}
-        {/* <Route index element={<AccountsList />} /> */}
+        <Route index element={<AccountsList />} />
         
         {/* Create View - POST /accounts */}
         {/* <Route path="create" element={<AccountCreate />} /> */}
@@ -49,8 +49,8 @@ const AccountsRoutes = () => {
         {/* Statistics View - Account analytics */}
         {/* <Route path=":id/stats" element={<AccountStats />} /> */}
         
-        {/* Placeholder route to prevent empty Routes */}
-        <Route path="*" element={<div>Accounts pages coming soon...</div>} />
+        {/* Placeholder route for other pages */}
+        <Route path="*" element={<div>Other account pages coming soon...</div>} />
       </Routes>
     </Suspense>
   );

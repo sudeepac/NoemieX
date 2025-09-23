@@ -1,0 +1,244 @@
+/* ConfirmationModal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+.modalContent.warning {
+  border-top: 4px solid #f59e0b;
+}
+
+.modalContent.danger {
+  border-top: 4px solid #ef4444;
+}
+
+.modalContent.info {
+  border-top: 4px solid #3b82f6;
+}
+
+.modalContent.success {
+  border-top: 4px solid #10b981;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 0 24px;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerContent h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icons */
+.warningIcon {
+  color: #f59e0b;
+  width: 24px;
+  height: 24px;
+}
+
+.dangerIcon {
+  color: #ef4444;
+  width: 24px;
+  height: 24px;
+}
+
+.infoIcon {
+  color: #3b82f6;
+  width: 24px;
+  height: 24px;
+}
+
+.successIcon {
+  color: #10b981;
+  width: 24px;
+  height: 24px;
+}
+
+.modalBody {
+  padding: 20px 24px;
+}
+
+.modalBody p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 0 24px 24px 24px;
+  border-top: 1px solid #f3f4f6;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+/* Button Styles */
+.btnPrimary,
+.btnSecondary {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  min-width: 80px;
+}
+
+.btnSecondary {
+  background-color: #f9fafb;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.btnSecondary:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btnPrimary {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btnPrimary:hover {
+  background-color: #2563eb;
+}
+
+.btnWarning {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.btnWarning:hover {
+  background-color: #d97706;
+}
+
+.btnDanger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btnDanger:hover {
+  background-color: #dc2626;
+}
+
+.btnInfo {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btnInfo:hover {
+  background-color: #2563eb;
+}
+
+.btnPrimary:disabled,
+.btnSecondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .modalOverlay {
+    padding: 16px;
+  }
+  
+  .modalContent {
+    max-width: 100%;
+  }
+  
+  .modalHeader {
+    padding: 20px 20px 0 20px;
+  }
+  
+  .headerContent h3 {
+    font-size: 1.1rem;
+  }
+  
+  .modalBody {
+    padding: 16px 20px;
+  }
+  
+  .modalActions {
+    padding: 0 20px 20px 20px;
+    flex-direction: column-reverse;
+  }
+  
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+  }
+}
+
+/* AI-NOTE: Comprehensive styling for ConfirmationModal component with proper
+ * visual hierarchy, responsive design, and different states (warning, danger, info, success).
+ * Follows design system patterns and provides smooth animations. */
