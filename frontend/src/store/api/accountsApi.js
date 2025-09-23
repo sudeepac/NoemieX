@@ -22,10 +22,11 @@ export const accountsApi = apiSlice.injectEndpoints({
         
         return `/accounts?${searchParams}`;
       },
+      // AI-NOTE: Fixed API response structure - backend returns data in result.data, not result.accounts
       providesTags: (result, error, arg) =>
-        result
+        result?.data
           ? [
-              ...result.accounts.map(({ id }) => ({ type: 'Account', id })),
+              ...result.data.map(({ _id }) => ({ type: 'Account', id: _id })),
               { type: 'Account', id: 'LIST' },
             ]
           : [{ type: 'Account', id: 'LIST' }],
@@ -91,6 +92,20 @@ export const accountsApi = apiSlice.injectEndpoints({
         { type: 'AccountStats', id: accountId },
       ],
     }),
+
+    // Update account billing
+    updateAccountBilling: builder.mutation({
+      query: ({ accountId, ...billingData }) => ({
+        url: `/accounts/${accountId}/billing`,
+        method: 'PATCH',
+        body: billingData,
+      }),
+      invalidatesTags: (result, error, { accountId }) => [
+        { type: 'Account', id: accountId },
+        { type: 'Account', id: 'LIST' },
+        { type: 'AccountStats', id: accountId },
+      ],
+    }),
   }),
 });
 
@@ -103,4 +118,5 @@ export const {
   useUpdateAccountMutation,
   useDeleteAccountMutation,
   useToggleAccountStatusMutation,
+  useUpdateAccountBillingMutation,
 } = accountsApi;

@@ -38,6 +38,7 @@ export const ReportsAnalytics = lazy(() => import('../../pages/common/ReportsAna
 // ============================================================================
 // Superadmin Portal
 export const SuperadminAccountManagement = lazy(() => import('../../pages/accounts/SuperadminAccountManagement'));
+export const SuperadminUserManagement = lazy(() => import('../../pages/users/SuperadminUserManagement'));
 
 // Account Portal
 export const AgencyManagement = lazy(() => import('../../pages/accounts/AgencyManagement'));

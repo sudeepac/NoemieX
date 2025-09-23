@@ -7,4 +7,5 @@ export * from './billingTransactionsApi';
 export * from './billingEventHistoriesApi';
 export * from './offerLettersApi';
 export * from './paymentSchedulesApi';
+export * from './superadminApi';
 export * from './usersApi';

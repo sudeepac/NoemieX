@@ -24,10 +24,11 @@ export const agenciesApi = apiSlice.injectEndpoints({
         
         return `/agencies?${searchParams}`;
       },
+      // AI-NOTE: Fixed API response structure - backend returns data in result.data, not result.agencies
       providesTags: (result, error, arg) =>
-        result
+        result?.data
           ? [
-              ...result.agencies.map(({ id }) => ({ type: 'Agency', id })),
+              ...result.data.map(({ _id }) => ({ type: 'Agency', id: _id })),
               { type: 'Agency', id: 'LIST' },
             ]
           : [{ type: 'Agency', id: 'LIST' }],

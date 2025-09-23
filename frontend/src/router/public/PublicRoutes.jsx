@@ -20,13 +20,14 @@ import {
  * // AI-NOTE: Public routes following React Router v6 patterns with automatic redirection.
  * // Authenticated users are redirected to their portal to prevent access to auth pages.
  * // All components are lazy-loaded for optimal performance.
+ * // FIXED: Changed currentUser.portal to currentUser.portalType to match backend response structure.
  */
 const PublicRoutes = () => {
   const currentUser = useSelector(selectCurrentUser);
 
   // If user is authenticated, redirect to their portal
   if (currentUser) {
-    const portalPath = `/${currentUser.portal}`;
+    const portalPath = `/${currentUser.portalType}`;
     return <Navigate to={portalPath} replace />;
   }
 

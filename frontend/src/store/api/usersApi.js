@@ -25,10 +25,11 @@ export const usersApi = apiSlice.injectEndpoints({
         
         return `/users?${searchParams}`;
       },
+      // AI-NOTE: Fixed API response structure - backend returns data in result.data, not result.users
       providesTags: (result, error, arg) =>
-        result
+        result?.data
           ? [
-              ...result.users.map(({ id }) => ({ type: 'User', id })),
+              ...result.data.map(({ _id }) => ({ type: 'User', id: _id })),
               { type: 'User', id: 'LIST' },
             ]
           : [{ type: 'User', id: 'LIST' }],

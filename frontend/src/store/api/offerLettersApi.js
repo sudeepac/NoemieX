@@ -27,10 +27,11 @@ export const offerLettersApi = apiSlice.injectEndpoints({
         
         return `/offer-letters?${searchParams}`;
       },
+      // AI-NOTE: Fixed API response structure - backend returns data in result.data, not result.offerLetters
       providesTags: (result, error, arg) =>
-        result
+        result?.data
           ? [
-              ...result.offerLetters.map(({ id }) => ({ type: 'OfferLetter', id })),
+              ...result.data.map(({ _id }) => ({ type: 'OfferLetter', id: _id })),
               { type: 'OfferLetter', id: 'LIST' },
             ]
           : [{ type: 'OfferLetter', id: 'LIST' }],

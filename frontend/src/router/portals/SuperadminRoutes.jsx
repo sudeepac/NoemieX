@@ -5,10 +5,11 @@ import {
   SuperadminPortal,
   SuperadminDashboard,
   SuperadminAccountManagement,
+  SuperadminUserManagement,
   SystemSettings,
-  PlatformAnalytics,
-  ReportsAnalytics
+  PlatformAnalytics
 } from '../shared/LazyComponents';
+import SuperadminSubscriptionManagement from '../../pages/subscriptions/SuperadminSubscriptionManagement';
 
 // Import model routes
 import UsersRoutes from '../models/UsersRoutes';
@@ -42,10 +43,13 @@ const SuperadminRoutes = () => {
             <Route index element={<SuperadminDashboard />} />
             
             {/* Management Pages */}
-            <Route path="accounts-management" element={<SuperadminAccountManagement />} />
-            <Route path="system-settings" element={<SystemSettings />} />
-            <Route path="platform-analytics" element={<PlatformAnalytics />} />
-            <Route path="reports-analytics" element={<ReportsAnalytics />} />
+            <Route path="accounts" element={<SuperadminAccountManagement />} />
+            <Route path="users" element={<SuperadminUserManagement />} />
+            <Route path="settings" element={<SystemSettings />} />
+            <Route path="security" element={<div>Security & Compliance - Coming Soon</div>} />
+            <Route path="database" element={<div>Data Management - Coming Soon</div>} />
+            <Route path="analytics" element={<PlatformAnalytics />} />
+            <Route path="subscriptions" element={<SuperadminSubscriptionManagement />} />
             
             {/* Model Routes - Full Access */}
             <Route path="users/*" element={<UsersRoutes />} />

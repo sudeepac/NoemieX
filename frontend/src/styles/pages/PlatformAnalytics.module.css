@@ -1,0 +1,780 @@
+/* Platform Analytics Page Styles */
+
+.analyticsContainer {
+  padding: 24px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Loading States */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loadingSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #64748b;
+}
+
+.spinIcon {
+  width: 32px;
+  height: 32px;
+  animation: spin 1s linear infinite;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.tabLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: #64748b;
+  gap: 12px;
+}
+
+/* Page Header */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+.pageDescription {
+  font-size: 16px;
+  color: #64748b;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.timeframeSelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.selectorIcon {
+  width: 16px;
+  height: 16px;
+  color: #64748b;
+}
+
+.timeframeSelect {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  outline: none;
+}
+
+.refreshButton,
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #475569;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:hover,
+.exportButton:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.refreshButton:disabled,
+.exportButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.exportButton {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.exportButton:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.buttonIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Tab Navigation */
+.tabNavigation {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  padding: 8px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.tabButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: fit-content;
+}
+
+.tabButton:hover {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.tabButton.active {
+  background: #3b82f6;
+  color: white;
+}
+
+.tabIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Tab Content */
+.tabContent {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Overview Tab */
+.overviewTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.metricCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.metricCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.metricIcon {
+  width: 20px;
+  height: 20px;
+  color: #3b82f6;
+}
+
+.metricLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.metricValue {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.metricChange {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.metricChange.positive {
+  color: #059669;
+}
+
+.metricChange.negative {
+  color: #dc2626;
+}
+
+.metricChange.warning {
+  color: #d97706;
+}
+
+.changeIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Charts */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.chartCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.chartHeader h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.chartPeriod {
+  font-size: 12px;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.chartPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: white;
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.chartIcon {
+  width: 48px;
+  height: 48px;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.chartPlaceholder p {
+  color: #64748b;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+
+.chartPlaceholder small {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Users Tab */
+.usersTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.userMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.userMetricCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.userMetricCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.metricDetails {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.userChartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+/* Revenue Tab */
+.revenueTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.revenueMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.revenueMetricCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.revenueMetricCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.revenueChartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+/* Performance Tab */
+.performanceTab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.performanceMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.performanceMetricCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.performanceMetricCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.healthIndicator {
+  margin-top: 8px;
+}
+
+.healthBar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.healthFill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.healthBar.excellent .healthFill {
+  background: #059669;
+}
+
+.healthBar.good .healthFill {
+  background: #3b82f6;
+}
+
+.healthBar.warning .healthFill {
+  background: #d97706;
+}
+
+.performanceChartsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+/* Activity Tab */
+.activityTab {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.activityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.activityHeader h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.activityFilters {
+  display: flex;
+  gap: 12px;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #475569;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterButton:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.filterIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.activityItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.activityItem:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.activityIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.activityTypeIcon {
+  width: 20px;
+  height: 20px;
+  color: #3b82f6;
+}
+
+.activityContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.activityTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.activityDescription {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.activityMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.activityTime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.activityUser {
+  font-weight: 500;
+}
+
+.activityActions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.viewButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #475569;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.viewButton:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.viewIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.emptyActivity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  color: #cbd5e1;
+  margin-bottom: 16px;
+}
+
+.emptyActivity p {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+}
+
+.emptyActivity small {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .pageHeader {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  .headerActions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .metricsGrid,
+  .userMetricsGrid,
+  .revenueMetricsGrid,
+  .performanceMetricsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .chartsGrid,
+  .userChartsGrid,
+  .revenueChartsGrid,
+  .performanceChartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .analyticsContainer {
+    padding: 16px;
+  }
+  
+  .pageHeader {
+    padding: 20px;
+  }
+  
+  .pageTitle {
+    font-size: 24px;
+  }
+  
+  .tabContent {
+    padding: 20px;
+  }
+  
+  .tabNavigation {
+    padding: 6px;
+  }
+  
+  .tabButton {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .metricValue {
+    font-size: 28px;
+  }
+  
+  .metricsGrid,
+  .userMetricsGrid,
+  .revenueMetricsGrid,
+  .performanceMetricsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .activityItem {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .activityActions {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .analyticsContainer {
+    padding: 12px;
+  }
+  
+  .pageHeader {
+    padding: 16px;
+  }
+  
+  .tabContent {
+    padding: 16px;
+  }
+  
+  .headerActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .timeframeSelector {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .refreshButton,
+  .exportButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* AI-NOTE: Comprehensive CSS module for PlatformAnalytics with responsive design, 
+   modern styling, and support for all tab components including metrics cards, 
+   charts, activity lists, and loading states. */

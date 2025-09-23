@@ -5,7 +5,8 @@ const {
   successResponse,
   errorResponse,
   notFoundResponse,
-  validationErrorResponse
+  validationErrorResponse,
+  forbiddenResponse
 } = require('../utils/response.util');
 
 // @desc    Get billing event histories with filtering and pagination
@@ -230,6 +231,8 @@ const getUserActivity = asyncHandler(async (req, res) => {
 // Note: createBillingEventHistory is removed as event histories should only be created
 // automatically by the system through model methods, not via direct API calls.
 // This maintains the insert-only audit trail integrity.
+
+
 
 // @desc    Hide a billing event history (soft delete)
 // @route   PATCH /api/billing-event-histories/:id/hide

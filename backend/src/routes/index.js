@@ -8,6 +8,7 @@ const billingEventHistoriesRoutes = require('./billing-event-histories.routes');
 const billingTransactionsRoutes = require('./billing-transactions.routes');
 const offerLettersRoutes = require('./offer-letters.routes');
 const paymentScheduleItemsRoutes = require('./payment-schedule-items.routes');
+const superadminRoutes = require('./superadmin.routes');
 const usersRoutes = require('./users.routes');
 
 module.exports = {
@@ -18,5 +19,6 @@ module.exports = {
   billingTransactionsRoutes,
   offerLettersRoutes,
   paymentScheduleItemsRoutes,
+  superadminRoutes,
   usersRoutes
 };

@@ -1,0 +1,640 @@
+/* AI-NOTE: Comprehensive styling for SuperAdmin Account Management with minimalistic design,
+   modern table layout, responsive design, and consistent color scheme */
+
+.container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #fafafa;
+  min-height: 100vh;
+}
+
+/* Header Section */
+.header {
+  margin-bottom: 2rem;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.headerText {
+  flex: 1;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #171717;
+  margin: 0 0 0.5rem 0;
+}
+
+.titleIcon {
+  width: 32px;
+  height: 32px;
+  color: #171717;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #737373;
+  margin: 0;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #171717;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.createButton:hover {
+  background: #404040;
+  transform: translateY(-1px);
+}
+
+/* Filters Section */
+.filtersSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+}
+
+.searchContainer {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: #737373;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: #fafafa;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #171717;
+  background: white;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.filterSelect {
+  padding: 0.75rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #171717;
+}
+
+.refreshButton {
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refreshButton:hover {
+  background: #fafafa;
+  border-color: #171717;
+}
+
+.refreshButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Table Section */
+.tableContainer {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #fafafa;
+}
+
+.table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #404040;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.tableRow {
+  border-bottom: 1px solid #f5f5f5;
+  transition: background-color 0.2s ease;
+}
+
+.tableRow:hover {
+  background: #fafafa;
+}
+
+.table td {
+  padding: 1rem;
+  vertical-align: middle;
+}
+
+/* Account Info */
+.accountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.accountName {
+  font-weight: 600;
+  color: #171717;
+  font-size: 0.875rem;
+}
+
+.accountEmail {
+  font-size: 0.75rem;
+  color: #737373;
+}
+
+/* Status Badges */
+.statusBadge,
+.subscriptionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.statusBadge.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.statusBadge.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusBadge.danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusBadge.secondary {
+  background: #f5f5f5;
+  color: #737373;
+}
+
+.subscriptionBadge.primary {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.subscriptionBadge.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.subscriptionBadge.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.subscriptionBadge.secondary {
+  background: #f5f5f5;
+  color: #737373;
+}
+
+/* Metrics */
+.userCount,
+.revenue {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: #404040;
+}
+
+.date {
+  font-size: 0.875rem;
+  color: #737373;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #737373;
+}
+
+.actionButton:hover {
+  background: #fafafa;
+  border-color: #171717;
+  color: #171717;
+}
+
+.actionButton.success {
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.actionButton.success:hover {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #16a34a;
+}
+
+.actionButton.danger {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.actionButton.danger:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  color: #737373;
+}
+
+.emptyState svg {
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.emptyState h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #404040;
+}
+
+.emptyState p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+}
+
+.paginationButton {
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background: #fafafa;
+  border-color: #171717;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationInfo {
+  font-size: 0.875rem;
+  color: #737373;
+}
+
+/* Loading and Error States */
+.loadingState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  color: #737373;
+}
+
+.loadingIcon,
+.errorIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: #171717;
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #171717;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #404040;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .headerContent {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .filtersSection {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .filters {
+    flex-wrap: wrap;
+  }
+
+  .table {
+    font-size: 0.75rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .titleIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .actionButton {
+    padding: 0.375rem;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: #0a0a0a;
+    color: #fafafa;
+  }
+
+  .title {
+    color: #fafafa;
+  }
+
+  .titleIcon {
+    color: #fafafa;
+  }
+
+  .subtitle {
+    color: #a3a3a3;
+  }
+
+  .createButton {
+    background: #fafafa;
+    color: #171717;
+  }
+
+  .createButton:hover {
+    background: #e5e5e5;
+  }
+
+  .filtersSection,
+  .tableContainer,
+  .pagination {
+    background: #171717;
+    border-color: #404040;
+  }
+
+  .table thead {
+    background: #262626;
+  }
+
+  .table th {
+    color: #a3a3a3;
+    border-color: #404040;
+  }
+
+  .tableRow {
+    border-color: #262626;
+  }
+
+  .tableRow:hover {
+    background: #262626;
+  }
+
+  .searchInput,
+  .filterSelect {
+    background: #262626;
+    border-color: #404040;
+    color: #fafafa;
+  }
+
+  .searchInput:focus,
+  .filterSelect:focus {
+    border-color: #fafafa;
+  }
+
+  .refreshButton,
+  .paginationButton {
+    background: #262626;
+    border-color: #404040;
+    color: #fafafa;
+  }
+
+  .refreshButton:hover,
+  .paginationButton:hover:not(:disabled) {
+    background: #404040;
+    border-color: #fafafa;
+  }
+
+  .accountName {
+    color: #fafafa;
+  }
+
+  .userCount,
+  .revenue {
+    color: #a3a3a3;
+  }
+
+  .date {
+    color: #737373;
+  }
+
+  .actionButton {
+    border-color: #404040;
+    color: #a3a3a3;
+  }
+
+  .actionButton:hover {
+    background: #262626;
+    border-color: #fafafa;
+    color: #fafafa;
+  }
+
+  .emptyState {
+    color: #737373;
+  }
+
+  .emptyState h3 {
+    color: #a3a3a3;
+  }
+
+  .paginationInfo {
+    color: #737373;
+  }
+
+  .retryButton {
+    background: #fafafa;
+    color: #171717;
+  }
+
+  .retryButton:hover {
+    background: #e5e5e5;
+  }
+}
+
+/* AI-NOTE: Comprehensive styling with minimalistic design, responsive layout,
+   modern table styling, consistent color scheme, and full dark mode support.
+   Includes loading states, error handling, and accessibility considerations. */

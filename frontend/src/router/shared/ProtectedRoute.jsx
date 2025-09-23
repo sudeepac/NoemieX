@@ -24,8 +24,9 @@ const ProtectedRoute = ({ children, requiredPortal = null, fallbackPath = '/logi
   }
 
   // Check if user has access to required portal
-  if (requiredPortal && currentUser.portal !== requiredPortal) {
-    const userPortalPath = `/${currentUser.portal}`;
+  // AI-NOTE: Fixed to use portalType instead of portal to match backend response
+  if (requiredPortal && currentUser.portalType !== requiredPortal) {
+    const userPortalPath = `/${currentUser.portalType}`;
     return <Navigate to={userPortalPath} replace />;
   }
 

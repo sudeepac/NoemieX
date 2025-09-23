@@ -1,0 +1,108 @@
+/* AgencyDashboard Component Styles */
+.dashboardContainer {
+  padding: 24px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.dashboardHeader {
+  margin-bottom: 32px;
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dashboardHeader h1 {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.dashboardHeader p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.dashboardCard {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dashboardCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #ec4899;
+}
+
+.dashboardCard h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.dashboardCard p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 16px;
+  }
+  
+  .dashboardHeader {
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  
+  .dashboardHeader h1 {
+    font-size: 1.75rem;
+  }
+  
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .dashboardCard {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardContainer {
+    padding: 12px;
+  }
+  
+  .dashboardHeader {
+    padding: 16px;
+  }
+  
+  .dashboardHeader h1 {
+    font-size: 1.5rem;
+  }
+  
+  .dashboardCard {
+    padding: 16px;
+  }
+}
+
+/* AI-NOTE: Created CSS module for AgencyDashboard following project conventions.
+   Uses camelCase class names and agency-themed hover colors (pink). */

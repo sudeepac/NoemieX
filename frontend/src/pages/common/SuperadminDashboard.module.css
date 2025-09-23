@@ -1,0 +1,411 @@
+/* SuperadminDashboard Component Styles - Minimalistic Evergreen Design */
+.dashboardContainer {
+  padding: 32px;
+  background: #fafafa;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+.dashboardHeader {
+  margin-bottom: 40px;
+  background: white;
+  padding: 32px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.dashboardHeader h1 {
+  margin: 0 0 8px 0;
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #171717;
+  letter-spacing: -0.025em;
+}
+
+.dashboardHeader p {
+  margin: 0;
+  color: #737373;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.dashboardCard {
+  background: white;
+  padding: 28px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.dashboardCard:hover {
+  border-color: #d4d4d4;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.dashboardCard h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #171717;
+  letter-spacing: -0.015em;
+}
+
+.dashboardCard p {
+  margin: 0;
+  color: #737373;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 16px;
+  }
+  
+  .dashboardHeader {
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  
+  .dashboardHeader h1 {
+    font-size: 1.75rem;
+  }
+  
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .dashboardCard {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardContainer {
+    padding: 12px;
+  }
+  
+  .dashboardHeader {
+    padding: 16px;
+  }
+  
+  .dashboardHeader h1 {
+    font-size: 1.5rem;
+  }
+  
+  .dashboardCard {
+    padding: 16px;
+  }
+}
+
+/* Metric Cards */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metricCard {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.15s ease;
+}
+
+.metricCard:hover {
+  border-color: #d4d4d4;
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.metricIcon {
+  width: 20px;
+  height: 20px;
+  color: #737373;
+}
+
+.metricValue {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #171717;
+  margin: 0 0 4px 0;
+  letter-spacing: -0.025em;
+}
+
+.metricLabel {
+  font-size: 0.875rem;
+  color: #737373;
+  margin: 0;
+}
+
+.metricChange {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.metricChange.positive {
+  color: #059669;
+}
+
+.metricChange.negative {
+  color: #dc2626;
+}
+
+/* Quick Actions */
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  background: white;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #171717;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.actionButton:hover {
+  border-color: #d4d4d4;
+  background: #fafafa;
+  text-decoration: none;
+  color: #171717;
+}
+
+.actionIcon {
+  width: 16px;
+  height: 16px;
+  color: #737373;
+}
+
+/* Activity Feed */
+.activityFeed {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  overflow: hidden;
+}
+
+.activityHeader {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #fafafa;
+}
+
+.activityHeader h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.activityList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.activityItem {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f5f5f5;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.activityItem:last-child {
+  border-bottom: none;
+}
+
+.activityIcon {
+  width: 16px;
+  height: 16px;
+  color: #737373;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.activityContent {
+  flex: 1;
+}
+
+.activityText {
+  font-size: 0.875rem;
+  color: #171717;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.activityTime {
+  font-size: 0.8rem;
+  color: #737373;
+  margin: 0;
+}
+
+/* System Status */
+.systemStatus {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  padding: 24px;
+}
+
+.statusHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.statusHeader h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #171717;
+}
+
+.statusList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+}
+
+.statusLabel {
+  font-size: 0.875rem;
+  color: #171717;
+  font-weight: 500;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.statusBadge.operational {
+  background: #dcfce7;
+  color: #059669;
+}
+
+.statusBadge.warning {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.statusBadge.error {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.statusIcon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Loading and Error States */
+.loadingState,
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  color: #737373;
+}
+
+.loadingIcon,
+.errorIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: #171717;
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.retryButton {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #171717;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #404040;
+  transform: translateY(-1px);
+}
+
+.noActivity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #737373;
+  text-align: center;
+}
+
+.noActivity svg {
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+/* AI-NOTE: Enhanced with minimalistic, evergreen design patterns.
+   Removed heavy shadows, used subtle borders, refined typography,
+   and implemented timeless color palette for long-term usability. */

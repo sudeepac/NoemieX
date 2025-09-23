@@ -79,7 +79,14 @@ export const apiSlice = createApi({
     'PaymentSchedule',
     'PaymentScheduleStats',
     'BillingTransaction',
-    'BillingEventHistory'
+    'BillingEventHistory',
+    'PlatformStats',
+    'PlatformHealth',
+    'PlatformActivity',
+    'SystemMetrics',
+    'BillingOverview',
+    'SubscriptionAnalytics',
+    'PlatformSettings'
   ],
   endpoints: (builder) => ({
     // This will be extended by individual API files using injectEndpoints

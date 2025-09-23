@@ -21,6 +21,7 @@ import AgencyRoutes from './portals/AgencyRoutes';
  * // AI-NOTE: Main router following React Router v6 patterns with portal-based organization.
  * // Automatically redirects users to their appropriate portal based on authentication.
  * // Follows the new /router folder structure with separated concerns.
+ * // FIXED: Changed currentUser.portal to currentUser.portalType to match backend response structure.
  */
 const AppRoutes = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -39,7 +40,7 @@ const AppRoutes = () => {
       {currentUser && (
         <Route 
           path="*" 
-          element={<Navigate to={`/${currentUser.portal}`} replace />} 
+          element={<Navigate to={`/${currentUser.portalType}`} replace />} 
         />
       )}
     </Routes>

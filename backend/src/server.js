@@ -18,6 +18,7 @@ const offerLetterRoutes = require('./routes/offer-letters.routes');
 const paymentScheduleItemRoutes = require('./routes/payment-schedule-items.routes');
 const billingTransactionRoutes = require('./routes/billing-transactions.routes');
 const billingEventHistoryRoutes = require('./routes/billing-event-histories.routes');
+const superadminRoutes = require('./routes/superadmin.routes');
 
 const app = express();
 
@@ -65,6 +66,7 @@ app.use('/api/offer-letters', offerLetterRoutes);
 app.use('/api/payment-schedule-items', paymentScheduleItemRoutes);
 app.use('/api/billing-transactions', billingTransactionRoutes);
 app.use('/api/billing-event-histories', billingEventHistoryRoutes);
+app.use('/api/superadmin', superadminRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
