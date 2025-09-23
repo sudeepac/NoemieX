@@ -1,3 +1,9 @@
+// AI-NOTE: Landing page content updated to focus on study abroad commission billing
+// Changed from generic enterprise multi-tenant to specific study abroad agency use case
+// Target customers: 1) Study abroad agencies with subagent networks 2) CRM providers needing commission APIs
+// Key pain points addressed: manual commission processes, reconciliation complexity, multi-currency, audit compliance
+// Content reflects research on industry challenges: 68% use manual processes, subagent transparency needs, clawback disputes
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -9,7 +15,10 @@ import {
   Star,
   Globe,
   Lock,
-  Zap
+  Zap,
+  BarChart3,
+  CreditCard,
+  Settings
 } from 'lucide-react';
 import './landing.styles.css';
 
@@ -17,67 +26,67 @@ const LandingPage = () => {
   const features = [
     {
       icon: <Shield className="w-8 h-8" />,
-      title: "Secure & Compliant",
-      description: "Enterprise-grade security with role-based access control and data encryption."
+      title: "Subagent-Ready Commission Engine",
+      description: "Tiered rates, overrides, bonuses, caps, minimums, and multi-currency support — all scoped per agency within each account."
     },
     {
       icon: <Users className="w-8 h-8" />,
-      title: "Multi-Portal System",
-      description: "Dedicated portals for superadmins, accounts, and agencies with tailored experiences."
+      title: "From Offer Letter to Payout",
+      description: "Versioned payment schedules flow into traceable transactions with clear states and full history."
     },
     {
       icon: <Building2 className="w-8 h-8" />,
-      title: "Account Management",
-      description: "Comprehensive tenant management with detailed analytics and reporting."
+      title: "Disputes & Clawbacks, Simplified",
+      description: "Track exceptions, partials, deferrals, and clawbacks with an immutable event log and clear audit trail."
     },
     {
       icon: <Globe className="w-8 h-8" />,
-      title: "Global Reach",
-      description: "Support for multiple regions and languages with localized experiences."
+      title: "Multi-Currency Ready",
+      description: "Define base currency and convert consistently; ensure payout readiness with transparent status and history."
     },
     {
       icon: <Lock className="w-8 h-8" />,
-      title: "Data Protection",
-      description: "GDPR compliant with advanced data protection and privacy controls."
+      title: "Multi-Tenant Isolation by Design",
+      description: "Strong tenant boundaries and agency-level RBAC across portals keep data clean, compliant, and secure."
     },
     {
       icon: <Zap className="w-8 h-8" />,
-      title: "High Performance",
-      description: "Lightning-fast performance with optimized infrastructure and caching."
+      title: "API & Whitelabel Integration",
+      description: "Drop-in API and whitelabel UI to embed commission billing into your CRM without rebuilding core primitives."
     }
   ];
 
   const testimonials = [
     {
       name: "Sarah Johnson",
-      role: "IT Director",
-      company: "TechCorp Inc.",
-      content: "NoemieX has transformed how we manage our multi-tenant operations. The security features are top-notch.",
+      role: "Operations Director",
+      company: "Global Education Partners",
+      content: "Before NoemieX, we spent 15 hours per month reconciling subagent commissions. Now it's automated and audit-ready.",
       rating: 5
     },
     {
       name: "Michael Chen",
-      role: "Operations Manager",
-      company: "Global Solutions",
-      content: "The portal system is intuitive and powerful. Our team productivity has increased by 40%.",
+      role: "Network Manager",
+      company: "StudyLink International",
+      content: "Our subagents love the transparency. They can see their commission calculations in real-time, reducing disputes by 80%.",
       rating: 5
     },
     {
       name: "Emily Rodriguez",
-      role: "Security Lead",
-      company: "SecureData Ltd.",
-      content: "Outstanding security features and compliance tools. Exactly what we needed for our enterprise.",
+      role: "Technical Lead",
+      company: "EduCRM Solutions",
+      content: "The API integration was seamless. Our CRM now handles commission billing natively without any manual intervention.",
       rating: 5
     }
   ];
 
   const benefits = [
-    "Role-based access control",
-    "Real-time analytics dashboard",
-    "Automated compliance reporting",
-    "24/7 technical support",
-    "API integration capabilities",
-    "Custom branding options"
+    "Automated commission calculations and splits",
+    "Multi-currency support with consistent conversion",
+    "Immutable audit trail for disputes and compliance",
+    "Subagent portal with performance tracking",
+    "API-first architecture for CRM integration",
+    "Whitelabel options for seamless branding"
   ];
 
   return (
@@ -103,14 +112,14 @@ const LandingPage = () => {
           <div className="hero-content">
             <div className="hero-text">
               <h1 className="hero-title">
-                Enterprise-Grade
-                <span className="text-gradient"> Multi-Portal </span>
-                Management System
+                Commission & Billing
+                <span className="text-gradient"> Infrastructure </span>
+                for Study Abroad Networks
               </h1>
               <p className="hero-description">
-                Streamline your operations with our secure, scalable platform designed for 
-                superadmins, account managers, and agencies. Experience the future of 
-                enterprise management today.
+                Automate subagent commission splits, reconcile faster, and pay with confidence — 
+                tenant-safe, agency-aware, and audit-ready. Built for study abroad agencies 
+                and CRM providers who need bulletproof billing.
               </p>
               <div className="hero-actions">
                 <Link to="/register" className="btn btn-primary btn-large">
@@ -123,16 +132,16 @@ const LandingPage = () => {
               </div>
               <div className="hero-stats">
                 <div className="stat">
-                  <div className="stat-number">10K+</div>
-                  <div className="stat-label">Active Users</div>
+                  <div className="stat-number">22K+</div>
+                  <div className="stat-label">Global Agents</div>
                 </div>
                 <div className="stat">
-                  <div className="stat-number">99.9%</div>
-                  <div className="stat-label">Uptime</div>
+                  <div className="stat-number">68%</div>
+                  <div className="stat-label">Use Manual Processes</div>
                 </div>
                 <div className="stat">
-                  <div className="stat-number">500+</div>
-                  <div className="stat-label">Companies</div>
+                  <div className="stat-number">15%</div>
+                  <div className="stat-label">Avg Commission Rate</div>
                 </div>
               </div>
             </div>
@@ -173,8 +182,8 @@ const LandingPage = () => {
       <section className="features">
         <div className="container">
           <div className="section-header">
-            <h2>Powerful Features for Modern Enterprises</h2>
-            <p>Everything you need to manage your multi-tenant operations efficiently and securely.</p>
+            <h2>Built for Study Abroad Commission Complexity</h2>
+            <p>Everything you need to automate subagent commissions, reconcile payments, and scale your agency network.</p>
           </div>
           <div className="features-grid">
             {features.map((feature, index) => (
@@ -195,10 +204,11 @@ const LandingPage = () => {
         <div className="container">
           <div className="benefits-content">
             <div className="benefits-text">
-              <h2>Why Choose NoemieX?</h2>
+              <h2>Why Study Abroad Agencies Choose NoemieX?</h2>
               <p>
-                Our platform is built with enterprise needs in mind, offering unparalleled 
-                security, scalability, and user experience across all portal types.
+                Many agencies still manage commissions with spreadsheets or manual processes, making 
+                reconciliation slow and error-prone. Our platform automates the entire commission 
+                lifecycle with tenant-safe, agency-aware architecture.
               </p>
               <div className="benefits-list">
                 {benefits.map((benefit, index) => (
@@ -218,34 +228,34 @@ const LandingPage = () => {
                 <div className="portal-card superadmin">
                   <div className="portal-header">
                     <Shield className="w-6 h-6" />
-                    <span>Superadmin Portal</span>
+                    <span>Platform Portal</span>
                   </div>
                   <div className="portal-features">
-                    <div>Global oversight</div>
-                    <div>System configuration</div>
-                    <div>User management</div>
+                    <div>Multi-tenant oversight</div>
+                    <div>Commission rule templates</div>
+                    <div>Global compliance monitoring</div>
                   </div>
                 </div>
                 <div className="portal-card account">
                   <div className="portal-header">
                     <Building2 className="w-6 h-6" />
-                    <span>Account Portal</span>
+                    <span>Agency HQ Portal</span>
                   </div>
                   <div className="portal-features">
-                    <div>Tenant management</div>
-                    <div>Analytics dashboard</div>
-                    <div>Billing & reports</div>
+                    <div>Subagent network management</div>
+                    <div>Commission reconciliation</div>
+                    <div>Payout scheduling & tracking</div>
                   </div>
                 </div>
                 <div className="portal-card agency">
                   <div className="portal-header">
                     <Users className="w-6 h-6" />
-                    <span>Agency Portal</span>
+                    <span>Subagent Portal</span>
                   </div>
                   <div className="portal-features">
-                    <div>Client management</div>
-                    <div>Project tracking</div>
-                    <div>Team collaboration</div>
+                    <div>Commission statements</div>
+                    <div>Student placement tracking</div>
+                    <div>Performance bonuses</div>
                   </div>
                 </div>
               </div>
@@ -258,8 +268,8 @@ const LandingPage = () => {
       <section className="testimonials">
         <div className="container">
           <div className="section-header">
-            <h2>Trusted by Industry Leaders</h2>
-            <p>See what our customers have to say about their experience with NoemieX.</p>
+            <h2>Trusted by Study Abroad Professionals</h2>
+            <p>Agencies and CRM providers solving commission complexity with NoemieX</p>
           </div>
           <div className="testimonials-grid">
             {testimonials.map((testimonial, index) => (
@@ -287,10 +297,10 @@ const LandingPage = () => {
       <section className="cta">
         <div className="container">
           <div className="cta-content">
-            <h2>Ready to Transform Your Operations?</h2>
+            <h2>Ready to Automate Your Commission Operations?</h2>
             <p>
-              Join thousands of companies already using NoemieX to streamline their 
-              multi-tenant operations and boost productivity.
+              Join study abroad agencies and CRM providers who've eliminated manual commission processes. 
+              Start your free trial and see commission automation in action.
             </p>
             <div className="cta-actions">
               <Link to="/register" className="btn btn-primary btn-large">

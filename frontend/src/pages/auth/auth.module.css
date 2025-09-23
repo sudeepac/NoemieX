@@ -64,7 +64,7 @@
 
 .authPageBrandSubtitle {
   font-size: 1.125rem;
-  opacity: 0.9;
+  color: #e0e7ff;
   margin: 0;
   line-height: 1.6;
 }
@@ -102,11 +102,12 @@
   margin: 0 0 0.25rem 0;
   font-size: 1.125rem;
   font-weight: 600;
+  color: white;
 }
 
 .featureContent p {
   margin: 0;
-  opacity: 0.8;
+  color: #e0e7ff;
   font-size: 0.875rem;
   line-height: 1.5;
 }
@@ -699,3 +700,4 @@
 
 /* AI-NOTE: CSS Modules conversion of auth.styles.css with camelCase class names for React compatibility.
    All global classes converted to local scope to prevent style conflicts and improve maintainability. */
+/* AI-NOTE: Adjusted color of .authPageBrandSubtitle and .featureContent p to #e0e7ff for better visibility against the dark background. */
