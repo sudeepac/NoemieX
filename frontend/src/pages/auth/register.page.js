@@ -15,7 +15,8 @@ import {
   ArrowLeft,
   CheckCircle
 } from 'lucide-react';
-import { registerUser, clearError } from '../../store/slices/auth.slice';
+import { clearError, setCredentials } from '../../store/slices/auth.slice';
+import { useRegisterMutation } from '../../store/api/authApi';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import styles from './auth.module.css';
 
@@ -26,7 +27,8 @@ const RegisterPage = () => {
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { error, isAuthenticated } = useSelector((state) => state.auth);
+  const [registerMutation, { isLoading }] = useRegisterMutation();
 
   const {
     register,
@@ -71,12 +73,21 @@ const RegisterPage = () => {
     };
 
     try {
-      await dispatch(registerUser(registrationData)).unwrap();
-      toast.success('Registration successful! Please check your email for verification.');
+      const result = await registerMutation(registrationData).unwrap();
+      
+      // Set credentials in Redux store
+      dispatch(setCredentials({
+        user: result.user,
+        token: result.token
+      }));
+      
+      toast.success('Registration successful!');
       reset();
-      navigate('/login');
+      
+      // Redirect to portal dashboard
+      navigate(`/${result.user.portalType}`);
     } catch (error) {
-      // Error is handled by the useEffect above
+      toast.error(error?.data?.message || 'Registration failed');
     }
   };
 
@@ -126,7 +137,7 @@ const RegisterPage = () => {
     return true;
   };
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner message="Creating your account..." />;
   }
 
@@ -399,9 +410,9 @@ const RegisterPage = () => {
               <button
                 type="submit"
                 className={styles.submitBtn}
-                disabled={loading || !selectedPortal}
+                disabled={isLoading || !selectedPortal}
               >
-                {loading ? 'Creating Account...' : 'Create Account'}
+                {isLoading ? 'Creating Account...' : 'Create Account'}
               </button>
             </form>
 

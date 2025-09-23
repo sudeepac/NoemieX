@@ -55,47 +55,50 @@ export const CommissionTracking = lazy(() => import('../../pages/billing-transac
 // MODEL-BASED CRUD PAGES
 // ============================================================================
 
-// Users Model
-export const UsersList = lazy(() => import('../../pages/users/UsersList'));
-export const UserDetail = lazy(() => import('../../pages/users/UserDetail'));
-export const UserCreate = lazy(() => import('../../pages/users/UserCreate'));
-export const UserEdit = lazy(() => import('../../pages/users/UserEdit'));
-export const UserProfile = lazy(() => import('../../pages/users/UserProfile'));
+// AI-NOTE: Commented out non-existent pages to fix compilation errors
+// TODO: Create these pages when needed
 
-// Accounts Model
-export const AccountsList = lazy(() => import('../../pages/accounts/AccountsList'));
-export const AccountDetail = lazy(() => import('../../pages/accounts/AccountDetail'));
-export const AccountCreate = lazy(() => import('../../pages/accounts/AccountCreate'));
-export const AccountEdit = lazy(() => import('../../pages/accounts/AccountEdit'));
-export const AccountBilling = lazy(() => import('../../pages/accounts/AccountBilling'));
-export const AccountStats = lazy(() => import('../../pages/accounts/AccountStats'));
+// Users Model - Pages don't exist yet
+// export const UsersList = lazy(() => import('../../pages/users/UsersList'));
+// export const UserDetail = lazy(() => import('../../pages/users/UserDetail'));
+// export const UserCreate = lazy(() => import('../../pages/users/UserCreate'));
+// export const UserEdit = lazy(() => import('../../pages/users/UserEdit'));
+// export const UserProfile = lazy(() => import('../../pages/users/UserProfile'));
 
-// Agencies Model
-export const AgenciesList = lazy(() => import('../../pages/agencies/AgenciesList'));
-export const AgencyDetail = lazy(() => import('../../pages/agencies/AgencyDetail'));
-export const AgencyCreate = lazy(() => import('../../pages/agencies/AgencyCreate'));
-export const AgencyEdit = lazy(() => import('../../pages/agencies/AgencyEdit'));
+// Accounts Model - Pages don't exist yet
+// export const AccountsList = lazy(() => import('../../pages/accounts/AccountsList'));
+// export const AccountDetail = lazy(() => import('../../pages/accounts/AccountDetail'));
+// export const AccountCreate = lazy(() => import('../../pages/accounts/AccountCreate'));
+// export const AccountEdit = lazy(() => import('../../pages/accounts/AccountEdit'));
+// export const AccountBilling = lazy(() => import('../../pages/accounts/AccountBilling'));
+// export const AccountStats = lazy(() => import('../../pages/accounts/AccountStats'));
 
-// Offer Letters Model
-export const OfferLettersList = lazy(() => import('../../pages/offer-letters/OfferLettersList'));
-export const OfferLetterDetail = lazy(() => import('../../pages/offer-letters/OfferLetterDetail'));
-export const OfferLetterCreate = lazy(() => import('../../pages/offer-letters/OfferLetterCreate'));
-export const OfferLetterEdit = lazy(() => import('../../pages/offer-letters/OfferLetterEdit'));
+// Agencies Model - Pages don't exist yet
+// export const AgenciesList = lazy(() => import('../../pages/agencies/AgenciesList'));
+// export const AgencyDetail = lazy(() => import('../../pages/agencies/AgencyDetail'));
+// export const AgencyCreate = lazy(() => import('../../pages/agencies/AgencyCreate'));
+// export const AgencyEdit = lazy(() => import('../../pages/agencies/AgencyEdit'));
 
-// Payment Schedules Model
-export const PaymentSchedulesList = lazy(() => import('../../pages/payment-schedules/PaymentSchedulesList'));
-export const PaymentScheduleDetail = lazy(() => import('../../pages/payment-schedules/PaymentScheduleDetail'));
-export const PaymentScheduleCreate = lazy(() => import('../../pages/payment-schedules/PaymentScheduleCreate'));
-export const PaymentScheduleEdit = lazy(() => import('../../pages/payment-schedules/PaymentScheduleEdit'));
+// Offer Letters Model - Pages don't exist yet
+// export const OfferLettersList = lazy(() => import('../../pages/offer-letters/OfferLettersList'));
+// export const OfferLetterDetail = lazy(() => import('../../pages/offer-letters/OfferLetterDetail'));
+// export const OfferLetterCreate = lazy(() => import('../../pages/offer-letters/OfferLetterCreate'));
+// export const OfferLetterEdit = lazy(() => import('../../pages/offer-letters/OfferLetterEdit'));
 
-// Billing Transactions Model
-export const BillingTransactionsList = lazy(() => import('../../pages/billing-transactions/BillingTransactionsList'));
-export const BillingTransactionDetail = lazy(() => import('../../pages/billing-transactions/BillingTransactionDetail'));
-export const BillingTransactionCreate = lazy(() => import('../../pages/billing-transactions/BillingTransactionCreate'));
-export const BillingTransactionEdit = lazy(() => import('../../pages/billing-transactions/BillingTransactionEdit'));
+// Payment Schedules Model - Pages don't exist yet
+// export const PaymentSchedulesList = lazy(() => import('../../pages/payment-schedules/PaymentSchedulesList'));
+// export const PaymentScheduleDetail = lazy(() => import('../../pages/payment-schedules/PaymentScheduleDetail'));
+// export const PaymentScheduleCreate = lazy(() => import('../../pages/payment-schedules/PaymentScheduleCreate'));
+// export const PaymentScheduleEdit = lazy(() => import('../../pages/payment-schedules/PaymentScheduleEdit'));
 
-// Billing Event Histories Model
-export const BillingEventHistoriesList = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoriesList'));
-export const BillingEventHistoryDetail = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoryDetail'));
-export const BillingEventHistoryCreate = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoryCreate'));
-export const BillingEventHistoryEdit = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoryEdit'));
+// Billing Transactions Model - Pages don't exist yet
+// export const BillingTransactionsList = lazy(() => import('../../pages/billing-transactions/BillingTransactionsList'));
+// export const BillingTransactionDetail = lazy(() => import('../../pages/billing-transactions/BillingTransactionDetail'));
+// export const BillingTransactionCreate = lazy(() => import('../../pages/billing-transactions/BillingTransactionCreate'));
+// export const BillingTransactionEdit = lazy(() => import('../../pages/billing-transactions/BillingTransactionEdit'));
+
+// Billing Event Histories Model - Pages don't exist yet
+// export const BillingEventHistoriesList = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoriesList'));
+// export const BillingEventHistoryDetail = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoryDetail'));
+// export const BillingEventHistoryCreate = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoryCreate'));
+// export const BillingEventHistoryEdit = lazy(() => import('../../pages/billing-event-histories/BillingEventHistoryEdit'));

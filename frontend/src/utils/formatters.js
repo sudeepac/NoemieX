@@ -320,17 +320,7 @@ export const formatStatus = (status) => {
   return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 };
 
-/**
- * Truncate text with ellipsis
- * @param {string} text - Text to truncate
- * @param {number} maxLength - Maximum length (default: 50)
- * @returns {string} Truncated text
- */
-export const truncateText = (text, maxLength = 50) => {
-  if (!text) return '';
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
+// truncateText function already defined at the top of the file
 
 /**
  * Format phone number

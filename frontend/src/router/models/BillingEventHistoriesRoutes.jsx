@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import {
-  BillingEventHistoriesList,
-  BillingEventHistoryDetail,
-  BillingEventHistoryCreate,
-  BillingEventHistoryEdit
-} from '../shared/LazyComponents';
+// AI-NOTE: Commented out imports for non-existent pages to fix compilation errors
+// import {
+//   BillingEventHistoriesList,
+//   BillingEventHistoryDetail,
+//   BillingEventHistoryCreate,
+//   BillingEventHistoryEdit
+// } from '../shared/LazyComponents';
 
 /**
  * BillingEventHistoriesRoutes - Model-based routes for Billing Event Histories CRUD operations
@@ -19,22 +20,27 @@ import {
  * // AI-NOTE: Billing Event Histories model routes following RESTful patterns and Redux slice structure.
  * // Aligned with billingEventHistoriesSlice actions: fetchBillingEventHistories, createBillingEventHistory, updateBillingEventHistory, deleteBillingEventHistory.
  * // Each route corresponds to specific CRUD operations as defined in MODEL_ROUTES_MAPPING.md.
+ * // Routes temporarily commented out until pages are created.
  */
 const BillingEventHistoriesRoutes = () => {
   return (
     <Suspense fallback={<div className="loading-spinner">Loading Billing Event Histories...</div>}>
       <Routes>
+        {/* Temporarily commented out until pages are created */}
         {/* List View - GET /billing-event-histories */}
-        <Route index element={<BillingEventHistoriesList />} />
+        {/* <Route index element={<BillingEventHistoriesList />} /> */}
         
         {/* Create View - POST /billing-event-histories */}
-        <Route path="create" element={<BillingEventHistoryCreate />} />
+        {/* <Route path="create" element={<BillingEventHistoryCreate />} /> */}
         
         {/* Detail View - GET /billing-event-histories/:id */}
-        <Route path=":id" element={<BillingEventHistoryDetail />} />
+        {/* <Route path=":id" element={<BillingEventHistoryDetail />} /> */}
         
         {/* Edit View - PUT /billing-event-histories/:id */}
-        <Route path=":id/edit" element={<BillingEventHistoryEdit />} />
+        {/* <Route path=":id/edit" element={<BillingEventHistoryEdit />} /> */}
+        
+        {/* Placeholder route to prevent empty Routes */}
+        <Route path="*" element={<div>Billing Event Histories pages coming soon...</div>} />
       </Routes>
     </Suspense>
   );

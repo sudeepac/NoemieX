@@ -4,7 +4,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { Eye, EyeOff, LogIn, Building, Users, User, Zap } from 'lucide-react';
-import { loginUser, clearError } from '../../store/slices/auth.slice';
+import { clearError, setCredentials } from '../../store/slices/auth.slice';
+import { useLoginMutation } from '../../store/api/authApi';
 import styles from './auth.module.css';
 
 const LoginPage = () => {
@@ -14,7 +15,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const { isLoading, error } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.auth);
+  const [login, { isLoading }] = useLoginMutation();
   
   const {
     register,
@@ -123,7 +125,13 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      const result = await dispatch(loginUser(data)).unwrap();
+      const result = await login(data).unwrap();
+      
+      // Set credentials in Redux store
+      dispatch(setCredentials({
+        user: result.user,
+        token: result.token
+      }));
       
       toast.success('Login successful!');
       
@@ -131,7 +139,7 @@ const LoginPage = () => {
       const from = location.state?.from?.pathname || `/${result.user.portalType}`;
       navigate(from, { replace: true });
     } catch (error) {
-      // Error is handled by useEffect
+      toast.error(error?.data?.message || 'Login failed');
     }
   };
 
