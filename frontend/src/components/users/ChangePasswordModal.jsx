@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useChangeUserPasswordMutation } from '../../store/api/api';
 import { validatePasswordChange } from '../../types/user.types';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './ChangePasswordModal.css';
 
 // ChangePasswordModal component for password management
@@ -152,7 +153,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
                 </button>
               </div>
               {errors.currentPassword && (
-                <span className="error-text">{errors.currentPassword}</span>
+                <ErrorMessage error={{message: errors.currentPassword}} variant="inline" type="validation" />
               )}
             </div>
           )}
@@ -182,7 +183,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
               </button>
             </div>
             {errors.newPassword && (
-              <span className="error-text">{errors.newPassword}</span>
+              <ErrorMessage error={{message: errors.newPassword}} variant="inline" type="validation" />
             )}
             <div className="password-requirements">
               <small>Password must be at least 8 characters long</small>
@@ -214,7 +215,7 @@ function ChangePasswordModal({ userId, userName, onClose }) {
               </button>
             </div>
             {errors.confirmPassword && (
-              <span className="error-text">{errors.confirmPassword}</span>
+              <ErrorMessage error={{message: errors.confirmPassword}} variant="inline" type="validation" />
             )}
           </div>
 

@@ -14,6 +14,7 @@ import {
   accountHelpers 
 } from '../../types/account.types';
 import LoadingSpinner from '../common/loading-spinner.component';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './AccountDetail.css';
 
 // AccountDetail component for displaying comprehensive account information
@@ -89,17 +90,19 @@ function AccountDetail() {
   if (isError) {
     return (
       <div className="account-detail-container">
-        <div className="error-container">
-          <h3>Error Loading Account</h3>
-          <p>{error?.data?.message || 'Failed to load account details'}</p>
-          <div className="error-actions">
-            <button onClick={() => refetch()} className="btn btn-primary">
-              Try Again
-            </button>
-            <Link to="/accounts" className="btn btn-outline">
-              Back to Accounts
-            </Link>
-          </div>
+        <ErrorMessage 
+          error={{message: error?.data?.message || 'Failed to load account details'}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Account"
+        />
+        <div className="error-actions">
+          <button onClick={() => refetch()} className="btn btn-primary">
+            Try Again
+          </button>
+          <Link to="/accounts" className="btn btn-outline">
+            Back to Accounts
+          </Link>
         </div>
       </div>
     );
@@ -111,14 +114,16 @@ function AccountDetail() {
   if (!account) {
     return (
       <div className="account-detail-container">
-        <div className="error-container">
-          <h3>Account Not Found</h3>
-          <p>The requested account could not be found.</p>
-          <div className="error-actions">
-            <Link to="/accounts" className="btn btn-primary">
-              Back to Accounts
-            </Link>
-          </div>
+        <ErrorMessage 
+          error={{message: "The requested account could not be found."}} 
+          variant="page" 
+          type="error"
+          title="Account Not Found"
+        />
+        <div className="error-actions">
+          <Link to="/accounts" className="btn btn-primary">
+            Back to Accounts
+          </Link>
         </div>
       </div>
     );

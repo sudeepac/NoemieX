@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { useStudents } from '../../shared/hooks/useStudents';
+// AI-NOTE: useStudents hook removed - needs to be replaced with RTK Query studentsApi when implemented
+// import { useGetStudentsQuery } from '../../store/api';
 import { usePermissions } from '../../shared/hooks/usePermissions';
 import StudentCard from './StudentCard';
 import { Search, Filter, Plus } from 'lucide-react';

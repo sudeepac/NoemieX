@@ -15,9 +15,10 @@ import {
   selectSelectedPaymentSchedule,
   closeDetail,
   openForm,
-} from '../../store/slices/payment-schedules.slice';
+} from '../../store/slices/paymentSchedulesUi.slice';
 import { toast } from 'react-toastify';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 
 const PaymentScheduleDetail = ({ paymentScheduleId }) => {
   const dispatch = useDispatch();
@@ -121,13 +122,15 @@ const PaymentScheduleDetail = ({ paymentScheduleId }) => {
   if (error) {
     return (
       <div className="payment-schedule-detail error">
-        <div className="error-message">
-          <h3>Error Loading Payment Schedule</h3>
-          <p>{error?.data?.message || 'Failed to load payment schedule details'}</p>
-          <button className="btn btn-primary" onClick={handleClose}>
-            Close
-          </button>
-        </div>
+        <ErrorMessage 
+          error={{message: error?.data?.message || 'Failed to load payment schedule details'}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Payment Schedule"
+        />
+        <button className="btn btn-primary" onClick={handleClose}>
+          Close
+        </button>
       </div>
     );
   }

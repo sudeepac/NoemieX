@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
-const connectDB = require('./config/database');
+const connectDB = require('./utils/database');
 const { globalErrorHandler } = require('./middleware/error.middleware');
 
 // Route imports

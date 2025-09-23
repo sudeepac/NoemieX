@@ -45,7 +45,7 @@ import {
   goToEventHistoryDetail,
   openNoteModal,
   openDocumentUploadModal
-} from '../../store/slices/billing-event-histories.slice';
+} from '../../store/slices/billingEventHistoriesUi.slice';
 import styles from './BillingEventHistoriesList.module.css';
 
 const BillingEventHistoriesList = ({ portal = 'account' }) => {

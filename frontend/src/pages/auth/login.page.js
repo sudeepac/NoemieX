@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { Eye, EyeOff, LogIn, Building, Users, User, Zap } from 'lucide-react';
 import { loginUser, clearError } from '../../store/slices/auth.slice';
-import './auth.styles.css';
+import styles from './auth.module.css';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -157,44 +157,44 @@ const LoginPage = () => {
   ];
 
   return (
-    <div className="auth-page">
-      <div className="auth-page__container">
-        <div className="auth-page__content">
+    <div className={styles.authPage}>
+      <div className={styles.authPageContainer}>
+        <div className={styles.authPageContent}>
           {/* Left side - Branding */}
-          <div className="auth-page__branding">
-            <div className="auth-page__brand">
-              <h1 className="auth-page__brand-title">NoemieX</h1>
-              <p className="auth-page__brand-subtitle">
+          <div className={styles.authPageBranding}>
+            <div className={styles.authPageBrand}>
+              <h1 className={styles.authPageBrandTitle}>NoemieX</h1>
+              <p className={styles.authPageBrandSubtitle}>
                 Multi-tenant billing system for study abroad agencies
               </p>
             </div>
             
-            <div className="auth-page__features">
-              <div className="feature">
-                <div className="feature__icon">
+            <div className={styles.authPageFeatures}>
+              <div className={styles.feature}>
+                <div className={styles.featureIcon}>
                   <Building />
                 </div>
-                <div className="feature__content">
+                <div className={styles.featureContent}>
                   <h3>Multi-tenant Architecture</h3>
                   <p>Secure data isolation for each account</p>
                 </div>
               </div>
               
-              <div className="feature">
-                <div className="feature__icon">
+              <div className={styles.feature}>
+                <div className={styles.featureIcon}>
                   <Users />
                 </div>
-                <div className="feature__content">
+                <div className={styles.featureContent}>
                   <h3>Role-based Access</h3>
                   <p>Granular permissions and user management</p>
                 </div>
               </div>
               
-              <div className="feature">
-                <div className="feature__icon">
+              <div className={styles.feature}>
+                <div className={styles.featureIcon}>
                   <LogIn />
                 </div>
-                <div className="feature__content">
+                <div className={styles.featureContent}>
                   <h3>Secure Authentication</h3>
                   <p>JWT-based authentication with refresh tokens</p>
                 </div>
@@ -203,50 +203,50 @@ const LoginPage = () => {
           </div>
 
           {/* Right side - Login Form */}
-          <div className="auth-page__form-container">
-            <div className="auth-form">
-              <div className="auth-form__header">
-                <h2 className="auth-form__title">Welcome Back</h2>
-                <p className="auth-form__subtitle">
+          <div className={styles.authPageFormContainer}>
+            <div className={styles.authForm}>
+              <div className={styles.authFormHeader}>
+                <h2 className={styles.authFormTitle}>Welcome Back</h2>
+                <p className={styles.authFormSubtitle}>
                   Sign in to your account to continue
                 </p>
               </div>
 
               {/* Demo Users Quick Login */}
-              <div className="demo-users-section">
+              <div className={styles.demoUsersSection}>
                 <button
                   type="button"
                   onClick={() => setShowDemoUsers(!showDemoUsers)}
-                  className="demo-users-toggle"
+                  className={styles.demoUsersToggle}
                 >
                   <Zap size={16} />
                   {showDemoUsers ? 'Hide Demo Users' : 'Quick Login with Demo Users'}
                 </button>
                 
                 {showDemoUsers && (
-                  <div className="demo-users-grid">
-                    <div className="demo-users-header">
+                  <div className={styles.demoUsersGrid}>
+                    <div className={styles.demoUsersHeader}>
                       <p>Click any user below to auto-fill login credentials:</p>
                     </div>
                     
                     {/* Super Admin Users */}
-                    <div className="demo-portal-group">
-                      <h4 className="demo-portal-title">
+                    <div className={styles.demoPortalGroup}>
+                      <h4 className={styles.demoPortalTitle}>
                         <Building size={16} />
                         Super Admin Portal
                       </h4>
-                      <div className="demo-users-list">
+                      <div className={styles.demoUsersList}>
                         {demoUsers.filter(user => user.portalType === 'superadmin').map((user, index) => (
                           <button
                             key={index}
                             type="button"
                             onClick={() => handleQuickLogin(user)}
-                            className="demo-user-card"
+                            className={styles.demoUserCard}
                           >
-                            <div className="demo-user-info">
-                              <span className="demo-user-name">{user.name}</span>
-                              <span className="demo-user-role">{user.role}</span>
-                              <span className="demo-user-email">{user.email}</span>
+                            <div className={styles.demoUserInfo}>
+                              <span className={styles.demoUserName}>{user.name}</span>
+                              <span className={styles.demoUserRole}>{user.role}</span>
+                              <span className={styles.demoUserEmail}>{user.email}</span>
                             </div>
                           </button>
                         ))}
@@ -254,23 +254,23 @@ const LoginPage = () => {
                     </div>
 
                     {/* Account Portal Users */}
-                    <div className="demo-portal-group">
-                      <h4 className="demo-portal-title">
+                    <div className={styles.demoPortalGroup}>
+                      <h4 className={styles.demoPortalTitle}>
                         <Users size={16} />
                         Account Portal
                       </h4>
-                      <div className="demo-users-list">
+                      <div className={styles.demoUsersList}>
                         {demoUsers.filter(user => user.portalType === 'account').map((user, index) => (
                           <button
                             key={index}
                             type="button"
                             onClick={() => handleQuickLogin(user)}
-                            className="demo-user-card"
+                            className={styles.demoUserCard}
                           >
-                            <div className="demo-user-info">
-                              <span className="demo-user-name">{user.name}</span>
-                              <span className="demo-user-role">{user.role}</span>
-                              <span className="demo-user-email">{user.email}</span>
+                            <div className={styles.demoUserInfo}>
+                              <span className={styles.demoUserName}>{user.name}</span>
+                              <span className={styles.demoUserRole}>{user.role}</span>
+                              <span className={styles.demoUserEmail}>{user.email}</span>
                             </div>
                           </button>
                         ))}
@@ -278,23 +278,23 @@ const LoginPage = () => {
                     </div>
 
                     {/* Agency Portal Users */}
-                    <div className="demo-portal-group">
-                      <h4 className="demo-portal-title">
+                    <div className={styles.demoPortalGroup}>
+                      <h4 className={styles.demoPortalTitle}>
                         <User size={16} />
                         Agency Portal
                       </h4>
-                      <div className="demo-users-list">
+                      <div className={styles.demoUsersList}>
                         {demoUsers.filter(user => user.portalType === 'agency').map((user, index) => (
                           <button
                             key={index}
                             type="button"
                             onClick={() => handleQuickLogin(user)}
-                            className="demo-user-card"
+                            className={styles.demoUserCard}
                           >
-                            <div className="demo-user-info">
-                              <span className="demo-user-name">{user.name}</span>
-                              <span className="demo-user-role">{user.role}</span>
-                              <span className="demo-user-email">{user.email}</span>
+                            <div className={styles.demoUserInfo}>
+                              <span className={styles.demoUserName}>{user.name}</span>
+                              <span className={styles.demoUserRole}>{user.role}</span>
+                              <span className={styles.demoUserEmail}>{user.email}</span>
                             </div>
                           </button>
                         ))}
@@ -304,45 +304,45 @@ const LoginPage = () => {
                 )}
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="auth-form__form">
+              <form onSubmit={handleSubmit(onSubmit)} className={styles.authFormForm}>
                 {/* Portal Selection */}
-                <div className="form-group">
-                  <label className="form-label">Select Portal</label>
-                  <div className="portal-options">
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Select Portal</label>
+                  <div className={styles.portalOptions}>
                     {portalOptions.map((option) => (
-                      <label key={option.value} className="portal-option">
+                      <label key={option.value} className={styles.portalOption}>
                         <input
                           type="radio"
                           value={option.value}
                           {...register('portalType', { 
                             required: 'Please select a portal' 
                           })}
-                          className="portal-option__input"
+                          className={styles.portalOptionInput}
                         />
-                        <div className={`portal-option__content ${
-                          selectedPortal === option.value ? 'portal-option__content--selected' : ''
+                        <div className={`${styles.portalOptionContent} ${
+                          selectedPortal === option.value ? styles.portalOptionContentSelected : ''
                         }`}>
                           {option.icon}
-                          <div className="portal-option__text">
-                            <span className="portal-option__label">{option.label}</span>
-                            <span className="portal-option__description">{option.description}</span>
+                          <div className={styles.portalOptionText}>
+                            <span className={styles.portalOptionLabel}>{option.label}</span>
+                            <span className={styles.portalOptionDescription}>{option.description}</span>
                           </div>
                         </div>
                       </label>
                     ))}
                   </div>
                   {errors.portalType && (
-                    <span className="form-error">{errors.portalType.message}</span>
+                    <span className={styles.formError}>{errors.portalType.message}</span>
                   )}
                 </div>
 
                 {/* Email */}
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">Email Address</label>
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.formLabel}>Email Address</label>
                   <input
                     type="email"
                     id="email"
-                    className={`form-input ${errors.email ? 'form-input--error' : ''}`}
+                    className={`${styles.formInput} ${errors.email ? styles.formInputError : ''}`}
                     placeholder="Enter your email"
                     {...register('email', {
                       required: 'Email is required',
@@ -353,18 +353,18 @@ const LoginPage = () => {
                     })}
                   />
                   {errors.email && (
-                    <span className="form-error">{errors.email.message}</span>
+                    <span className={styles.formError}>{errors.email.message}</span>
                   )}
                 </div>
 
                 {/* Password */}
-                <div className="form-group">
-                  <label htmlFor="password" className="form-label">Password</label>
-                  <div className="form-input-group">
+                <div className={styles.formGroup}>
+                  <label htmlFor="password" className={styles.formLabel}>Password</label>
+                  <div className={styles.formInputGroup}>
                     <input
                       type={showPassword ? 'text' : 'password'}
                       id="password"
-                      className={`form-input ${errors.password ? 'form-input--error' : ''}`}
+                      className={`${styles.formInput} ${errors.password ? styles.formInputError : ''}`}
                       placeholder="Enter your password"
                       {...register('password', {
                         required: 'Password is required',
@@ -376,14 +376,14 @@ const LoginPage = () => {
                     />
                     <button
                       type="button"
-                      className="form-input-group__button"
+                      className={styles.formInputGroupButton}
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
                   {errors.password && (
-                    <span className="form-error">{errors.password.message}</span>
+                    <span className={styles.formError}>{errors.password.message}</span>
                   )}
                 </div>
 
@@ -391,15 +391,15 @@ const LoginPage = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="btn btn--primary btn--full-width"
+                  className={`${styles.btn} ${styles.btnPrimary} ${styles.btnFullWidth}`}
                 >
                   {isLoading ? (
-                    <span className="btn__loading">
-                      <div className="btn__spinner"></div>
+                    <span className={styles.btnLoading}>
+                      <div className={styles.btnSpinner}></div>
                       Signing in...
                     </span>
                   ) : (
-                    <span className="btn__content">
+                    <span className={styles.btnContent}>
                       <LogIn size={20} />
                       Sign In
                     </span>
@@ -407,10 +407,10 @@ const LoginPage = () => {
                 </button>
               </form>
 
-              <div className="auth-form__footer">
-                <p className="auth-form__footer-text">
+              <div className={styles.authFormFooter}>
+                <p className={styles.authFormFooterText}>
                   Don't have an account?{' '}
-                  <Link to="/register" className="auth-form__link">
+                  <Link to="/register" className={styles.authFormLink}>
                     Sign up here
                   </Link>
                 </p>

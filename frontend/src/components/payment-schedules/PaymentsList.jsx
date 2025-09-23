@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { usePermissions } from '../../shared/hooks/usePermissions';
 import PaymentCard from './PaymentCard';
 import { Search, Filter, Plus, DollarSign } from 'lucide-react';
-import { formatCurrency } from '../../shared/utils';
+import { formatCurrency } from '../../utils/formatters';
 import './PaymentsList.css';
 
 /**

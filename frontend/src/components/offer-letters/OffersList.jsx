@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useOffers } from '../../shared/hooks/useOffers';
+import { useGetOfferLettersQuery } from '../../store/api';
 import { usePermissions } from '../../shared/hooks/usePermissions';
 import OfferCard from './OfferCard';
 import { Search, Filter, Plus, FileText } from 'lucide-react';

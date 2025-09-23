@@ -8,7 +8,7 @@ import {
   selectEditingTransaction,
   selectCurrentView,
   goBackToTransactionsList,
-} from '../../store/slices/billing-transactions.slice';
+} from '../../store/slices/billingTransactionsUi.slice';
 import styles from './BillingTransactionForm.module.css';
 
 /**

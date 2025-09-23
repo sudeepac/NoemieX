@@ -13,7 +13,7 @@ import {
   goToCreateTransaction,
   goToEditTransaction,
   goToTransactionDetail,
-} from '../../store/slices/billing-transactions.slice';
+} from '../../store/slices/billingTransactionsUi.slice';
 import styles from './BillingTransactionsList.module.css';
 
 /**

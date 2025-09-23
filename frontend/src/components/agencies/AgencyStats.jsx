@@ -14,6 +14,7 @@ import {
   UserCheck,
   Calendar
 } from 'lucide-react';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './AgencyStats.css';
 
 /**
@@ -49,7 +50,7 @@ const AgencyStats = ({ agency, stats, loading, error }) => {
         <div className="stats-error">
           <AlertTriangle className="w-6 h-6" />
           <p>Failed to load agency statistics</p>
-          <span className="error-message">{error.message}</span>
+          <ErrorMessage error={error} variant="inline" type="error" />
         </div>
       </div>
     );

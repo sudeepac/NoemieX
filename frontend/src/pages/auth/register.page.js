@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { registerUser, clearError } from '../../store/slices/auth.slice';
 import LoadingSpinner from '../../components/common/loading-spinner.component';
-import './auth.styles.css';
+import styles from './auth.module.css';
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -131,44 +131,44 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
+    <div className={styles.authPage}>
+      <div className={styles.authContainer}>
         {/* Left Side - Branding */}
-        <div className="auth-branding">
-          <div className="branding-content">
-            <Link to="/" className="back-link">
+        <div className={styles.authBranding}>
+          <div className={styles.brandingContent}>
+            <Link to="/" className={styles.backLink}>
               <ArrowLeft className="w-5 h-5" />
               Back to Home
             </Link>
             
-            <div className="brand-logo">
+            <div className={styles.brandLogo}>
               <h1>NoemieX</h1>
               <p>Enterprise Multi-Portal System</p>
             </div>
 
-            <div className="branding-features">
+            <div className={styles.brandingFeatures}>
               <h3>Join thousands of companies using NoemieX</h3>
-              <div className="feature-list">
-                <div className="feature-item">
+              <div className={styles.featureList}>
+                <div className={styles.featureItem}>
                   <CheckCircle className="w-5 h-5" />
                   <span>Enterprise-grade security</span>
                 </div>
-                <div className="feature-item">
+                <div className={styles.featureItem}>
                   <CheckCircle className="w-5 h-5" />
                   <span>Role-based access control</span>
                 </div>
-                <div className="feature-item">
+                <div className={styles.featureItem}>
                   <CheckCircle className="w-5 h-5" />
                   <span>Real-time analytics</span>
                 </div>
-                <div className="feature-item">
+                <div className={styles.featureItem}>
                   <CheckCircle className="w-5 h-5" />
                   <span>24/7 support</span>
                 </div>
               </div>
             </div>
 
-            <div className="testimonial">
+            <div className={styles.testimonial}>
               <blockquote>
                 "NoemieX has transformed how we manage our operations. The multi-portal 
                 system is exactly what we needed for our enterprise."
@@ -182,42 +182,42 @@ const RegisterPage = () => {
         </div>
 
         {/* Right Side - Registration Form */}
-        <div className="auth-form-section">
-          <div className="auth-form-container">
-            <div className="auth-header">
+        <div className={styles.authFormSection}>
+          <div className={styles.authFormContainer}>
+            <div className={styles.authHeader}>
               <h2>Create Your Account</h2>
               <p>Get started with NoemieX today</p>
             </div>
 
             {/* Portal Selection */}
-            <div className="portal-selection">
+            <div className={styles.portalSelection}>
               <h3>Choose Your Portal Type</h3>
               <p>Select the portal that best fits your role and needs</p>
               
-              <div className="portal-options">
+              <div className={styles.portalOptions}>
                 {portalOptions.map((portal) => (
                   <div
                     key={portal.id}
-                    className={`portal-option ${selectedPortal === portal.id ? 'selected' : ''} ${portal.color}`}
+                    className={`${styles.portalOption} ${selectedPortal === portal.id ? styles.selected : ''} ${styles[portal.color]}`}
                     onClick={() => setSelectedPortal(portal.id)}
                   >
-                    <div className="portal-icon">
+                    <div className={styles.portalIcon}>
                       {portal.icon}
                     </div>
-                    <div className="portal-info">
+                    <div className={styles.portalInfo}>
                       <h4>{portal.title}</h4>
                       <p>{portal.description}</p>
-                      <div className="portal-features">
+                      <div className={styles.portalFeatures}>
                         {portal.features.map((feature, index) => (
-                          <span key={index} className="feature-tag">
+                          <span key={index} className={styles.featureTag}>
                             {feature}
                           </span>
                         ))}
                       </div>
                     </div>
-                    <div className="portal-selector">
-                      <div className="radio-button">
-                        {selectedPortal === portal.id && <div className="radio-inner" />}
+                    <div className={styles.portalSelector}>
+                      <div className={styles.radioButton}>
+                        {selectedPortal === portal.id && <div className={styles.radioInner} />}
                       </div>
                     </div>
                   </div>
@@ -226,12 +226,12 @@ const RegisterPage = () => {
             </div>
 
             {/* Registration Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
-              <div className="form-row">
-                <div className="form-group">
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.authForm}>
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
                   <label htmlFor="firstName">First Name</label>
-                  <div className="input-wrapper">
-                    <User className="input-icon" />
+                  <div className={styles.inputWrapper}>
+                    <User className={styles.inputIcon} />
                     <input
                       type="text"
                       id="firstName"
@@ -243,18 +243,18 @@ const RegisterPage = () => {
                           message: 'First name must be at least 2 characters'
                         }
                       })}
-                      className={errors.firstName ? 'error' : ''}
+                      className={errors.firstName ? styles.error : ''}
                     />
                   </div>
                   {errors.firstName && (
-                    <span className="error-message">{errors.firstName.message}</span>
+                    <span className={styles.errorMessage}>{errors.firstName.message}</span>
                   )}
                 </div>
 
-                <div className="form-group">
+                <div className={styles.formGroup}>
                   <label htmlFor="lastName">Last Name</label>
-                  <div className="input-wrapper">
-                    <User className="input-icon" />
+                  <div className={styles.inputWrapper}>
+                    <User className={styles.inputIcon} />
                     <input
                       type="text"
                       id="lastName"
@@ -266,19 +266,19 @@ const RegisterPage = () => {
                           message: 'Last name must be at least 2 characters'
                         }
                       })}
-                      className={errors.lastName ? 'error' : ''}
+                      className={errors.lastName ? styles.error : ''}
                     />
                   </div>
                   {errors.lastName && (
-                    <span className="error-message">{errors.lastName.message}</span>
+                    <span className={styles.errorMessage}>{errors.lastName.message}</span>
                   )}
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="email">Email Address</label>
-                <div className="input-wrapper">
-                  <Mail className="input-icon" />
+                <div className={styles.inputWrapper}>
+                  <Mail className={styles.inputIcon} />
                   <input
                     type="email"
                     id="email"
@@ -290,18 +290,18 @@ const RegisterPage = () => {
                         message: 'Please enter a valid email address'
                       }
                     })}
-                    className={errors.email ? 'error' : ''}
+                    className={errors.email ? styles.error : ''}
                   />
                 </div>
                 {errors.email && (
-                  <span className="error-message">{errors.email.message}</span>
+                  <span className={styles.errorMessage}>{errors.email.message}</span>
                 )}
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="password">Password</label>
-                <div className="input-wrapper">
-                  <Lock className="input-icon" />
+                <div className={styles.inputWrapper}>
+                  <Lock className={styles.inputIcon} />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     id="password"
@@ -310,45 +310,45 @@ const RegisterPage = () => {
                       required: 'Password is required',
                       validate: validatePassword
                     })}
-                    className={errors.password ? 'error' : ''}
+                    className={errors.password ? styles.error : ''}
                   />
                   <button
                     type="button"
-                    className="password-toggle"
+                    className={styles.passwordToggle}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
                 {errors.password && (
-                  <span className="error-message">{errors.password.message}</span>
+                  <span className={styles.errorMessage}>{errors.password.message}</span>
                 )}
-                <div className="password-requirements">
+                <div className={styles.passwordRequirements}>
                   <p>Password must contain:</p>
                   <ul>
-                    <li className={password && password.length >= 8 ? 'valid' : ''}>
+                    <li className={password && password.length >= 8 ? styles.valid : ''}>
                       At least 8 characters
                     </li>
-                    <li className={password && /(?=.*[a-z])/.test(password) ? 'valid' : ''}>
+                    <li className={password && /(?=.*[a-z])/.test(password) ? styles.valid : ''}>
                       One lowercase letter
                     </li>
-                    <li className={password && /(?=.*[A-Z])/.test(password) ? 'valid' : ''}>
+                    <li className={password && /(?=.*[A-Z])/.test(password) ? styles.valid : ''}>
                       One uppercase letter
                     </li>
-                    <li className={password && /(?=.*\d)/.test(password) ? 'valid' : ''}>
+                    <li className={password && /(?=.*\d)/.test(password) ? styles.valid : ''}>
                       One number
                     </li>
-                    <li className={password && /(?=.*[@$!%*?&])/.test(password) ? 'valid' : ''}>
+                    <li className={password && /(?=.*[@$!%*?&])/.test(password) ? styles.valid : ''}>
                       One special character
                     </li>
                   </ul>
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className={styles.formGroup}>
                 <label htmlFor="confirmPassword">Confirm Password</label>
-                <div className="input-wrapper">
-                  <Lock className="input-icon" />
+                <div className={styles.inputWrapper}>
+                  <Lock className={styles.inputIcon} />
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
                     id="confirmPassword"
@@ -358,57 +358,57 @@ const RegisterPage = () => {
                       validate: (value) =>
                         value === password || 'Passwords do not match'
                     })}
-                    className={errors.confirmPassword ? 'error' : ''}
+                    className={errors.confirmPassword ? styles.error : ''}
                   />
                   <button
                     type="button"
-                    className="password-toggle"
+                    className={styles.passwordToggle}
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <span className="error-message">{errors.confirmPassword.message}</span>
+                  <span className={styles.errorMessage}>{errors.confirmPassword.message}</span>
                 )}
               </div>
 
-              <div className="form-group">
-                <label className="checkbox-label">
+              <div className={styles.formGroup}>
+                <label className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
                     {...register('agreeToTerms', {
                       required: 'You must agree to the terms and conditions'
                     })}
                   />
-                  <span className="checkmark"></span>
+                  <span className={styles.checkmark}></span>
                   I agree to the{' '}
-                  <Link to="/terms" className="link">
+                  <Link to="/terms" className={styles.link}>
                     Terms of Service
                   </Link>{' '}
                   and{' '}
-                  <Link to="/privacy" className="link">
+                  <Link to="/privacy" className={styles.link}>
                     Privacy Policy
                   </Link>
                 </label>
                 {errors.agreeToTerms && (
-                  <span className="error-message">{errors.agreeToTerms.message}</span>
+                  <span className={styles.errorMessage}>{errors.agreeToTerms.message}</span>
                 )}
               </div>
 
               <button
                 type="submit"
-                className="submit-btn"
+                className={styles.submitBtn}
                 disabled={loading || !selectedPortal}
               >
                 {loading ? 'Creating Account...' : 'Create Account'}
               </button>
             </form>
 
-            <div className="auth-footer">
+            <div className={styles.authFooter}>
               <p>
                 Already have an account?{' '}
-                <Link to="/login" className="link">
+                <Link to="/login" className={styles.link}>
                   Sign in here
                 </Link>
               </p>

@@ -13,6 +13,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { accountHelpers } from '../../types/account.types';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './AccountStats.css';
 
 /**
@@ -48,7 +49,7 @@ const AccountStats = ({ account, stats, loading, error }) => {
         <div className="stats-error">
           <AlertTriangle className="w-6 h-6" />
           <p>Failed to load account statistics</p>
-          <span className="error-message">{error.message}</span>
+          <ErrorMessage error={error} variant="inline" type="error" />
         </div>
       </div>
     );

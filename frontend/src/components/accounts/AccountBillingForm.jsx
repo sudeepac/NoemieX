@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetAccountQuery, useUpdateAccountMutation } from '../../store/api/api';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import { BILLING_CYCLES, BILLING_STATUSES, CURRENCIES } from '../../types/account.types';
 import { useAuth } from '../../hooks/useAuth';
 import './AccountBillingForm.css';
@@ -20,34 +22,43 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   });
   const [updateAccount, { isLoading: isUpdating }] = useUpdateAccountMutation();
 
-  // Form state
-  const [formData, setFormData] = useState({
-    billing: {
-      cycle: BILLING_CYCLES.MONTHLY,
-      status: BILLING_STATUSES.CURRENT,
-      nextBillingDate: '',
-      paymentMethod: {
-        type: 'credit_card',
-        lastFour: '',
-        expiryMonth: '',
-        expiryYear: '',
-        cardholderName: ''
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+    reset,
+    clearErrors
+  } = useForm({
+    defaultValues: {
+      billing: {
+        cycle: BILLING_CYCLES.MONTHLY,
+        status: BILLING_STATUSES.CURRENT,
+        nextBillingDate: '',
+        paymentMethod: {
+          type: 'credit_card',
+          lastFour: '',
+          expiryMonth: '',
+          expiryYear: '',
+          cardholderName: ''
+        },
+        billingAddress: {
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: 'US'
+        }
       },
-      billingAddress: {
-        street: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: 'US'
+      settings: {
+        currency: CURRENCIES.USD
       }
-    },
-    settings: {
-      currency: CURRENCIES.USD
     }
   });
-  
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formData = watch();
 
   // Check permissions - only superadmin can access billing forms
   const canAccessBilling = () => {
@@ -58,7 +69,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   useEffect(() => {
     if (accountData?.account) {
       const account = accountData.account;
-      setFormData({
+      reset({
         billing: {
           cycle: account.billing?.cycle || BILLING_CYCLES.MONTHLY,
           status: account.billing?.status || BILLING_STATUSES.CURRENT,
@@ -84,121 +95,30 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
         }
       });
     }
-  }, [accountData]);
+  }, [accountData, reset]);
 
-  // Handle form field changes
-  const handleChange = (field, value) => {
-    setFormData(prev => {
-      if (field.includes('.')) {
-        const fieldParts = field.split('.');
-        let newData = { ...prev };
-        let current = newData;
-        
-        for (let i = 0; i < fieldParts.length - 1; i++) {
-          current[fieldParts[i]] = { ...current[fieldParts[i]] };
-          current = current[fieldParts[i]];
-        }
-        
-        current[fieldParts[fieldParts.length - 1]] = value;
-        return newData;
-      }
-      return {
-        ...prev,
-        [field]: value
-      };
-    });
 
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: undefined
-      }));
-    }
-  };
 
-  // Validate billing form
-  const validateForm = () => {
-    const validationErrors = {};
 
-    // Validate billing cycle
-    if (!formData.billing.cycle) {
-      validationErrors.billingCycle = 'Billing cycle is required';
-    }
-
-    // Validate billing status
-    if (!formData.billing.status) {
-      validationErrors.billingStatus = 'Billing status is required';
-    }
-
-    // Validate payment method
-    if (formData.billing.paymentMethod.type === 'credit_card') {
-      if (!formData.billing.paymentMethod.cardholderName.trim()) {
-        validationErrors.cardholderName = 'Cardholder name is required';
-      }
-      if (!formData.billing.paymentMethod.lastFour || formData.billing.paymentMethod.lastFour.length !== 4) {
-        validationErrors.lastFour = 'Last four digits must be 4 characters';
-      }
-      if (!formData.billing.paymentMethod.expiryMonth || 
-          parseInt(formData.billing.paymentMethod.expiryMonth) < 1 || 
-          parseInt(formData.billing.paymentMethod.expiryMonth) > 12) {
-        validationErrors.expiryMonth = 'Valid expiry month is required (1-12)';
-      }
-      if (!formData.billing.paymentMethod.expiryYear || 
-          parseInt(formData.billing.paymentMethod.expiryYear) < new Date().getFullYear()) {
-        validationErrors.expiryYear = 'Valid expiry year is required';
-      }
-    }
-
-    // Validate billing address
-    if (!formData.billing.billingAddress.street.trim()) {
-      validationErrors.street = 'Street address is required';
-    }
-    if (!formData.billing.billingAddress.city.trim()) {
-      validationErrors.city = 'City is required';
-    }
-    if (!formData.billing.billingAddress.state.trim()) {
-      validationErrors.state = 'State is required';
-    }
-    if (!formData.billing.billingAddress.zipCode.trim()) {
-      validationErrors.zipCode = 'ZIP code is required';
-    }
-    if (!formData.billing.billingAddress.country.trim()) {
-      validationErrors.country = 'Country is required';
-    }
-
-    return validationErrors;
-  };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
+  const onSubmit = async (data) => {
     // Check permissions
     if (!canAccessBilling()) {
       alert('You do not have permission to update billing information');
       return;
     }
 
-    // Validate form
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setIsSubmitting(true);
-    
     try {
       // Prepare data for submission
       const submitData = {
         billing: {
-          ...formData.billing,
-          nextBillingDate: formData.billing.nextBillingDate ? 
-            new Date(formData.billing.nextBillingDate) : undefined
+          ...data.billing,
+          nextBillingDate: data.billing.nextBillingDate ? 
+            new Date(data.billing.nextBillingDate) : undefined
         },
         settings: {
-          currency: formData.settings.currency
+          currency: data.settings.currency
         }
       };
 
@@ -213,8 +133,6 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
     } catch (error) {
       console.error('Billing form submission error:', error);
       alert(`Error updating billing information: ${error.data?.message || error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -231,10 +149,12 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   if (!canAccessBilling()) {
     return (
       <div className="billing-form-container">
-        <div className="error-message">
-          <h3>Access Denied</h3>
-          <p>You do not have permission to access billing information.</p>
-        </div>
+        <ErrorMessage 
+          error={{message: "You do not have permission to access billing information."}} 
+          variant="page" 
+          type="error"
+          title="Access Denied"
+        />
       </div>
     );
   }
@@ -250,10 +170,12 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   if (error) {
     return (
       <div className="billing-form-container">
-        <div className="error-message">
-          <h3>Error Loading Account</h3>
-          <p>{error.data?.message || error.message}</p>
-        </div>
+        <ErrorMessage 
+          error={{message: error.data?.message || error.message}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Account"
+        />
       </div>
     );
   }
@@ -265,7 +187,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
         <p>Manage billing details for {accountData?.account?.name}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="billing-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="billing-form">
         {/* Billing Cycle & Status */}
         <div className="form-section">
           <h3>Billing Settings</h3>
@@ -274,30 +196,28 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <label htmlFor="billingCycle">Billing Cycle *</label>
               <select
                 id="billingCycle"
-                value={formData.billing.cycle}
-                onChange={(e) => handleChange('billing.cycle', e.target.value)}
-                className={errors.billingCycle ? 'error' : ''}
+                {...register('billing.cycle', { required: 'Billing cycle is required' })}
+                className={errors.billing?.cycle ? 'error' : ''}
               >
                 <option value={BILLING_CYCLES.MONTHLY}>Monthly</option>
                 <option value={BILLING_CYCLES.QUARTERLY}>Quarterly</option>
                 <option value={BILLING_CYCLES.ANNUALLY}>Annually</option>
               </select>
-              {errors.billingCycle && <span className="error-text">{errors.billingCycle}</span>}
+              <ErrorMessage error={errors.billing?.cycle} variant="inline" type="validation" />
             </div>
 
             <div className="form-group">
               <label htmlFor="billingStatus">Billing Status *</label>
               <select
                 id="billingStatus"
-                value={formData.billing.status}
-                onChange={(e) => handleChange('billing.status', e.target.value)}
-                className={errors.billingStatus ? 'error' : ''}
+                {...register('billing.status', { required: 'Billing status is required' })}
+                className={errors.billing?.status ? 'error' : ''}
               >
                 <option value={BILLING_STATUSES.CURRENT}>Current</option>
                 <option value={BILLING_STATUSES.OVERDUE}>Overdue</option>
                 <option value={BILLING_STATUSES.PENDING}>Pending</option>
               </select>
-              {errors.billingStatus && <span className="error-text">{errors.billingStatus}</span>}
+              <ErrorMessage error={errors.billing?.status} variant="inline" type="validation" />
             </div>
 
             <div className="form-group">
@@ -305,8 +225,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <input
                 type="date"
                 id="nextBillingDate"
-                value={formData.billing.nextBillingDate}
-                onChange={(e) => handleChange('billing.nextBillingDate', e.target.value)}
+                {...register('billing.nextBillingDate')}
               />
             </div>
 
@@ -314,8 +233,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <label htmlFor="currency">Currency *</label>
               <select
                 id="currency"
-                value={formData.settings.currency}
-                onChange={(e) => handleChange('settings.currency', e.target.value)}
+                {...register('settings.currency')}
               >
                 <option value={CURRENCIES.USD}>USD - US Dollar</option>
                 <option value={CURRENCIES.EUR}>EUR - Euro</option>
@@ -334,8 +252,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <label htmlFor="paymentType">Payment Type *</label>
               <select
                 id="paymentType"
-                value={formData.billing.paymentMethod.type}
-                onChange={(e) => handleChange('billing.paymentMethod.type', e.target.value)}
+                {...register('billing.paymentMethod.type')}
               >
                 <option value="credit_card">Credit Card</option>
                 <option value="debit_card">Debit Card</option>
@@ -345,19 +262,18 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               </select>
             </div>
 
-            {formData.billing.paymentMethod.type === 'credit_card' && (
+            {watch('billing.paymentMethod.type') === 'credit_card' && (
               <>
                 <div className="form-group">
                   <label htmlFor="cardholderName">Cardholder Name *</label>
                   <input
                     type="text"
                     id="cardholderName"
-                    value={formData.billing.paymentMethod.cardholderName}
-                    onChange={(e) => handleChange('billing.paymentMethod.cardholderName', e.target.value)}
-                    className={errors.cardholderName ? 'error' : ''}
+                    {...register('billing.paymentMethod.cardholderName', { required: 'Cardholder name is required' })}
+                    className={errors.billing?.paymentMethod?.cardholderName ? 'error' : ''}
                     placeholder="Full name on card"
                   />
-                  {errors.cardholderName && <span className="error-text">{errors.cardholderName}</span>}
+                  <ErrorMessage error={errors.billing?.paymentMethod?.cardholderName} variant="inline" type="validation" />
                 </div>
 
                 <div className="form-group">
@@ -365,22 +281,26 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
                   <input
                     type="text"
                     id="lastFour"
-                    value={formData.billing.paymentMethod.lastFour}
-                    onChange={(e) => handleChange('billing.paymentMethod.lastFour', e.target.value)}
-                    className={errors.lastFour ? 'error' : ''}
+                    {...register('billing.paymentMethod.lastFour', { 
+                      required: 'Last four digits are required',
+                      pattern: {
+                        value: /^\d{4}$/,
+                        message: 'Must be 4 digits'
+                      }
+                    })}
+                    className={errors.billing?.paymentMethod?.lastFour ? 'error' : ''}
                     placeholder="1234"
                     maxLength="4"
                   />
-                  {errors.lastFour && <span className="error-text">{errors.lastFour}</span>}
+                  <ErrorMessage error={errors.billing?.paymentMethod?.lastFour} variant="inline" type="validation" />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="expiryMonth">Expiry Month *</label>
                   <select
                     id="expiryMonth"
-                    value={formData.billing.paymentMethod.expiryMonth}
-                    onChange={(e) => handleChange('billing.paymentMethod.expiryMonth', e.target.value)}
-                    className={errors.expiryMonth ? 'error' : ''}
+                    {...register('billing.paymentMethod.expiryMonth', { required: 'Expiry month is required' })}
+                    className={errors.billing?.paymentMethod?.expiryMonth ? 'error' : ''}
                   >
                     <option value="">Select Month</option>
                     {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
@@ -389,16 +309,15 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
                       </option>
                     ))}
                   </select>
-                  {errors.expiryMonth && <span className="error-text">{errors.expiryMonth}</span>}
+                  <ErrorMessage error={errors.billing?.paymentMethod?.expiryMonth} variant="inline" type="validation" />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="expiryYear">Expiry Year *</label>
                   <select
                     id="expiryYear"
-                    value={formData.billing.paymentMethod.expiryYear}
-                    onChange={(e) => handleChange('billing.paymentMethod.expiryYear', e.target.value)}
-                    className={errors.expiryYear ? 'error' : ''}
+                    {...register('billing.paymentMethod.expiryYear', { required: 'Expiry year is required' })}
+                    className={errors.billing?.paymentMethod?.expiryYear ? 'error' : ''}
                   >
                     <option value="">Select Year</option>
                     {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() + i).map(year => (
@@ -407,7 +326,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
                       </option>
                     ))}
                   </select>
-                  {errors.expiryYear && <span className="error-text">{errors.expiryYear}</span>}
+                  <ErrorMessage error={errors.billing?.paymentMethod?.expiryYear} variant="inline" type="validation" />
                 </div>
               </>
             )}
@@ -423,12 +342,11 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <input
                 type="text"
                 id="street"
-                value={formData.billing.billingAddress.street}
-                onChange={(e) => handleChange('billing.billingAddress.street', e.target.value)}
-                className={errors.street ? 'error' : ''}
+                {...register('billing.billingAddress.street', { required: 'Street address is required' })}
+                className={errors.billing?.billingAddress?.street ? 'error' : ''}
                 placeholder="123 Main Street"
               />
-              {errors.street && <span className="error-text">{errors.street}</span>}
+              <ErrorMessage error={errors.billing?.billingAddress?.street} variant="inline" type="validation" />
             </div>
 
             <div className="form-group">
@@ -436,12 +354,11 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <input
                 type="text"
                 id="city"
-                value={formData.billing.billingAddress.city}
-                onChange={(e) => handleChange('billing.billingAddress.city', e.target.value)}
-                className={errors.city ? 'error' : ''}
+                {...register('billing.billingAddress.city', { required: 'City is required' })}
+                className={errors.billing?.billingAddress?.city ? 'error' : ''}
                 placeholder="New York"
               />
-              {errors.city && <span className="error-text">{errors.city}</span>}
+              <ErrorMessage error={errors.billing?.billingAddress?.city} variant="inline" type="validation" />
             </div>
 
             <div className="form-group">
@@ -449,12 +366,11 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <input
                 type="text"
                 id="state"
-                value={formData.billing.billingAddress.state}
-                onChange={(e) => handleChange('billing.billingAddress.state', e.target.value)}
-                className={errors.state ? 'error' : ''}
+                {...register('billing.billingAddress.state', { required: 'State is required' })}
+                className={errors.billing?.billingAddress?.state ? 'error' : ''}
                 placeholder="NY"
               />
-              {errors.state && <span className="error-text">{errors.state}</span>}
+              <ErrorMessage error={errors.billing?.billingAddress?.state} variant="inline" type="validation" />
             </div>
 
             <div className="form-group">
@@ -462,21 +378,19 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
               <input
                 type="text"
                 id="zipCode"
-                value={formData.billing.billingAddress.zipCode}
-                onChange={(e) => handleChange('billing.billingAddress.zipCode', e.target.value)}
-                className={errors.zipCode ? 'error' : ''}
+                {...register('billing.billingAddress.zipCode', { required: 'ZIP code is required' })}
+                className={errors.billing?.billingAddress?.zipCode ? 'error' : ''}
                 placeholder="10001"
               />
-              {errors.zipCode && <span className="error-text">{errors.zipCode}</span>}
+              <ErrorMessage error={errors.billing?.billingAddress?.zipCode} variant="inline" type="validation" />
             </div>
 
             <div className="form-group">
               <label htmlFor="country">Country *</label>
               <select
                 id="country"
-                value={formData.billing.billingAddress.country}
-                onChange={(e) => handleChange('billing.billingAddress.country', e.target.value)}
-                className={errors.country ? 'error' : ''}
+                {...register('billing.billingAddress.country', { required: 'Country is required' })}
+                className={errors.billing?.billingAddress?.country ? 'error' : ''}
               >
                 <option value="US">United States</option>
                 <option value="CA">Canada</option>
@@ -487,7 +401,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
                 <option value="IT">Italy</option>
                 <option value="ES">Spain</option>
               </select>
-              {errors.country && <span className="error-text">{errors.country}</span>}
+              <ErrorMessage error={errors.billing?.billingAddress?.country} variant="inline" type="validation" />
             </div>
           </div>
         </div>
@@ -498,16 +412,16 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
             type="button"
             onClick={handleCancel}
             className="btn btn-secondary"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUpdating}
           >
             Cancel
           </button>
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUpdating}
           >
-            {isSubmitting ? 'Updating...' : 'Update Billing Information'}
+            {isSubmitting || isUpdating ? 'Updating...' : 'Update Billing Information'}
           </button>
         </div>
       </form>
@@ -517,4 +431,10 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
 
 export default AccountBillingForm;
 
-// AI-NOTE: Created AccountBillingForm component for superadmin-only billing management. Includes billing cycle, payment method, billing address, validation, and secure form handling following AccountForm patterns.
+// AI-NOTE: AccountBillingForm component migrated to React Hook Form
+// - Superadmin-only access with permission checks for billing management
+// - Migrated from useState to React Hook Form for better performance and validation
+// - Uses register() for form fields with built-in validation rules
+// - Handles nested billing data structure (billing.paymentMethod, billing.billingAddress)
+// - Conditional rendering for credit card fields using watch()
+// - Maintains RTK Query integration for data fetching and mutations

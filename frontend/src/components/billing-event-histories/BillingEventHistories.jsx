@@ -1,7 +1,7 @@
 // AI-NOTE: Main billing event histories component that orchestrates list and detail views
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentView } from '../../store/slices/billing-event-histories.slice';
+import { selectCurrentView } from '../../store/slices/billingEventHistoriesUi.slice';
 import {
   useListBillingEventHistoriesQuery,
   useGetBillingEventHistoryByIdQuery,

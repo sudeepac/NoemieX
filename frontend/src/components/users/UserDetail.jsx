@@ -13,6 +13,7 @@ import {
 } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
 import ChangePasswordModal from './ChangePasswordModal';
+import ErrorMessage from '../shared/ErrorMessage';
 import './UserDetail.css';
 
 // UserDetail component for displaying user information
@@ -109,9 +110,13 @@ function UserDetail() {
 
   if (isError) {
     return (
-      <div className="error-container">
-        <h3>Error Loading User</h3>
-        <p>{error?.data?.message || 'Failed to load user details'}</p>
+      <div>
+        <ErrorMessage 
+          error={error?.data?.message || 'Failed to load user details'}
+          variant="error"
+          type="page"
+          title="Error Loading User"
+        />
         <div className="error-actions">
           <button onClick={refetch} className="btn btn-primary">
             Try Again
@@ -128,9 +133,13 @@ function UserDetail() {
 
   if (!user) {
     return (
-      <div className="error-container">
-        <h3>User Not Found</h3>
-        <p>The requested user could not be found.</p>
+      <div>
+        <ErrorMessage 
+          error="The requested user could not be found."
+          variant="warning"
+          type="page"
+          title="User Not Found"
+        />
         <button onClick={() => navigate('/users')} className="btn btn-primary">
           Back to Users
         </button>

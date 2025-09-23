@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, Mail, Phone, MapPin, Calendar, GraduationCap } from 'lucide-react';
-import { formatDate } from '../../shared/utils';
+import { formatDate } from '../../utils/formatters';
 import './StudentCard.css';
 
 /**

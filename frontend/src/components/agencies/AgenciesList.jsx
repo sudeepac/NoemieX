@@ -20,7 +20,7 @@ import {
   hideStatusConfirmation,
   setError,
   clearError
-} from '../../store/slices/agencies.slice';
+} from '../../store/slices/agenciesUi.slice';
 import { PORTAL_TYPES } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
 import './AgenciesList.css';

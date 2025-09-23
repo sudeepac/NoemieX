@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
@@ -16,6 +17,7 @@ import {
   userHelpers 
 } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './UserForm.css';
 
 // UserForm component for creating and editing users
@@ -26,10 +28,21 @@ function UserForm() {
   
   const { user: currentUser } = useSelector((state) => state.auth);
   
-  // Form state
-  const [formData, setFormData] = useState(createUserFormData());
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+    reset,
+    clearErrors
+  } = useForm({
+    defaultValues: createUserFormData(),
+    mode: 'onChange'
+  });
+  
+  const formData = watch();
 
   // RTK Query hooks
   const { 
@@ -45,7 +58,7 @@ function UserForm() {
   useEffect(() => {
     if (isEditing && userData?.data) {
       const user = userData.data;
-      setFormData({
+      const userFormData = {
         email: user.email || '',
         firstName: user.firstName || '',
         lastName: user.lastName || '',
@@ -64,63 +77,31 @@ function UserForm() {
         // Don't populate password fields for editing
         password: '',
         confirmPassword: ''
-      });
-    }
-  }, [isEditing, userData]);
-
-  // Handle form field changes
-  const handleChange = (field, value) => {
-    setFormData(prev => {
-      if (field.includes('.')) {
-        const [parent, child] = field.split('.');
-        return {
-          ...prev,
-          [parent]: {
-            ...prev[parent],
-            [child]: value
-          }
-        };
-      }
-      return {
-        ...prev,
-        [field]: value
       };
-    });
-
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: undefined
-      }));
+      reset(userFormData);
     }
+  }, [isEditing, userData, reset]);
+
+  // Custom validation function for React Hook Form
+  const validateForm = (data) => {
+    const validationErrors = validateUserForm(data, isEditing);
+    return Object.keys(validationErrors).length === 0 ? true : validationErrors;
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validate form
-    const validationErrors = validateUserForm(formData, isEditing);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
+  const onSubmit = async (data) => {
     // Check permissions
     if (!canSubmitForm()) {
       alert('You do not have permission to perform this action');
       return;
     }
-
-    setIsSubmitting(true);
     
     try {
       // Prepare data for submission
       const submitData = {
-        ...formData,
+        ...data,
         // Remove password fields if empty during edit
-        ...(isEditing && !formData.password && {
+        ...(isEditing && !data.password && {
           password: undefined,
           confirmPassword: undefined
         })
@@ -138,8 +119,6 @@ function UserForm() {
     } catch (error) {
       console.error('Form submission error:', error);
       alert(`Error ${isEditing ? 'updating' : 'creating'} user: ${error.data?.message || error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -228,25 +207,29 @@ function UserForm() {
 
   if (isEditing && isUserError) {
     return (
-      <div className="error-container">
-        <h3>Error Loading User</h3>
-        <p>Failed to load user data for editing</p>
-        <button onClick={() => navigate('/users')} className="btn btn-primary">
-          Back to Users
-        </button>
-      </div>
+      <ErrorMessage 
+        error={{message: "Failed to load user data for editing"}} 
+        variant="page" 
+        type="error"
+        title="Error Loading User"
+      />
+      <button onClick={() => navigate('/users')} className="btn btn-primary">
+        Back to Users
+      </button>
     );
   }
 
   if (!canSubmitForm()) {
     return (
-      <div className="error-container">
-        <h3>Access Denied</h3>
-        <p>You do not have permission to {isEditing ? 'edit this user' : 'create users'}</p>
-        <button onClick={() => navigate('/users')} className="btn btn-primary">
-          Back to Users
-        </button>
-      </div>
+      <ErrorMessage 
+        error={{message: `You do not have permission to ${isEditing ? 'edit this user' : 'create users'}`}} 
+        variant="page" 
+        type="error"
+        title="Access Denied"
+      />
+      <button onClick={() => navigate('/users')} className="btn btn-primary">
+        Back to Users
+      </button>
     );
   }
 
@@ -269,7 +252,7 @@ function UserForm() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="user-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="user-form">
         <div className="form-sections">
           {/* Basic Information */}
           <div className="form-section">
@@ -280,13 +263,18 @@ function UserForm() {
                 <input
                   type="email"
                   id="email"
-                  value={formData.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
+                  {...register('email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Invalid email address'
+                    }
+                  })}
                   disabled={isFieldDisabled('email')}
                   className={errors.email ? 'error' : ''}
                   placeholder="user@example.com"
                 />
-                {errors.email && <span className="error-text">{errors.email}</span>}
+                <ErrorMessage error={errors.email} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
@@ -294,13 +282,18 @@ function UserForm() {
                 <input
                   type="text"
                   id="firstName"
-                  value={formData.firstName}
-                  onChange={(e) => handleChange('firstName', e.target.value)}
+                  {...register('firstName', {
+                    required: 'First name is required',
+                    minLength: {
+                      value: 2,
+                      message: 'First name must be at least 2 characters'
+                    }
+                  })}
                   disabled={isFieldDisabled('firstName')}
                   className={errors.firstName ? 'error' : ''}
                   placeholder="John"
                 />
-                {errors.firstName && <span className="error-text">{errors.firstName}</span>}
+                <ErrorMessage error={errors.firstName} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
@@ -308,13 +301,18 @@ function UserForm() {
                 <input
                   type="text"
                   id="lastName"
-                  value={formData.lastName}
-                  onChange={(e) => handleChange('lastName', e.target.value)}
+                  {...register('lastName', {
+                    required: 'Last name is required',
+                    minLength: {
+                      value: 2,
+                      message: 'Last name must be at least 2 characters'
+                    }
+                  })}
                   disabled={isFieldDisabled('lastName')}
                   className={errors.lastName ? 'error' : ''}
                   placeholder="Doe"
                 />
-                {errors.lastName && <span className="error-text">{errors.lastName}</span>}
+                <ErrorMessage error={errors.lastName} variant="inline" type="validation" />
               </div>
             </div>
           </div>
@@ -327,8 +325,9 @@ function UserForm() {
                 <label htmlFor="role">Role *</label>
                 <select
                   id="role"
-                  value={formData.role}
-                  onChange={(e) => handleChange('role', e.target.value)}
+                  {...register('role', {
+                    required: 'Role is required'
+                  })}
                   disabled={isFieldDisabled('role')}
                   className={errors.role ? 'error' : ''}
                 >
@@ -338,15 +337,16 @@ function UserForm() {
                     </option>
                   ))}
                 </select>
-                {errors.role && <span className="error-text">{errors.role}</span>}
+                <ErrorMessage error={errors.role} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="portalType">Portal Type *</label>
                 <select
                   id="portalType"
-                  value={formData.portalType}
-                  onChange={(e) => handleChange('portalType', e.target.value)}
+                  {...register('portalType', {
+                    required: 'Portal type is required'
+                  })}
                   disabled={isFieldDisabled('portalType')}
                   className={errors.portalType ? 'error' : ''}
                 >
@@ -356,15 +356,16 @@ function UserForm() {
                     </option>
                   ))}
                 </select>
-                {errors.portalType && <span className="error-text">{errors.portalType}</span>}
+                <ErrorMessage error={errors.portalType} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="isActive">Status</label>
                 <select
                   id="isActive"
-                  value={formData.isActive.toString()}
-                  onChange={(e) => handleChange('isActive', e.target.value === 'true')}
+                  {...register('isActive', {
+                    setValueAs: (value) => value === 'true'
+                  })}
                   disabled={isFieldDisabled('isActive')}
                 >
                   <option value="true">Active</option>
@@ -383,8 +384,7 @@ function UserForm() {
                 <input
                   type="text"
                   id="accountId"
-                  value={formData.accountId}
-                  onChange={(e) => handleChange('accountId', e.target.value)}
+                  {...register('accountId')}
                   disabled={isFieldDisabled('accountId')}
                   placeholder="Account ID (will be auto-assigned based on portal)"
                 />
@@ -398,8 +398,7 @@ function UserForm() {
                 <input
                   type="text"
                   id="agencyId"
-                  value={formData.agencyId}
-                  onChange={(e) => handleChange('agencyId', e.target.value)}
+                  {...register('agencyId')}
                   disabled={isFieldDisabled('agencyId')}
                   placeholder="Agency ID (optional for account-level users)"
                 />
@@ -419,8 +418,7 @@ function UserForm() {
                 <input
                   type="tel"
                   id="phone"
-                  value={formData.profile.phone}
-                  onChange={(e) => handleChange('profile.phone', e.target.value)}
+                  {...register('profile.phone')}
                   disabled={isFieldDisabled('profile.phone')}
                   placeholder="+1 (555) 123-4567"
                 />
@@ -431,8 +429,7 @@ function UserForm() {
                 <input
                   type="text"
                   id="department"
-                  value={formData.profile.department}
-                  onChange={(e) => handleChange('profile.department', e.target.value)}
+                  {...register('profile.department')}
                   disabled={isFieldDisabled('profile.department')}
                   placeholder="Sales, Marketing, Operations, etc."
                 />
@@ -443,8 +440,7 @@ function UserForm() {
                 <input
                   type="text"
                   id="position"
-                  value={formData.profile.position}
-                  onChange={(e) => handleChange('profile.position', e.target.value)}
+                  {...register('profile.position')}
                   disabled={isFieldDisabled('profile.position')}
                   placeholder="Manager, Specialist, Coordinator, etc."
                 />
@@ -454,8 +450,7 @@ function UserForm() {
                 <label htmlFor="address">Address</label>
                 <textarea
                   id="address"
-                  value={formData.profile.address}
-                  onChange={(e) => handleChange('profile.address', e.target.value)}
+                  {...register('profile.address')}
                   disabled={isFieldDisabled('profile.address')}
                   placeholder="Street address, city, state, zip code"
                   rows="3"
@@ -466,8 +461,7 @@ function UserForm() {
                 <label htmlFor="notes">Notes</label>
                 <textarea
                   id="notes"
-                  value={formData.profile.notes}
-                  onChange={(e) => handleChange('profile.notes', e.target.value)}
+                  {...register('profile.notes')}
                   disabled={isFieldDisabled('profile.notes')}
                   placeholder="Additional notes about this user"
                   rows="3"
@@ -488,12 +482,17 @@ function UserForm() {
                   <input
                     type="password"
                     id="password"
-                    value={formData.password}
-                    onChange={(e) => handleChange('password', e.target.value)}
+                    {...register('password', {
+                      required: !isEditing ? 'Password is required' : false,
+                      minLength: {
+                        value: 8,
+                        message: 'Password must be at least 8 characters long'
+                      }
+                    })}
                     className={errors.password ? 'error' : ''}
                     placeholder={isEditing ? 'Leave blank to keep current password' : 'Enter password'}
                   />
-                  {errors.password && <span className="error-text">{errors.password}</span>}
+                  <ErrorMessage error={errors.password} variant="inline" type="validation" />
                   {!isEditing && (
                     <small className="help-text">
                       Password must be at least 8 characters long
@@ -508,12 +507,23 @@ function UserForm() {
                   <input
                     type="password"
                     id="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                    {...register('confirmPassword', {
+                      required: !isEditing ? 'Please confirm your password' : false,
+                      validate: (value) => {
+                        const password = watch('password');
+                        if (!isEditing && password && value !== password) {
+                          return 'Passwords do not match';
+                        }
+                        if (isEditing && password && value !== password) {
+                          return 'Passwords do not match';
+                        }
+                        return true;
+                      }
+                    })}
                     className={errors.confirmPassword ? 'error' : ''}
                     placeholder="Confirm password"
                   />
-                  {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+                  <ErrorMessage error={errors.confirmPassword} variant="inline" type="validation" />
                 </div>
               </div>
             </div>
@@ -545,4 +555,4 @@ function UserForm() {
 
 export default UserForm;
 
-// AI-NOTE: Created comprehensive UserForm component with role-based field restrictions, validation, and portal-specific logic. Handles both create and edit modes with proper permission checks.
+// AI-NOTE: Migrated UserForm from useState to React Hook Form for better performance and validation. Maintained all role-based restrictions, nested object handling (profile fields), and conditional validation for password fields. Form now uses register() for field binding and handleSubmit() wrapper for submission.

@@ -14,6 +14,7 @@ import {
 } from '../../types/account.types';
 import { PORTAL_TYPES } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './AccountsList.css';
 
 // AccountsList component with comprehensive filtering and superadmin access
@@ -126,13 +127,15 @@ function AccountsList() {
 
   if (isError) {
     return (
-      <div className="error-container">
-        <h3>Error Loading Accounts</h3>
-        <p>{error?.data?.message || 'Failed to load accounts'}</p>
-        <button onClick={refetch} className="btn btn-primary">
-          Try Again
-        </button>
-      </div>
+      <ErrorMessage 
+        error={{message: error?.data?.message || 'Failed to load accounts'}} 
+        variant="page" 
+        type="error"
+        title="Error Loading Accounts"
+      />
+      <button onClick={refetch} className="btn btn-primary">
+        Try Again
+      </button>
     );
   }
 

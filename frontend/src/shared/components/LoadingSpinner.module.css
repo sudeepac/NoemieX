@@ -1,69 +1,57 @@
-/* Loading Spinner Styles */
+/* LoadingSpinner Component Styles */
+/* AI-NOTE: Standardized loading spinner styles using CSS Modules to replace inconsistent loading patterns */
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  min-height: 200px;
+  min-height: 100px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 9999;
+  min-height: 100vh;
 }
 
 .spinner {
   position: relative;
   display: inline-block;
-}
-
-.circle {
-  position: absolute;
-  border: 3px solid transparent;
-  border-top: 3px solid #3b82f6;
   border-radius: 50%;
-  animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #3b82f6;
+  animation: spin 1s linear infinite;
 }
 
-.circle:nth-child(1) {
-  animation-delay: -0.45s;
-}
-
-.circle:nth-child(2) {
-  animation-delay: -0.3s;
-}
-
-.circle:nth-child(3) {
-  animation-delay: -0.15s;
+.spinnerInner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
 }
 
 /* Size variants */
 .small {
-  width: 24px;
-  height: 24px;
-}
-
-.small .circle {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-width: 2px;
 }
 
 .medium {
-  width: 40px;
-  height: 40px;
-}
-
-.medium .circle {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-width: 3px;
 }
 
 .large {
-  width: 64px;
-  height: 64px;
-}
-
-.large .circle {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   border-width: 4px;
 }
 
@@ -84,25 +72,26 @@
   }
 }
 
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-top-color: #3b82f6;
+  }
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  .circle {
+  .overlay {
+    background: rgba(17, 24, 39, 0.9);
+  }
+  
+  .spinner {
+    border-color: #374151;
     border-top-color: #60a5fa;
   }
   
   .message {
-    color: #9ca3af;
-  }
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .container {
-    padding: 1.5rem;
-    min-height: 150px;
-  }
-  
-  .message {
-    font-size: 0.8rem;
+    color: #d1d5db;
   }
 }

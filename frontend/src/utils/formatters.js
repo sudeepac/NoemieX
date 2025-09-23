@@ -1,7 +1,19 @@
 /**
  * Utility functions for formatting data display
- * AI-NOTE: Common formatters for currency, dates, and other data types used across components
+ * AI-NOTE: Enhanced centralized formatters for currency, dates, and other data types used across components
+ * Consolidated from shared/utils to avoid duplication and standardize date handling patterns
  */
+
+// String utilities
+export const truncateText = (text, maxLength = 100) => {
+  if (!text || text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
+export const capitalizeFirst = (str) => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
 
 /**
  * Format currency amount with symbol and locale
@@ -114,6 +126,140 @@ export const formatRelativeTime = (date) => {
   
   const diffInYears = Math.floor(diffInMonths / 12);
   return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+};
+
+/**
+ * Format date for API submission (ISO string)
+ * Standardizes date submission format across forms
+ * @param {string|Date} date - Date to format
+ * @returns {string} ISO date string
+ */
+export const formatDateForAPI = (date) => {
+  if (!date) return '';
+  
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  
+  if (isNaN(dateObj.getTime())) {
+    return '';
+  }
+  
+  return dateObj.toISOString();
+};
+
+/**
+ * Format date for display in tables and lists
+ * Standardizes date display format across components
+ * @param {string|Date} date - Date to format
+ * @returns {string} Formatted date string (MM/DD/YYYY)
+ */
+export const formatDateShort = (date) => {
+  if (!date) return '-';
+  
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  
+  if (isNaN(dateObj.getTime())) {
+    return '-';
+  }
+  
+  return dateObj.toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric'
+  });
+};
+
+/**
+ * Format date for input fields (YYYY-MM-DD)
+ * Standardizes date input format for HTML date inputs
+ * @param {string|Date} date - Date to format
+ * @returns {string} Formatted date string for input
+ */
+export const formatDateForInput = (date) => {
+  if (!date) return '';
+  
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  
+  if (isNaN(dateObj.getTime())) {
+    return '';
+  }
+  
+  return dateObj.toISOString().split('T')[0];
+};
+
+/**
+ * Parse date from various input formats
+ * Handles common date input patterns found in the codebase
+ * @param {string|Date} input - Date input to parse
+ * @returns {Date|null} Parsed date object or null if invalid
+ */
+export const parseDate = (input) => {
+  if (!input) return null;
+  
+  if (input instanceof Date) {
+    return isNaN(input.getTime()) ? null : input;
+  }
+  
+  const date = new Date(input);
+  return isNaN(date.getTime()) ? null : date;
+};
+
+/**
+ * Check if date is today
+ * @param {string|Date} date - Date to check
+ * @returns {boolean} True if date is today
+ */
+export const isToday = (date) => {
+  if (!date) return false;
+  
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  
+  if (isNaN(dateObj.getTime())) {
+    return false;
+  }
+  
+  const today = new Date();
+  return dateObj.toDateString() === today.toDateString();
+};
+
+/**
+ * Get date range for common periods
+ * @param {string} period - Period type: 'today', 'week', 'month', 'year'
+ * @returns {Object} Object with start and end dates
+ */
+export const getDateRange = (period) => {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  
+  switch (period) {
+    case 'today':
+      return {
+        start: today,
+        end: new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1)
+      };
+    
+    case 'week':
+      const weekStart = new Date(today);
+      weekStart.setDate(today.getDate() - today.getDay());
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      weekEnd.setHours(23, 59, 59, 999);
+      return { start: weekStart, end: weekEnd };
+    
+    case 'month':
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+      const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      monthEnd.setHours(23, 59, 59, 999);
+      return { start: monthStart, end: monthEnd };
+    
+    case 'year':
+      const yearStart = new Date(today.getFullYear(), 0, 1);
+      const yearEnd = new Date(today.getFullYear(), 11, 31);
+      yearEnd.setHours(23, 59, 59, 999);
+      return { start: yearStart, end: yearEnd };
+    
+    default:
+      return { start: today, end: today };
+  }
 };
 
 /**

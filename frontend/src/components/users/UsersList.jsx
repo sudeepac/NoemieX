@@ -13,6 +13,7 @@ import {
   userHelpers 
 } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './UsersList.css';
 
 // UsersList component with comprehensive filtering and role-based access
@@ -153,13 +154,15 @@ function UsersList() {
 
   if (isError) {
     return (
-      <div className="error-container">
-        <h3>Error Loading Users</h3>
-        <p>{error?.data?.message || 'Failed to load users'}</p>
-        <button onClick={refetch} className="btn btn-primary">
-          Try Again
-        </button>
-      </div>
+      <ErrorMessage 
+        error={{message: error?.data?.message || 'Failed to load users'}} 
+        variant="page" 
+        type="error"
+        title="Error Loading Users"
+      />
+      <button onClick={refetch} className="btn btn-primary">
+        Try Again
+      </button>
     );
   }
 

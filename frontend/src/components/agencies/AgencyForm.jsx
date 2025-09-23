@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -11,9 +12,10 @@ import {
   clearEditingAgency,
   setError,
   clearError
-} from '../../store/slices/agencies.slice';
+} from '../../store/slices/agenciesUi.slice';
 import { PORTAL_TYPES } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './AgencyForm.css';
 
 /**
@@ -80,10 +82,20 @@ function AgencyForm() {
   const { user: currentUser } = useSelector((state) => state.auth);
   const { editingAgency, error } = useSelector((state) => state.agencies);
   
-  // Form state
-  const [formData, setFormData] = useState(createAgencyFormData());
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+    reset,
+    clearErrors
+  } = useForm({
+    defaultValues: createAgencyFormData()
+  });
+
+  const formData = watch();
 
   // RTK Query hooks
   const { 
@@ -107,18 +119,15 @@ function AgencyForm() {
   // Set account context for account admins
   useEffect(() => {
     if (currentUser?.portalType === PORTAL_TYPES.ACCOUNT && currentUser.accountId) {
-      setFormData(prev => ({
-        ...prev,
-        accountId: currentUser.accountId
-      }));
+      setValue('accountId', currentUser.accountId);
     }
-  }, [currentUser]);
+  }, [currentUser, setValue]);
 
   // Load agency data for editing
   useEffect(() => {
     if (isEditing && agencyData?.data) {
       const agency = agencyData.data;
-      setFormData({
+      reset({
         name: agency.name || '',
         description: agency.description || '',
         commissionSplitPercent: agency.commissionSplitPercent || 50,
@@ -127,7 +136,7 @@ function AgencyForm() {
       });
     } else if (isEditing && editingAgency) {
       // Use editing agency from Redux state
-      setFormData({
+      reset({
         name: editingAgency.name || '',
         description: editingAgency.description || '',
         commissionSplitPercent: editingAgency.commissionSplitPercent || 50,
@@ -135,7 +144,7 @@ function AgencyForm() {
         isActive: editingAgency.isActive !== undefined ? editingAgency.isActive : true
       });
     }
-  }, [isEditing, agencyData, editingAgency]);
+  }, [isEditing, agencyData, editingAgency, reset]);
 
   // Clear editing agency on unmount
   useEffect(() => {
@@ -155,49 +164,28 @@ function AgencyForm() {
   }, [error, dispatch]);
 
   /**
-   * Handle form field changes
+   * Validate form data using React Hook Form
    */
-  const handleChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: undefined
-      }));
-    }
+  const validateForm = (data) => {
+    const validationErrors = validateAgencyForm(data, isEditing);
+    return validationErrors;
   };
 
   /**
    * Handle form submission
    */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validate form
-    const validationErrors = validateAgencyForm(formData, isEditing);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
+  const onSubmit = async (data) => {
     // Check permissions
     if (!canSubmitForm()) {
       dispatch(setError('You do not have permission to perform this action'));
       return;
     }
-
-    setIsSubmitting(true);
     
     try {
       // Prepare data for submission
       const submitData = {
-        ...formData,
-        commissionSplitPercent: Number(formData.commissionSplitPercent)
+        ...data,
+        commissionSplitPercent: Number(data.commissionSplitPercent)
       };
 
       if (isEditing) {
@@ -217,8 +205,6 @@ function AgencyForm() {
         error?.message || 
         `Error ${isEditing ? 'updating' : 'creating'} agency`
       ));
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -275,13 +261,15 @@ function AgencyForm() {
   if (isEditing && isAgencyError) {
     return (
       <div className="agency-form-container">
-        <div className="error-container">
-          <h3>Error Loading Agency</h3>
-          <p>Failed to load agency data for editing</p>
-          <button onClick={() => navigate('/agencies')} className="btn btn-primary">
-            Back to Agencies
-          </button>
-        </div>
+        <ErrorMessage 
+          error={{message: "Failed to load agency data for editing"}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Agency"
+        />
+        <button onClick={() => navigate('/agencies')} className="btn btn-primary">
+          Back to Agencies
+        </button>
       </div>
     );
   }
@@ -289,13 +277,15 @@ function AgencyForm() {
   if (!canSubmitForm()) {
     return (
       <div className="agency-form-container">
-        <div className="error-container">
-          <h3>Access Denied</h3>
-          <p>You do not have permission to {isEditing ? 'edit agencies' : 'create agencies'}</p>
-          <button onClick={() => navigate('/agencies')} className="btn btn-primary">
-            Back to Agencies
-          </button>
-        </div>
+        <ErrorMessage 
+          error={{message: `You do not have permission to ${isEditing ? 'edit agencies' : 'create agencies'}`}} 
+          variant="page" 
+          type="error"
+          title="Access Denied"
+        />
+        <button onClick={() => navigate('/agencies')} className="btn btn-primary">
+          Back to Agencies
+        </button>
       </div>
     );
   }
@@ -335,7 +325,7 @@ function AgencyForm() {
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="agency-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="agency-form">
         <div className="form-sections">
           {/* Basic Information */}
           <div className="form-section">
@@ -346,22 +336,32 @@ function AgencyForm() {
                 <input
                   type="text"
                   id="name"
-                  value={formData.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
+                  {...register('name', {
+                    required: 'Agency name is required',
+                    minLength: {
+                      value: 2,
+                      message: 'Agency name must be at least 2 characters'
+                    },
+                    maxLength: {
+                      value: 100,
+                      message: 'Agency name must be less than 100 characters'
+                    },
+                    validate: value => value.trim().length > 0 || 'Agency name is required'
+                  })}
                   className={errors.name ? 'error' : ''}
                   placeholder="Enter agency name"
                   maxLength={100}
-                  required
                 />
-                {errors.name && <span className="error-text">{errors.name}</span>}
+                <ErrorMessage error={errors.name} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="isActive">Status</label>
                 <select
                   id="isActive"
-                  value={formData.isActive}
-                  onChange={(e) => handleChange('isActive', e.target.value === 'true')}
+                  {...register('isActive', {
+                    setValueAs: value => value === 'true'
+                  })}
                 >
                   <option value={true}>Active</option>
                   <option value={false}>Inactive</option>
@@ -372,16 +372,20 @@ function AgencyForm() {
                 <label htmlFor="description">Description</label>
                 <textarea
                   id="description"
-                  value={formData.description}
-                  onChange={(e) => handleChange('description', e.target.value)}
+                  {...register('description', {
+                    maxLength: {
+                      value: 500,
+                      message: 'Description must be less than 500 characters'
+                    }
+                  })}
                   className={errors.description ? 'error' : ''}
                   placeholder="Optional description of the agency"
                   rows={3}
                   maxLength={500}
                 />
-                {errors.description && <span className="error-text">{errors.description}</span>}
+                <ErrorMessage error={errors.description} variant="inline" type="validation" />
                 <small className="field-hint">
-                  {formData.description.length}/500 characters
+                  {(formData.description || '').length}/500 characters
                 </small>
               </div>
             </div>
@@ -397,20 +401,27 @@ function AgencyForm() {
                   <input
                     type="number"
                     id="commissionSplitPercent"
-                    value={formData.commissionSplitPercent}
-                    onChange={(e) => handleChange('commissionSplitPercent', e.target.value)}
+                    {...register('commissionSplitPercent', {
+                      required: 'Commission split percentage is required',
+                      min: {
+                        value: 0,
+                        message: 'Commission split must be between 0 and 100'
+                      },
+                      max: {
+                        value: 100,
+                        message: 'Commission split must be between 0 and 100'
+                      },
+                      setValueAs: value => value === '' ? '' : Number(value)
+                    })}
                     className={errors.commissionSplitPercent ? 'error' : ''}
                     placeholder="50"
                     min="0"
                     max="100"
                     step="0.01"
-                    required
                   />
                   <span className="input-suffix">%</span>
                 </div>
-                {errors.commissionSplitPercent && (
-                  <span className="error-text">{errors.commissionSplitPercent}</span>
-                )}
+                <ErrorMessage error={errors.commissionSplitPercent} variant="inline" type="validation" />
                 <small className="field-hint">
                   Percentage of commission this agency receives (0-100%)
                 </small>
@@ -427,10 +438,10 @@ function AgencyForm() {
                   <label htmlFor="accountId">Account *</label>
                   <select
                     id="accountId"
-                    value={formData.accountId}
-                    onChange={(e) => handleChange('accountId', e.target.value)}
+                    {...register('accountId', {
+                      required: 'Account is required'
+                    })}
                     className={errors.accountId ? 'error' : ''}
-                    required
                   >
                     <option value="">Select an account</option>
                     {availableAccounts.map((account) => (
@@ -439,7 +450,7 @@ function AgencyForm() {
                       </option>
                     ))}
                   </select>
-                  {errors.accountId && <span className="error-text">{errors.accountId}</span>}
+                  <ErrorMessage error={errors.accountId} variant="inline" type="validation" />
                 </div>
               ) : (
                 <div className="form-group">
@@ -488,4 +499,4 @@ function AgencyForm() {
 
 export default AgencyForm;
 
-// AI-NOTE: Created AgencyForm component following AccountForm patterns with agency-specific fields (name, description, commission split, account assignment). Includes validation, role-based permissions, and proper error handling for both create and edit modes.
+// AI-NOTE: Migrated AgencyForm from useState to React Hook Form for improved performance and validation. Maintains agency-specific fields (name, description, commission split, account assignment) with role-based permissions, proper error handling, and form validation using register() and handleSubmit(). Includes conditional account assignment for different user portal types.

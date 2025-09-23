@@ -1,5 +1,7 @@
 // AI-NOTE: Payment schedule form component for creating and editing payment schedule items
-import React, { useState, useEffect } from 'react';
+// AI-NOTE: Migrated PaymentScheduleForm from useState to React Hook Form for better validation, performance, and maintainability. Uses register(), handleSubmit(), watch() for form state management and conditional validation.
+import React, { useEffect, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   useGetPaymentScheduleQuery,
@@ -13,10 +15,12 @@ import {
   selectFormMode,
   selectSelectedPaymentSchedule,
   closeForm,
-} from '../../store/slices/payment-schedules.slice';
+} from '../../store/slices/paymentSchedulesUi.slice';
 import { toast } from 'react-toastify';
+import ErrorMessage from '../../shared/components/ErrorMessage';
+import { FormField, FormSelect, FormCheckbox } from '../common/forms';
 
-const PaymentScheduleForm = () => {
+const PaymentScheduleForm = React.memo(() => {
   const dispatch = useDispatch();
   const formMode = useSelector(selectFormMode);
   const selectedPaymentSchedule = useSelector(selectSelectedPaymentSchedule);
@@ -28,34 +32,45 @@ const PaymentScheduleForm = () => {
   const { data: offerLettersData } = useGetOfferLettersQuery({ limit: 100 });
   const { data: agenciesData } = useGetAgenciesQuery({ limit: 100 });
 
-  // Form state
-  const [formData, setFormData] = useState({
-    accountId: user?.accountId || '',
-    agencyId: '',
-    offerLetterId: '',
-    itemType: 'milestone',
-    milestoneType: '',
-    scheduledAmount: '',
-    scheduledDueDate: '',
-    description: '',
-    priority: 'medium',
-    conditions: '',
-    isRecurring: false,
-    recurringSettings: {
-      frequency: 'monthly',
-      interval: 1,
-      endDate: '',
-      maxOccurrences: ''
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+    reset,
+    clearErrors
+  } = useForm({
+    defaultValues: {
+      accountId: user?.accountId || '',
+      agencyId: '',
+      offerLetterId: '',
+      itemType: 'milestone',
+      milestoneType: '',
+      scheduledAmount: '',
+      scheduledDueDate: '',
+      description: '',
+      priority: 'medium',
+      conditions: '',
+      isRecurring: false,
+      recurringSettings: {
+        frequency: 'monthly',
+        interval: 1,
+        endDate: '',
+        maxOccurrences: ''
+      },
+      metadata: {}
     },
-    metadata: {}
+    mode: 'onChange'
   });
 
-  const [errors, setErrors] = useState({});
+  const formData = watch();
 
   // Initialize form data when editing
   useEffect(() => {
     if (formMode === 'edit' && selectedPaymentSchedule) {
-      setFormData({
+      const editData = {
         accountId: selectedPaymentSchedule.accountId || user?.accountId || '',
         agencyId: selectedPaymentSchedule.agencyId || '',
         offerLetterId: selectedPaymentSchedule.offerLetterId || '',
@@ -75,83 +90,80 @@ const PaymentScheduleForm = () => {
           maxOccurrences: ''
         },
         metadata: selectedPaymentSchedule.metadata || {}
-      });
+      };
+      reset(editData);
     }
-  }, [formMode, selectedPaymentSchedule, user]);
+  }, [formMode, selectedPaymentSchedule, user, reset]);
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    
-    if (name.startsWith('recurringSettings.')) {
-      const field = name.split('.')[1];
-      setFormData(prev => ({
-        ...prev,
-        recurringSettings: {
-          ...prev.recurringSettings,
-          [field]: value
+  // Validation rules using React Hook Form
+  const validationRules = {
+    agencyId: {
+      required: 'Agency is required'
+    },
+    offerLetterId: {
+      required: 'Offer Letter is required'
+    },
+    itemType: {
+      required: 'Item Type is required'
+    },
+    milestoneType: {
+      validate: (value) => {
+        if (watch('itemType') === 'milestone' && !value) {
+          return 'Milestone Type is required for milestone items';
         }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
-      }));
-    }
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+        return true;
+      }
+    },
+    scheduledAmount: {
+      required: 'Scheduled Amount is required',
+      min: {
+        value: 0.01,
+        message: 'Amount must be greater than 0'
+      }
+    },
+    scheduledDueDate: {
+      required: 'Scheduled Due Date is required'
+    },
+    description: {
+      required: 'Description is required',
+      validate: (value) => value?.trim() || 'Description cannot be empty'
+    },
+    'recurringSettings.frequency': {
+      validate: (value) => {
+        if (watch('isRecurring') && !value) {
+          return 'Frequency is required for recurring items';
+        }
+        return true;
+      }
+    },
+    'recurringSettings.interval': {
+      validate: (value) => {
+        if (watch('isRecurring')) {
+          if (!value) {
+            return 'Interval is required for recurring items';
+          }
+          if (parseInt(value) < 1) {
+            return 'Interval must be at least 1';
+          }
+        }
+        return true;
+      }
     }
   };
 
-  // Validate form
-  const validateForm = () => {
-    const newErrors = {};
 
-    if (!formData.agencyId) newErrors.agencyId = 'Agency is required';
-    if (!formData.offerLetterId) newErrors.offerLetterId = 'Offer Letter is required';
-    if (!formData.itemType) newErrors.itemType = 'Item Type is required';
-    if (formData.itemType === 'milestone' && !formData.milestoneType) {
-      newErrors.milestoneType = 'Milestone Type is required for milestone items';
-    }
-    if (!formData.scheduledAmount || formData.scheduledAmount <= 0) {
-      newErrors.scheduledAmount = 'Valid scheduled amount is required';
-    }
-    if (!formData.scheduledDueDate) newErrors.scheduledDueDate = 'Scheduled due date is required';
-    if (!formData.description?.trim()) newErrors.description = 'Description is required';
-
-    if (formData.isRecurring) {
-      if (!formData.recurringSettings.frequency) {
-        newErrors['recurringSettings.frequency'] = 'Frequency is required for recurring items';
-      }
-      if (!formData.recurringSettings.interval || formData.recurringSettings.interval < 1) {
-        newErrors['recurringSettings.interval'] = 'Valid interval is required';
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      toast.error('Please fix the form errors');
-      return;
-    }
-
+  const onSubmit = async (data) => {
     try {
       const submitData = {
-        ...formData,
-        scheduledAmount: parseFloat(formData.scheduledAmount),
-        recurringSettings: formData.isRecurring ? {
-          ...formData.recurringSettings,
-          interval: parseInt(formData.recurringSettings.interval),
-          maxOccurrences: formData.recurringSettings.maxOccurrences ? 
-            parseInt(formData.recurringSettings.maxOccurrences) : undefined
+        ...data,
+        scheduledAmount: parseFloat(data.scheduledAmount),
+        recurringSettings: data.isRecurring ? {
+          ...data.recurringSettings,
+          interval: parseInt(data.recurringSettings.interval),
+          maxOccurrences: data.recurringSettings.maxOccurrences ? 
+            parseInt(data.recurringSettings.maxOccurrences) : undefined
         } : undefined
       };
 
@@ -174,9 +186,9 @@ const PaymentScheduleForm = () => {
   };
 
   // Handle cancel
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     dispatch(closeForm());
-  };
+  }, [dispatch]);
 
   const isLoading = isCreating || isUpdating;
   const offerLetters = offerLettersData?.offerLetters || [];
@@ -196,258 +208,207 @@ const PaymentScheduleForm = () => {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit(onSubmit)} className="form">
         <div className="form-grid">
           {/* Agency Selection */}
-          <div className="form-group">
-            <label htmlFor="agencyId">Agency *</label>
-            <select
-              id="agencyId"
-              name="agencyId"
-              value={formData.agencyId}
-              onChange={handleChange}
-              className={errors.agencyId ? 'error' : ''}
-              disabled={isLoading}
-            >
-              <option value="">Select Agency</option>
-              {agencies.map(agency => (
-                <option key={agency._id} value={agency._id}>
-                  {agency.name}
-                </option>
-              ))}
-            </select>
-            {errors.agencyId && <span className="error-text">{errors.agencyId}</span>}
-          </div>
+          <FormSelect
+            id="agencyId"
+            label="Agency"
+            register={register}
+            validation={validationRules.agencyId}
+            error={errors.agencyId}
+            disabled={isLoading}
+            required
+            placeholder="Select Agency"
+            options={agencies.map(agency => ({
+              value: agency._id,
+              label: agency.name
+            }))}
+          />
 
           {/* Offer Letter Selection */}
-          <div className="form-group">
-            <label htmlFor="offerLetterId">Offer Letter *</label>
-            <select
-              id="offerLetterId"
-              name="offerLetterId"
-              value={formData.offerLetterId}
-              onChange={handleChange}
-              className={errors.offerLetterId ? 'error' : ''}
-              disabled={isLoading}
-            >
-              <option value="">Select Offer Letter</option>
-              {offerLetters
-                .filter(ol => !formData.agencyId || ol.agencyId === formData.agencyId)
-                .map(offerLetter => (
-                <option key={offerLetter._id} value={offerLetter._id}>
-                  {offerLetter.title} - {offerLetter.clientName}
-                </option>
-              ))}
-            </select>
-            {errors.offerLetterId && <span className="error-text">{errors.offerLetterId}</span>}
-          </div>
+          <FormSelect
+            id="offerLetterId"
+            label="Offer Letter"
+            register={register}
+            validation={validationRules.offerLetterId}
+            error={errors.offerLetterId}
+            disabled={isLoading}
+            required
+            placeholder="Select Offer Letter"
+            options={offerLetters
+              .filter(ol => !watch('agencyId') || ol.agencyId === watch('agencyId'))
+              .map(offerLetter => ({
+                value: offerLetter._id,
+                label: `${offerLetter.title} - ${offerLetter.clientName}`
+              }))}
+          />
 
           {/* Item Type */}
-          <div className="form-group">
-            <label htmlFor="itemType">Item Type *</label>
-            <select
-              id="itemType"
-              name="itemType"
-              value={formData.itemType}
-              onChange={handleChange}
-              className={errors.itemType ? 'error' : ''}
-              disabled={isLoading}
-            >
-              <option value="milestone">Milestone</option>
-              <option value="recurring">Recurring</option>
-              <option value="one-time">One-time</option>
-              <option value="retainer">Retainer</option>
-            </select>
-            {errors.itemType && <span className="error-text">{errors.itemType}</span>}
-          </div>
+          <FormSelect
+            id="itemType"
+            label="Item Type"
+            register={register}
+            validation={validationRules.itemType}
+            error={errors.itemType}
+            disabled={isLoading}
+            required
+            options={[
+              { value: 'milestone', label: 'Milestone' },
+              { value: 'recurring', label: 'Recurring' },
+              { value: 'one-time', label: 'One-time' },
+              { value: 'retainer', label: 'Retainer' }
+            ]}
+          />
 
           {/* Milestone Type (conditional) */}
-          {formData.itemType === 'milestone' && (
-            <div className="form-group">
-              <label htmlFor="milestoneType">Milestone Type *</label>
-              <select
-                id="milestoneType"
-                name="milestoneType"
-                value={formData.milestoneType}
-                onChange={handleChange}
-                className={errors.milestoneType ? 'error' : ''}
-                disabled={isLoading}
-              >
-                <option value="">Select Milestone Type</option>
-                <option value="project-start">Project Start</option>
-                <option value="design-approval">Design Approval</option>
-                <option value="development-complete">Development Complete</option>
-                <option value="testing-complete">Testing Complete</option>
-                <option value="project-delivery">Project Delivery</option>
-                <option value="custom">Custom</option>
-              </select>
-              {errors.milestoneType && <span className="error-text">{errors.milestoneType}</span>}
-            </div>
+          {watch('itemType') === 'milestone' && (
+            <FormSelect
+              id="milestoneType"
+              label="Milestone Type"
+              register={register}
+              validation={validationRules.milestoneType}
+              error={errors.milestoneType}
+              disabled={isLoading}
+              required
+              placeholder="Select Milestone Type"
+              options={[
+                { value: 'project-start', label: 'Project Start' },
+                { value: 'design-approval', label: 'Design Approval' },
+                { value: 'development-complete', label: 'Development Complete' },
+                { value: 'testing-complete', label: 'Testing Complete' },
+                { value: 'project-delivery', label: 'Project Delivery' },
+                { value: 'custom', label: 'Custom' }
+              ]}
+            />
           )}
 
           {/* Scheduled Amount */}
-          <div className="form-group">
-            <label htmlFor="scheduledAmount">Scheduled Amount *</label>
-            <input
-              type="number"
-              id="scheduledAmount"
-              name="scheduledAmount"
-              value={formData.scheduledAmount}
-              onChange={handleChange}
-              className={errors.scheduledAmount ? 'error' : ''}
-              disabled={isLoading}
-              min="0"
+          <FormField
+            id="scheduledAmount"
+            label="Scheduled Amount"
+            type="number"
+            register={register}
+            validation={validationRules.scheduledAmount}
+            error={errors.scheduledAmount}
+            disabled={isLoading}
+            required
+            min="0"
               step="0.01"
               placeholder="0.00"
             />
-            {errors.scheduledAmount && <span className="error-text">{errors.scheduledAmount}</span>}
-          </div>
 
           {/* Scheduled Due Date */}
-          <div className="form-group">
-            <label htmlFor="scheduledDueDate">Scheduled Due Date *</label>
-            <input
-              type="date"
-              id="scheduledDueDate"
-              name="scheduledDueDate"
-              value={formData.scheduledDueDate}
-              onChange={handleChange}
-              className={errors.scheduledDueDate ? 'error' : ''}
-              disabled={isLoading}
-            />
-            {errors.scheduledDueDate && <span className="error-text">{errors.scheduledDueDate}</span>}
-          </div>
+          <FormField
+            id="scheduledDueDate"
+            label="Scheduled Due Date"
+            type="date"
+            register={register}
+            validation={validationRules.scheduledDueDate}
+            error={errors.scheduledDueDate}
+            disabled={isLoading}
+            required
+          />
 
           {/* Priority */}
-          <div className="form-group">
-            <label htmlFor="priority">Priority</label>
-            <select
-              id="priority"
-              name="priority"
-              value={formData.priority}
-              onChange={handleChange}
-              disabled={isLoading}
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="urgent">Urgent</option>
-            </select>
-          </div>
+          <FormSelect
+            id="priority"
+            label="Priority"
+            register={register}
+            disabled={isLoading}
+            options={[
+              { value: 'low', label: 'Low' },
+              { value: 'medium', label: 'Medium' },
+              { value: 'high', label: 'High' },
+              { value: 'urgent', label: 'Urgent' }
+            ]}
+          />
         </div>
 
         {/* Description */}
-        <div className="form-group">
-          <label htmlFor="description">Description *</label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className={errors.description ? 'error' : ''}
-            disabled={isLoading}
-            rows={3}
-            placeholder="Describe the payment schedule item..."
-          />
-          {errors.description && <span className="error-text">{errors.description}</span>}
-        </div>
+        <FormField
+          id="description"
+          label="Description"
+          type="textarea"
+          register={register}
+          validation={validationRules.description}
+          error={errors.description}
+          disabled={isLoading}
+          required
+          rows={3}
+          placeholder="Describe the payment schedule item..."
+        />
 
         {/* Conditions */}
-        <div className="form-group">
-          <label htmlFor="conditions">Conditions</label>
-          <textarea
-            id="conditions"
-            name="conditions"
-            value={formData.conditions}
-            onChange={handleChange}
-            disabled={isLoading}
-            rows={2}
-            placeholder="Any conditions or requirements..."
-          />
-        </div>
+        <FormField
+          id="conditions"
+          label="Conditions"
+          type="textarea"
+          register={register}
+          disabled={isLoading}
+          rows={2}
+          placeholder="Any conditions or requirements..."
+        />
 
         {/* Recurring Settings */}
-        <div className="form-group">
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              name="isRecurring"
-              checked={formData.isRecurring}
-              onChange={handleChange}
-              disabled={isLoading}
-            />
-            Is Recurring
-          </label>
-        </div>
+        <FormCheckbox
+          id="isRecurring"
+          label="Is Recurring"
+          register={register}
+          disabled={isLoading}
+        />
 
-        {formData.isRecurring && (
+        {watch('isRecurring') && (
           <div className="recurring-settings">
             <h4>Recurring Settings</h4>
             <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="recurringSettings.frequency">Frequency *</label>
-                <select
-                  id="recurringSettings.frequency"
-                  name="recurringSettings.frequency"
-                  value={formData.recurringSettings.frequency}
-                  onChange={handleChange}
-                  className={errors['recurringSettings.frequency'] ? 'error' : ''}
-                  disabled={isLoading}
-                >
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="monthly">Monthly</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="yearly">Yearly</option>
-                </select>
-                {errors['recurringSettings.frequency'] && 
-                  <span className="error-text">{errors['recurringSettings.frequency']}</span>
-                }
-              </div>
+              <FormSelect
+                id="recurringSettings.frequency"
+                label="Frequency"
+                register={register}
+                validation={validationRules['recurringSettings.frequency']}
+                error={errors.recurringSettings?.frequency}
+                disabled={isLoading}
+                required
+                options={[
+                  { value: 'daily', label: 'Daily' },
+                  { value: 'weekly', label: 'Weekly' },
+                  { value: 'monthly', label: 'Monthly' },
+                  { value: 'quarterly', label: 'Quarterly' },
+                  { value: 'yearly', label: 'Yearly' }
+                ]}
+              />
 
-              <div className="form-group">
-                <label htmlFor="recurringSettings.interval">Interval *</label>
-                <input
-                  type="number"
-                  id="recurringSettings.interval"
-                  name="recurringSettings.interval"
-                  value={formData.recurringSettings.interval}
-                  onChange={handleChange}
-                  className={errors['recurringSettings.interval'] ? 'error' : ''}
-                  disabled={isLoading}
-                  min="1"
-                  placeholder="1"
-                />
-                {errors['recurringSettings.interval'] && 
-                  <span className="error-text">{errors['recurringSettings.interval']}</span>
-                }
-              </div>
+              <FormField
+                id="recurringSettings.interval"
+                label="Interval"
+                type="number"
+                register={register}
+                validation={validationRules['recurringSettings.interval']}
+                error={errors.recurringSettings?.interval}
+                disabled={isLoading}
+                required
+                min="1"
+                placeholder="1"
+              />
 
-              <div className="form-group">
-                <label htmlFor="recurringSettings.endDate">End Date</label>
-                <input
-                  type="date"
-                  id="recurringSettings.endDate"
-                  name="recurringSettings.endDate"
-                  value={formData.recurringSettings.endDate}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                />
-              </div>
+              <FormField
+                id="recurringSettings.endDate"
+                label="End Date"
+                type="date"
+                register={register}
+                disabled={isLoading}
+              />
 
-              <div className="form-group">
-                <label htmlFor="recurringSettings.maxOccurrences">Max Occurrences</label>
-                <input
-                  type="number"
-                  id="recurringSettings.maxOccurrences"
-                  name="recurringSettings.maxOccurrences"
-                  value={formData.recurringSettings.maxOccurrences}
-                  onChange={handleChange}
-                  disabled={isLoading}
-                  min="1"
-                  placeholder="Unlimited"
-                />
-              </div>
+              <FormField
+                id="recurringSettings.maxOccurrences"
+                label="Max Occurrences"
+                type="number"
+                register={register}
+                disabled={isLoading}
+                min="1"
+                placeholder="Unlimited"
+              />
             </div>
           </div>
         )}
@@ -473,6 +434,8 @@ const PaymentScheduleForm = () => {
       </form>
     </div>
   );
-};
+});
 
+// AI-NOTE: Component optimized with React.memo and useCallback for better performance
+// Prevents unnecessary re-renders when parent components update
 export default PaymentScheduleForm;

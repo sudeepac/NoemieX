@@ -9,7 +9,7 @@ import {
   selectSelectedOfferLetter,
   selectFormMode,
   closeForm,
-} from '../../store/slices/offer-letters.slice';
+} from '../../store/slices/offerLettersUi.slice';
 // AI-NOTE: Fixed import error - selectAuth selector doesn't exist in auth.slice, use direct state.auth access instead
 import styles from './OfferLetterForm.module.css';
 

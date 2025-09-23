@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {
-  useGetAccountQuery,
-  useCreateAccountMutation,
-  useUpdateAccountMutation
-} from '../../store/api/api';
+import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
 import { 
-  accountHelpers,
-  SUBSCRIPTION_PLANS,
-  SUBSCRIPTION_STATUSES,
-  BILLING_CYCLES,
-  BILLING_STATUSES,
-  TIMEZONES,
-  CURRENCIES,
-  DATE_FORMATS,
-  createAccountFormData,
-  validateAccountForm
-} from '../../types/account.types';
-import { PORTAL_TYPES } from '../../types/user.types';
-import LoadingSpinner from '../common/loading-spinner.component';
+  useGetAccountQuery, 
+  useCreateAccountMutation, 
+  useUpdateAccountMutation 
+} from '../../store/api/accountsApi';
+import { 
+  ACCOUNT_STATUSES, 
+  SUBSCRIPTION_PLANS, 
+  SUBSCRIPTION_STATUSES, 
+  BILLING_CYCLES, 
+  BILLING_STATUSES, 
+  TIMEZONES, 
+  CURRENCIES, 
+  DATE_FORMATS 
+} from '../../constants/accountConstants';
+import { selectCurrentUser } from '../../store/slices/authSlice';
+import { LoadingSpinner, ErrorMessage, Button } from '../../shared/components';
 import './AccountForm.css';
 
 // AccountForm component for creating and editing accounts
@@ -30,10 +29,76 @@ function AccountForm() {
   
   const { user: currentUser } = useSelector((state) => state.auth);
   
-  // Form state
-  const [formData, setFormData] = useState(createAccountFormData());
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm({
+    defaultValues: {
+      name: '',
+      contactInfo: {
+        email: '',
+        phone: '',
+        website: '',
+        address: {
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: 'US'
+        }
+      },
+      subscription: {
+        plan: SUBSCRIPTION_PLANS.FREE,
+        status: SUBSCRIPTION_STATUSES.TRIAL,
+        startDate: '',
+        endDate: '',
+        trialEndDate: '',
+        autoRenew: true,
+        maxUsers: 5,
+        maxAgencies: 1
+      },
+      billing: {
+        cycle: BILLING_CYCLES.MONTHLY,
+        status: BILLING_STATUSES.CURRENT,
+        nextBillingDate: '',
+        paymentMethod: {
+          type: 'credit_card',
+          lastFour: '',
+          expiryMonth: '',
+          expiryYear: '',
+          cardholderName: ''
+        },
+        billingAddress: {
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: 'US'
+        }
+      },
+      settings: {
+        timezone: TIMEZONES.UTC,
+        currency: CURRENCIES.USD,
+        dateFormat: DATE_FORMATS.MM_DD_YYYY,
+        language: 'en',
+        features: {
+          multiAgency: true,
+          advancedReporting: false,
+          apiAccess: false,
+          customBranding: false
+        }
+      },
+      isActive: true
+    },
+    mode: 'onBlur'
+  });
+
+  const formData = watch(); // Watch all form values
 
   // RTK Query hooks
   const { 
@@ -49,7 +114,7 @@ function AccountForm() {
   useEffect(() => {
     if (isEditing && accountData?.data) {
       const account = accountData.data;
-      setFormData({
+      reset({
         name: account.name || '',
         contactInfo: {
           email: account.contactInfo?.email || '',
@@ -107,72 +172,32 @@ function AccountForm() {
         isActive: account.isActive !== undefined ? account.isActive : true
       });
     }
-  }, [isEditing, accountData]);
+  }, [isEditing, accountData, reset]);
 
-  // Handle form field changes
-  const handleChange = (field, value) => {
-    setFormData(prev => {
-      if (field.includes('.')) {
-        const fieldParts = field.split('.');
-        let newData = { ...prev };
-        let current = newData;
-        
-        for (let i = 0; i < fieldParts.length - 1; i++) {
-          current[fieldParts[i]] = { ...current[fieldParts[i]] };
-          current = current[fieldParts[i]];
-        }
-        
-        current[fieldParts[fieldParts.length - 1]] = value;
-        return newData;
-      }
-      return {
-        ...prev,
-        [field]: value
-      };
-    });
 
-    // Clear field error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: undefined
-      }));
-    }
-  };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validate form
-    const validationErrors = validateAccountForm(formData, isEditing);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
+  const onSubmit = async (data) => {
     // Check permissions
     if (!canSubmitForm()) {
       alert('You do not have permission to perform this action');
       return;
     }
-
-    setIsSubmitting(true);
     
     try {
       // Prepare data for submission
       const submitData = {
-        ...formData,
+        ...data,
         // Convert date strings to Date objects
         subscription: {
-          ...formData.subscription,
-          startDate: formData.subscription.startDate ? new Date(formData.subscription.startDate) : undefined,
-          endDate: formData.subscription.endDate ? new Date(formData.subscription.endDate) : undefined,
-          trialEndDate: formData.subscription.trialEndDate ? new Date(formData.subscription.trialEndDate) : undefined
+          ...data.subscription,
+          startDate: data.subscription.startDate ? new Date(data.subscription.startDate) : undefined,
+          endDate: data.subscription.endDate ? new Date(data.subscription.endDate) : undefined,
+          trialEndDate: data.subscription.trialEndDate ? new Date(data.subscription.trialEndDate) : undefined
         },
         billing: {
-          ...formData.billing,
-          nextBillingDate: formData.billing.nextBillingDate ? new Date(formData.billing.nextBillingDate) : undefined
+          ...data.billing,
+          nextBillingDate: data.billing.nextBillingDate ? new Date(data.billing.nextBillingDate) : undefined
         }
       };
 
@@ -188,8 +213,6 @@ function AccountForm() {
     } catch (error) {
       console.error('Form submission error:', error);
       alert(`Error ${isEditing ? 'updating' : 'creating'} account: ${error.data?.message || error.message}`);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -214,30 +237,44 @@ function AccountForm() {
   };
 
   if (isEditing && isLoadingAccount) {
-    return <LoadingSpinner />;
+    return (
+      <div className="account-form-container">
+        <LoadingSpinner message="Loading account data..." />
+      </div>
+    );
   }
 
   if (isEditing && isAccountError) {
     return (
-      <div className="error-container">
-        <h3>Error Loading Account</h3>
-        <p>Failed to load account data for editing</p>
-        <button onClick={() => navigate('/accounts')} className="btn btn-primary">
-          Back to Accounts
-        </button>
+      <div className="account-form-container">
+        <ErrorMessage 
+          message="Failed to load account data for editing"
+          variant="block"
+          type="network"
+        />
+        <div className="form-actions">
+          <Button 
+            variant="secondary" 
+            onClick={() => navigate('/accounts')}
+          >
+            Back to Accounts
+          </Button>
+        </div>
       </div>
     );
   }
 
   if (!canSubmitForm()) {
     return (
-      <div className="error-container">
-        <h3>Access Denied</h3>
-        <p>You do not have permission to {isEditing ? 'edit accounts' : 'create accounts'}</p>
-        <button onClick={() => navigate('/accounts')} className="btn btn-primary">
-          Back to Accounts
-        </button>
-      </div>
+      <ErrorMessage 
+        error={{message: `You do not have permission to ${isEditing ? 'edit accounts' : 'create accounts'}`}} 
+        variant="page" 
+        type="error"
+        title="Access Denied"
+      />
+      <button onClick={() => navigate('/accounts')} className="btn btn-primary">
+        Back to Accounts
+      </button>
     );
   }
 
@@ -260,7 +297,7 @@ function AccountForm() {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="account-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="account-form">
         <div className="form-sections">
           {/* Basic Information */}
           <div className="form-section">
@@ -271,21 +308,19 @@ function AccountForm() {
                 <input
                   type="text"
                   id="name"
-                  value={formData.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
+                  {...register('name', { required: 'Account name is required' })}
                   disabled={isFieldDisabled('name')}
                   className={errors.name ? 'error' : ''}
                   placeholder="Company or Organization Name"
                 />
-                {errors.name && <span className="error-text">{errors.name}</span>}
+                <ErrorMessage error={errors.name} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="isActive">Account Status</label>
                 <select
                   id="isActive"
-                  value={formData.isActive}
-                  onChange={(e) => handleChange('isActive', e.target.value === 'true')}
+                  {...register('isActive')}
                   disabled={isFieldDisabled('isActive')}
                 >
                   <option value={true}>Active</option>
@@ -304,13 +339,18 @@ function AccountForm() {
                 <input
                   type="email"
                   id="contactEmail"
-                  value={formData.contactInfo.email}
-                  onChange={(e) => handleChange('contactInfo.email', e.target.value)}
+                  {...register('contactInfo.email', {
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Invalid email address'
+                    }
+                  })}
                   disabled={isFieldDisabled('contactInfo.email')}
-                  className={errors['contactInfo.email'] ? 'error' : ''}
+                  className={errors.contactInfo?.email ? 'error' : ''}
                   placeholder="contact@company.com"
                 />
-                {errors['contactInfo.email'] && <span className="error-text">{errors['contactInfo.email']}</span>}
+                <ErrorMessage error={errors.contactInfo?.email} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
@@ -318,8 +358,7 @@ function AccountForm() {
                 <input
                   type="tel"
                   id="contactPhone"
-                  value={formData.contactInfo.phone}
-                  onChange={(e) => handleChange('contactInfo.phone', e.target.value)}
+                  {...register('contactInfo.phone')}
                   disabled={isFieldDisabled('contactInfo.phone')}
                   placeholder="+1 (555) 123-4567"
                 />
@@ -330,11 +369,17 @@ function AccountForm() {
                 <input
                   type="url"
                   id="website"
-                  value={formData.contactInfo.website}
-                  onChange={(e) => handleChange('contactInfo.website', e.target.value)}
+                  {...register('contactInfo.website', {
+                    pattern: {
+                      value: /^https?:\/\/.+/,
+                      message: 'Please enter a valid URL starting with http:// or https://'
+                    }
+                  })}
                   disabled={isFieldDisabled('contactInfo.website')}
+                  className={errors.contactInfo?.website ? 'error' : ''}
                   placeholder="https://www.company.com"
                 />
+                <ErrorMessage error={errors.contactInfo?.website} variant="inline" type="validation" />
               </div>
 
               <div className="form-group full-width">
@@ -345,8 +390,7 @@ function AccountForm() {
                     <input
                       type="text"
                       id="street"
-                      value={formData.contactInfo.address.street}
-                      onChange={(e) => handleChange('contactInfo.address.street', e.target.value)}
+                      {...register('contactInfo.address.street')}
                       disabled={isFieldDisabled('contactInfo.address.street')}
                       placeholder="123 Main Street"
                     />
@@ -356,8 +400,7 @@ function AccountForm() {
                     <input
                       type="text"
                       id="city"
-                      value={formData.contactInfo.address.city}
-                      onChange={(e) => handleChange('contactInfo.address.city', e.target.value)}
+                      {...register('contactInfo.address.city')}
                       disabled={isFieldDisabled('contactInfo.address.city')}
                       placeholder="New York"
                     />
@@ -367,8 +410,7 @@ function AccountForm() {
                     <input
                       type="text"
                       id="state"
-                      value={formData.contactInfo.address.state}
-                      onChange={(e) => handleChange('contactInfo.address.state', e.target.value)}
+                      {...register('contactInfo.address.state')}
                       disabled={isFieldDisabled('contactInfo.address.state')}
                       placeholder="NY"
                     />
@@ -378,8 +420,7 @@ function AccountForm() {
                     <input
                       type="text"
                       id="zipCode"
-                      value={formData.contactInfo.address.zipCode}
-                      onChange={(e) => handleChange('contactInfo.address.zipCode', e.target.value)}
+                      {...register('contactInfo.address.zipCode')}
                       disabled={isFieldDisabled('contactInfo.address.zipCode')}
                       placeholder="10001"
                     />
@@ -388,8 +429,7 @@ function AccountForm() {
                     <label htmlFor="country">Country</label>
                     <select
                       id="country"
-                      value={formData.contactInfo.address.country}
-                      onChange={(e) => handleChange('contactInfo.address.country', e.target.value)}
+                      {...register('contactInfo.address.country')}
                       disabled={isFieldDisabled('contactInfo.address.country')}
                     >
                       <option value="US">United States</option>
@@ -415,25 +455,23 @@ function AccountForm() {
                 <label htmlFor="plan">Subscription Plan *</label>
                 <select
                   id="plan"
-                  value={formData.subscription.plan}
-                  onChange={(e) => handleChange('subscription.plan', e.target.value)}
+                  {...register('subscription.plan', { required: 'Subscription plan is required' })}
                   disabled={isFieldDisabled('subscription.plan')}
-                  className={errors['subscription.plan'] ? 'error' : ''}
+                  className={errors.subscription?.plan ? 'error' : ''}
                 >
                   <option value={SUBSCRIPTION_PLANS.FREE}>Free</option>
                   <option value={SUBSCRIPTION_PLANS.BASIC}>Basic</option>
                   <option value={SUBSCRIPTION_PLANS.PROFESSIONAL}>Professional</option>
                   <option value={SUBSCRIPTION_PLANS.ENTERPRISE}>Enterprise</option>
                 </select>
-                {errors['subscription.plan'] && <span className="error-text">{errors['subscription.plan']}</span>}
+                <ErrorMessage error={errors.subscription?.plan} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="status">Status</label>
                 <select
                   id="status"
-                  value={formData.subscription.status}
-                  onChange={(e) => handleChange('subscription.status', e.target.value)}
+                  {...register('subscription.status')}
                   disabled={isFieldDisabled('subscription.status')}
                 >
                   <option value={SUBSCRIPTION_STATUSES.ACTIVE}>Active</option>
@@ -448,12 +486,18 @@ function AccountForm() {
                 <input
                   type="number"
                   id="maxUsers"
-                  value={formData.subscription.maxUsers}
-                  onChange={(e) => handleChange('subscription.maxUsers', parseInt(e.target.value) || 0)}
+                  {...register('subscription.maxUsers', {
+                    required: 'Max users is required',
+                    min: { value: 1, message: 'Must be at least 1 user' },
+                    max: { value: 1000, message: 'Cannot exceed 1000 users' },
+                    valueAsNumber: true
+                  })}
                   disabled={isFieldDisabled('subscription.maxUsers')}
+                  className={errors.subscription?.maxUsers ? 'error' : ''}
                   min="1"
                   placeholder="5"
                 />
+                <ErrorMessage error={errors.subscription?.maxUsers} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
@@ -461,12 +505,18 @@ function AccountForm() {
                 <input
                   type="number"
                   id="maxAgencies"
-                  value={formData.subscription.maxAgencies}
-                  onChange={(e) => handleChange('subscription.maxAgencies', parseInt(e.target.value) || 0)}
+                  {...register('subscription.maxAgencies', {
+                    required: 'Max agencies is required',
+                    min: { value: 1, message: 'Must be at least 1 agency' },
+                    max: { value: 100, message: 'Cannot exceed 100 agencies' },
+                    valueAsNumber: true
+                  })}
                   disabled={isFieldDisabled('subscription.maxAgencies')}
+                  className={errors.subscription?.maxAgencies ? 'error' : ''}
                   min="1"
                   placeholder="1"
                 />
+                <ErrorMessage error={errors.subscription?.maxAgencies} variant="inline" type="validation" />
               </div>
 
               <div className="form-group">
@@ -474,8 +524,7 @@ function AccountForm() {
                 <input
                   type="date"
                   id="startDate"
-                  value={formData.subscription.startDate}
-                  onChange={(e) => handleChange('subscription.startDate', e.target.value)}
+                  {...register('subscription.startDate')}
                   disabled={isFieldDisabled('subscription.startDate')}
                 />
               </div>
@@ -485,8 +534,7 @@ function AccountForm() {
                 <input
                   type="date"
                   id="endDate"
-                  value={formData.subscription.endDate}
-                  onChange={(e) => handleChange('subscription.endDate', e.target.value)}
+                  {...register('subscription.endDate')}
                   disabled={isFieldDisabled('subscription.endDate')}
                 />
               </div>
@@ -496,8 +544,7 @@ function AccountForm() {
                 <input
                   type="date"
                   id="trialEndDate"
-                  value={formData.subscription.trialEndDate}
-                  onChange={(e) => handleChange('subscription.trialEndDate', e.target.value)}
+                  {...register('subscription.trialEndDate')}
                   disabled={isFieldDisabled('subscription.trialEndDate')}
                 />
               </div>
@@ -506,8 +553,7 @@ function AccountForm() {
                 <label>
                   <input
                     type="checkbox"
-                    checked={formData.subscription.autoRenew}
-                    onChange={(e) => handleChange('subscription.autoRenew', e.target.checked)}
+                    {...register('subscription.autoRenew')}
                     disabled={isFieldDisabled('subscription.autoRenew')}
                   />
                   Auto Renew
@@ -524,8 +570,7 @@ function AccountForm() {
                 <label htmlFor="billingCycle">Billing Cycle</label>
                 <select
                   id="billingCycle"
-                  value={formData.billing.cycle}
-                  onChange={(e) => handleChange('billing.cycle', e.target.value)}
+                  {...register('billing.cycle')}
                   disabled={isFieldDisabled('billing.cycle')}
                 >
                   <option value={BILLING_CYCLES.MONTHLY}>Monthly</option>
@@ -538,8 +583,7 @@ function AccountForm() {
                 <label htmlFor="billingStatus">Billing Status</label>
                 <select
                   id="billingStatus"
-                  value={formData.billing.status}
-                  onChange={(e) => handleChange('billing.status', e.target.value)}
+                  {...register('billing.status')}
                   disabled={isFieldDisabled('billing.status')}
                 >
                   <option value={BILLING_STATUSES.CURRENT}>Current</option>
@@ -553,8 +597,7 @@ function AccountForm() {
                 <input
                   type="date"
                   id="nextBillingDate"
-                  value={formData.billing.nextBillingDate}
-                  onChange={(e) => handleChange('billing.nextBillingDate', e.target.value)}
+                  {...register('billing.nextBillingDate')}
                   disabled={isFieldDisabled('billing.nextBillingDate')}
                 />
               </div>
@@ -569,8 +612,7 @@ function AccountForm() {
                 <label htmlFor="timezone">Timezone</label>
                 <select
                   id="timezone"
-                  value={formData.settings.timezone}
-                  onChange={(e) => handleChange('settings.timezone', e.target.value)}
+                  {...register('settings.timezone')}
                   disabled={isFieldDisabled('settings.timezone')}
                 >
                   {Object.entries(TIMEZONES).map(([key, value]) => (
@@ -583,8 +625,7 @@ function AccountForm() {
                 <label htmlFor="currency">Currency</label>
                 <select
                   id="currency"
-                  value={formData.settings.currency}
-                  onChange={(e) => handleChange('settings.currency', e.target.value)}
+                  {...register('settings.currency')}
                   disabled={isFieldDisabled('settings.currency')}
                 >
                   {Object.entries(CURRENCIES).map(([key, value]) => (
@@ -597,8 +638,7 @@ function AccountForm() {
                 <label htmlFor="dateFormat">Date Format</label>
                 <select
                   id="dateFormat"
-                  value={formData.settings.dateFormat}
-                  onChange={(e) => handleChange('settings.dateFormat', e.target.value)}
+                  {...register('settings.dateFormat')}
                   disabled={isFieldDisabled('settings.dateFormat')}
                 >
                   {Object.entries(DATE_FORMATS).map(([key, value]) => (
@@ -611,8 +651,7 @@ function AccountForm() {
                 <label htmlFor="language">Language</label>
                 <select
                   id="language"
-                  value={formData.settings.language}
-                  onChange={(e) => handleChange('settings.language', e.target.value)}
+                  {...register('settings.language')}
                   disabled={isFieldDisabled('settings.language')}
                 >
                   <option value="en">English</option>
@@ -629,8 +668,7 @@ function AccountForm() {
                   <label>
                     <input
                       type="checkbox"
-                      checked={formData.settings.features.multiAgency}
-                      onChange={(e) => handleChange('settings.features.multiAgency', e.target.checked)}
+                      {...register('settings.features.multiAgency')}
                       disabled={isFieldDisabled('settings.features.multiAgency')}
                     />
                     Multi-Agency Support
@@ -638,8 +676,7 @@ function AccountForm() {
                   <label>
                     <input
                       type="checkbox"
-                      checked={formData.settings.features.advancedReporting}
-                      onChange={(e) => handleChange('settings.features.advancedReporting', e.target.checked)}
+                      {...register('settings.features.advancedReporting')}
                       disabled={isFieldDisabled('settings.features.advancedReporting')}
                     />
                     Advanced Reporting
@@ -647,8 +684,7 @@ function AccountForm() {
                   <label>
                     <input
                       type="checkbox"
-                      checked={formData.settings.features.apiAccess}
-                      onChange={(e) => handleChange('settings.features.apiAccess', e.target.checked)}
+                      {...register('settings.features.apiAccess')}
                       disabled={isFieldDisabled('settings.features.apiAccess')}
                     />
                     API Access
@@ -656,8 +692,7 @@ function AccountForm() {
                   <label>
                     <input
                       type="checkbox"
-                      checked={formData.settings.features.customBranding}
-                      onChange={(e) => handleChange('settings.features.customBranding', e.target.checked)}
+                      {...register('settings.features.customBranding')}
                       disabled={isFieldDisabled('settings.features.customBranding')}
                     />
                     Custom Branding
@@ -670,21 +705,22 @@ function AccountForm() {
 
         {/* Form Actions */}
         <div className="form-actions">
-          <button 
+          <Button 
             type="button" 
+            variant="secondary"
             onClick={() => navigate('/accounts')} 
-            className="btn btn-outline"
             disabled={isSubmitting}
           >
             Cancel
-          </button>
-          <button 
+          </Button>
+          <Button 
             type="submit" 
-            className="btn btn-primary"
+            variant="primary"
             disabled={isSubmitting}
+            loading={isSubmitting}
           >
-            {isSubmitting ? 'Saving...' : (isEditing ? 'Update Account' : 'Create Account')}
-          </button>
+            {isEditing ? 'Update Account' : 'Create Account'}
+          </Button>
         </div>
       </form>
     </div>
@@ -693,4 +729,4 @@ function AccountForm() {
 
 export default AccountForm;
 
-// AI-NOTE: Created comprehensive AccountForm component with account-specific fields including subscription plans, billing information, settings, and features. Follows UserForm pattern but adapted for account management with superadmin-only access controls and proper validation.
+// AI-NOTE: Migrated AccountForm to React Hook Form with comprehensive validation, standardized components (LoadingSpinner, ErrorMessage, Button), and improved form state management. Includes account-specific fields for subscription plans, billing, settings, and features with proper validation rules and error handling. Replaces useState with useForm hook for better performance and validation.

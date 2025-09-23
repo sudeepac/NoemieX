@@ -1,6 +1,7 @@
 // AI-NOTE: Payment schedules list component with filtering, pagination, and bulk operations
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import {
   useGetPaymentSchedulesQuery,
   useGetPaymentScheduleStatsQuery,
@@ -28,7 +29,7 @@ import {
   toggleStats,
   openForm,
   openDetail,
-} from '../../store/slices/payment-schedules.slice';
+} from '../../store/slices/paymentSchedulesUi.slice';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { toast } from 'react-toastify';
 
@@ -244,13 +245,15 @@ const PaymentSchedulesList = () => {
   if (error) {
     return (
       <div className="payment-schedules-list error">
-        <div className="error-message">
-          <h3>Error Loading Payment Schedules</h3>
-          <p>{error?.data?.message || 'Failed to load payment schedules'}</p>
-          <button className="btn btn-primary" onClick={refetch}>
-            Retry
-          </button>
-        </div>
+        <ErrorMessage 
+          error={{message: error?.data?.message || 'Failed to load payment schedules'}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Payment Schedules"
+        />
+        <button className="btn btn-primary" onClick={refetch}>
+          Retry
+        </button>
       </div>
     );
   }

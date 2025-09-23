@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
-import './auth.styles.css';
+import styles from './auth.module.css';
 
 const ForgotPasswordPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -38,24 +38,24 @@ const ForgotPasswordPage = () => {
 
   if (isSubmitted) {
     return (
-      <div className="auth-page">
-        <div className="auth-page__container">
-          <div className="auth-page__content">
+      <div className={styles.authPage}>
+        <div className={styles.authPageContainer}>
+          <div className={styles.authPageContent}>
             {/* Left side - Branding */}
-            <div className="auth-page__branding">
-              <div className="auth-page__brand">
-                <h1 className="auth-page__brand-title">NoemieX</h1>
-                <p className="auth-page__brand-subtitle">
+            <div className={styles.authPageBranding}>
+              <div className={styles.authPageBrand}>
+                <h1 className={styles.authPageBrandTitle}>NoemieX</h1>
+                <p className={styles.authPageBrandSubtitle}>
                   Multi-tenant billing system for study abroad agencies
                 </p>
               </div>
             </div>
 
             {/* Right side - Success Message */}
-            <div className="auth-page__form-container">
-              <div className="auth-form">
-                <div className="auth-form__header">
-                  <div className="success-icon">
+            <div className={styles.authPageFormContainer}>
+              <div className={styles.authForm}>
+                <div className={styles.authFormHeader}>
+                  <div className={styles.successIcon}>
                     <CheckCircle size={48} />
                   </div>
                   <h2>Check Your Email</h2>
@@ -64,8 +64,8 @@ const ForgotPasswordPage = () => {
                   </p>
                 </div>
 
-                <div className="auth-form__content">
-                  <div className="success-message">
+                <div className={styles.authFormContent}>
+                  <div className={styles.successMessage}>
                     <p>
                       If an account with that email exists, you'll receive an email with 
                       instructions to reset your password within a few minutes.
@@ -75,8 +75,8 @@ const ForgotPasswordPage = () => {
                     </p>
                   </div>
 
-                  <div className="auth-form__actions">
-                    <Link to="/login" className="btn btn-primary btn-full">
+                  <div className={styles.authFormActions}>
+                    <Link to="/login" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnFullWidth}`}>
                       <ArrowLeft size={20} />
                       Back to Login
                     </Link>
@@ -91,24 +91,24 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="auth-page">
-      <div className="auth-page__container">
-        <div className="auth-page__content">
+    <div className={styles.authPage}>
+      <div className={styles.authPageContainer}>
+        <div className={styles.authPageContent}>
           {/* Left side - Branding */}
-          <div className="auth-page__branding">
-            <div className="auth-page__brand">
-              <h1 className="auth-page__brand-title">NoemieX</h1>
-              <p className="auth-page__brand-subtitle">
+          <div className={styles.authPageBranding}>
+            <div className={styles.authPageBrand}>
+              <h1 className={styles.authPageBrandTitle}>NoemieX</h1>
+              <p className={styles.authPageBrandSubtitle}>
                 Multi-tenant billing system for study abroad agencies
               </p>
             </div>
             
-            <div className="auth-page__features">
-              <div className="feature">
-                <div className="feature__icon">
+            <div className={styles.authPageFeatures}>
+              <div className={styles.feature}>
+                <div className={styles.featureIcon}>
                   <Mail />
                 </div>
-                <div className="feature__content">
+                <div className={styles.featureContent}>
                   <h3>Secure Password Reset</h3>
                   <p>Reset your password safely and securely</p>
                 </div>
@@ -117,23 +117,23 @@ const ForgotPasswordPage = () => {
           </div>
 
           {/* Right side - Forgot Password Form */}
-          <div className="auth-page__form-container">
-            <div className="auth-form">
-              <div className="auth-form__header">
+          <div className={styles.authPageFormContainer}>
+            <div className={styles.authForm}>
+              <div className={styles.authFormHeader}>
                 <h2>Forgot Password?</h2>
                 <p>Enter your email address and we'll send you instructions to reset your password.</p>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="auth-form__content">
+              <form onSubmit={handleSubmit(onSubmit)} className={styles.authFormContent}>
                 {/* Email */}
-                <div className="form-group">
-                  <label htmlFor="email" className="form-label">Email Address</label>
-                  <div className="form-input-group">
-                    <Mail className="form-input-group__icon" />
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.formLabel}>Email Address</label>
+                  <div className={styles.formInputGroup}>
+                    <Mail className={styles.formInputGroupIcon} />
                     <input
                       type="email"
                       id="email"
-                      className={`form-input ${errors.email ? 'form-input--error' : ''}`}
+                      className={`${styles.formInput} ${errors.email ? styles.formInputError : ''}`}
                       placeholder="Enter your email address"
                       {...register('email', {
                         required: 'Email is required',
@@ -145,22 +145,22 @@ const ForgotPasswordPage = () => {
                     />
                   </div>
                   {errors.email && (
-                    <span className="form-error">{errors.email.message}</span>
+                    <span className={styles.formError}>{errors.email.message}</span>
                   )}
                 </div>
 
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="btn btn-primary btn-full"
+                  className={`${styles.btn} ${styles.btnPrimary} ${styles.btnFull}`}
                   disabled={isLoading}
                 >
                   {isLoading ? 'Sending Instructions...' : 'Send Reset Instructions'}
                 </button>
 
                 {/* Back to Login */}
-                <div className="auth-form__footer">
-                  <Link to="/login" className="auth-link">
+                <div className={styles.authFormFooter}>
+                  <Link to="/login" className={styles.authLink}>
                     <ArrowLeft size={16} />
                     Back to Login
                   </Link>

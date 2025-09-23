@@ -11,7 +11,7 @@ import {
 import {
   selectCurrentView,
   setCurrentView
-} from '../../store/slices/billing-event-histories.slice';
+} from '../../store/slices/billingEventHistoriesUi.slice';
 import styles from './BillingEventHistoryDetail.module.css';
 
 // Icons

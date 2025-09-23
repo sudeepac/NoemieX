@@ -11,7 +11,7 @@ import {
   selectEditingTransaction,
   goBackToTransactionsList,
   goToEditTransaction,
-} from '../../store/slices/billing-transactions.slice';
+} from '../../store/slices/billingTransactionsUi.slice';
 import styles from './BillingTransactionDetail.module.css';
 
 /**

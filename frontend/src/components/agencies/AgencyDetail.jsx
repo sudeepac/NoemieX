@@ -9,6 +9,7 @@ import {
 } from '../../store/api/api';
 import { PORTAL_TYPES } from '../../types/user.types';
 import LoadingSpinner from '../common/loading-spinner.component';
+import ErrorMessage from '../../shared/components/ErrorMessage';
 import './AgencyDetail.css';
 
 /**
@@ -130,17 +131,19 @@ function AgencyDetail() {
   if (isError) {
     return (
       <div className="agency-detail-container">
-        <div className="error-container">
-          <h3>Error Loading Agency</h3>
-          <p>{error?.data?.message || 'Failed to load agency details'}</p>
-          <div className="error-actions">
-            <button onClick={() => refetch()} className="btn btn-primary">
-              Try Again
-            </button>
-            <Link to="/agencies" className="btn btn-outline">
-              Back to Agencies
-            </Link>
-          </div>
+        <ErrorMessage 
+          error={{message: error?.data?.message || 'Failed to load agency details'}} 
+          variant="page" 
+          type="error"
+          title="Error Loading Agency"
+        />
+        <div className="error-actions">
+          <button onClick={() => refetch()} className="btn btn-primary">
+            Try Again
+          </button>
+          <Link to="/agencies" className="btn btn-outline">
+            Back to Agencies
+          </Link>
         </div>
       </div>
     );
@@ -152,14 +155,16 @@ function AgencyDetail() {
   if (!agency) {
     return (
       <div className="agency-detail-container">
-        <div className="error-container">
-          <h3>Agency Not Found</h3>
-          <p>The requested agency could not be found.</p>
-          <div className="error-actions">
-            <Link to="/agencies" className="btn btn-primary">
-              Back to Agencies
-            </Link>
-          </div>
+        <ErrorMessage 
+          error={{message: "The requested agency could not be found."}} 
+          variant="page" 
+          type="error"
+          title="Agency Not Found"
+        />
+        <div className="error-actions">
+          <Link to="/agencies" className="btn btn-primary">
+            Back to Agencies
+          </Link>
         </div>
       </div>
     );
