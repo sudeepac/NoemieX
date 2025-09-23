@@ -85,7 +85,7 @@ const SuperadminAccountManagement = () => {
   // Handle account update
   const handleUpdateAccount = async (accountData) => {
     try {
-      await updateAccount({ id: selectedAccount.id, ...accountData }).unwrap();
+      await updateAccount({ accountId: selectedAccount.id, ...accountData }).unwrap();
       setShowEditModal(false);
       setSelectedAccount(null);
       refetchAccounts();
@@ -119,7 +119,7 @@ const SuperadminAccountManagement = () => {
   // Handle billing update
   const handleUpdateBilling = async (billingData) => {
     try {
-      await updateAccountBilling({ id: selectedAccount.id, ...billingData }).unwrap();
+      await updateAccountBilling({ accountId: selectedAccount.id, ...billingData }).unwrap();
       setShowBillingModal(false);
       setSelectedAccount(null);
       refetchAccounts();
@@ -420,5 +420,6 @@ const SuperadminAccountManagement = () => {
 // AI-NOTE: Comprehensive SuperAdmin account management with CRUD operations,
 // filtering, search, pagination, billing management, and status control.
 // Connected to existing accountsApi endpoints for real data integration.
+// AI-NOTE: Fixed ObjectId casting error by changing updateAccount and updateAccountBilling calls from { id: selectedAccount.id, ...data } to { accountId: selectedAccount.id, ...data } to match accountsApi.js mutation parameter structure.
 
 export default SuperadminAccountManagement;

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useGetAccountQuery, useUpdateAccountMutation } from '../../store/api/api';
 import ErrorMessage from '../../shared/components/ErrorMessage';
 import { BILLING_CYCLES, BILLING_STATUSES, CURRENCIES } from '../../types/account.types';
@@ -13,7 +14,7 @@ import styles from './AccountBillingForm.module.css';
  */
 const AccountBillingForm = ({ onCancel, onSuccess }) => {
   const navigate = useNavigate();
-  const { accountId } = useParams();
+  const { id: accountId } = useParams();
   const { user } = useAuth();
   
   // RTK Query hooks
@@ -105,7 +106,7 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
   const onSubmit = async (data) => {
     // Check permissions
     if (!canAccessBilling()) {
-      alert('You do not have permission to update billing information');
+      toast.error('You do not have permission to update billing information');
       return;
     }
 
@@ -122,17 +123,17 @@ const AccountBillingForm = ({ onCancel, onSuccess }) => {
         }
       };
 
-      await updateAccount({ id: accountId, accountData: submitData }).unwrap();
+      await updateAccount({ accountId: accountId, ...submitData }).unwrap();
       
       if (onSuccess) {
         onSuccess();
       } else {
-        alert('Billing information updated successfully');
+        toast.success('Billing information updated successfully');
         navigate(`/accounts/${accountId}`);
       }
     } catch (error) {
       console.error('Billing form submission error:', error);
-      alert(`Error updating billing information: ${error.data?.message || error.message}`);
+      toast.error(`Error updating billing information: ${error.data?.message || error.message}`);
     }
   };
 
@@ -438,3 +439,4 @@ export default AccountBillingForm;
 // - Handles nested billing data structure (billing.paymentMethod, billing.billingAddress)
 // - Conditional rendering for credit card fields using watch()
 // - Maintains RTK Query integration for data fetching and mutations
+// AI-NOTE: Fixed ObjectId casting error by changing updateAccount call from { id: accountId, accountData: submitData } to { accountId: accountId, ...submitData } to match accountsApi.js mutation parameter structure.

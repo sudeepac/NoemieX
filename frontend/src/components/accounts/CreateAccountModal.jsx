@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { useCreateAccountMutation, useUpdateAccountMutation } from '../../store/api';
 import { X, Building2, Mail, Phone, Globe, MapPin, CreditCard, Settings } from 'lucide-react';
 import styles from './CreateAccountModal.module.css';
@@ -73,8 +74,8 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
       setValue('contactInfo.address.zipCode', editingAccount.contactInfo?.address?.zipCode || '');
       setValue('contactInfo.address.country', editingAccount.contactInfo?.address?.country || 'US');
       setValue('subscription.plan', editingAccount.subscription?.plan || 'trial');
-      setValue('subscription.maxUsers', editingAccount.subscription?.maxUsers || 5);
-      setValue('subscription.maxAgencies', editingAccount.subscription?.maxAgencies || 1);
+      setValue('subscription.maxUsers', parseInt(editingAccount.subscription?.maxUsers, 10) || 5);
+      setValue('subscription.maxAgencies', parseInt(editingAccount.subscription?.maxAgencies, 10) || 1);
       setValue('billing.companyName', editingAccount.billing?.companyName || '');
       setValue('billing.taxId', editingAccount.billing?.taxId || '');
       setValue('settings.timezone', editingAccount.settings?.timezone || 'UTC');
@@ -98,14 +99,20 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
   }
 
   // Step navigation with validation
-  const nextStep = () => {
-    console.log('Navigating to step:', currentStep + 1);
+  const nextStep = (e) => {
+    // Prevent any form submission
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    console.log('nextStep called - Current step:', currentStep, 'Moving to:', currentStep + 1);
     
     // Validate current step before proceeding
     if (currentStep === 1) {
       const name = watch('name');
       if (!name || name.trim() === '') {
-        alert('Please enter an account name before proceeding.');
+        toast.error('Please enter an account name before proceeding.');
         return;
       }
     }
@@ -113,16 +120,14 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
     if (currentStep === 2) {
       const email = watch('contactInfo.email');
       if (!email || email.trim() === '') {
-        alert('Please enter an email address before proceeding.');
+        toast.error('Please enter an email address before proceeding.');
         return;
       }
     }
     
-    try {
-      setCurrentStep(prev => Math.min(prev + 1, 3));
-    } catch (error) {
-      console.error('Error navigating to next step:', error);
-    }
+    const newStep = Math.min(currentStep + 1, 3);
+    console.log('Setting currentStep to:', newStep);
+    setCurrentStep(newStep);
   };
   
   const prevStep = () => {
@@ -141,15 +146,16 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
       
       if (isEditMode) {
         // Update existing account
+        console.log('Updating account with ID:', editingAccount._id, 'Data:', data);
         result = await updateAccount({ 
-          id: editingAccount._id, 
+          accountId: editingAccount._id, 
           ...data 
         }).unwrap();
-        alert(`Account "${data.name}" updated successfully!`);
+        toast.success(`Account "${data.name}" updated successfully!`);
       } else {
         // Create new account
         result = await createAccount(data).unwrap();
-        alert(`Account "${data.name}" created successfully!`);
+        toast.success(`Account "${data.name}" created successfully!`);
       }
       
       // Reset form and close modal
@@ -167,7 +173,7 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
       }, 100);
     } catch (error) {
       console.error(`Failed to ${isEditMode ? 'update' : 'create'} account:`, error);
-      alert(`Error ${isEditMode ? 'updating' : 'creating'} account: ${error.data?.message || error.message}`);
+      toast.error(`Error ${isEditMode ? 'updating' : 'creating'} account: ${error.data?.message || error.message}`);
     }
   };
 
@@ -231,6 +237,7 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          {console.log('=== FORM RENDER ===', { currentStep, isOpen, isEditMode })}
           {/* Step 1: Basic Information */}
           {currentStep === 1 && (
             <div className={styles.stepContent}>
@@ -365,7 +372,7 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
           {/* Step 3: Subscription & Settings */}
           {currentStep === 3 && (
             <div className={styles.stepContent}>
-              {console.log('Rendering step 3, currentStep:', currentStep, 'formData:', watchedData)}
+              {console.log('=== STEP 3 RENDERING ===', { currentStep, isStep3: currentStep === 3, watchedData })}
               <h3><Settings size={20} /> Subscription & Settings</h3>
               
               <div className={styles.subscriptionSection}>
@@ -392,7 +399,7 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
                       id="maxUsers"
                       {...register('subscription.maxUsers', { 
                         min: { value: 1, message: 'Must be at least 1' },
-                        valueAsNumber: true
+                        setValueAs: (value) => value === '' ? '' : parseInt(value, 10) || 1
                       })}
                       min="1"
                       disabled={isLoading}
@@ -406,7 +413,7 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
                       id="maxAgencies"
                       {...register('subscription.maxAgencies', { 
                         min: { value: 1, message: 'Must be at least 1' },
-                        valueAsNumber: true
+                        setValueAs: (value) => value === '' ? '' : parseInt(value, 10) || 1
                       })}
                       min="1"
                       disabled={isLoading}
@@ -476,7 +483,11 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
             {currentStep < 3 ? (
               <button
                 type="button"
-                onClick={nextStep}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  nextStep(e);
+                }}
                 className={styles.btnPrimary}
                 disabled={isLoading}
               >
@@ -504,5 +515,8 @@ const CreateAccountModal = ({ isOpen, onClose, onSuccess, editingAccount }) => {
 // FIXED: Added error handling for form watch() function and step navigation debugging
 // to prevent modal crashes when navigating to step 3. Added valueAsNumber validation
 // for numeric fields to ensure proper form state management.
+// FIXED: Account edit ObjectId casting error - changed updateAccount call from
+// { id: editingAccount._id, accountData: data } to { accountId: editingAccount._id, ...data }
+// to match accountsApi.js mutation parameter structure that expects { accountId, ...patch }
 
 export default CreateAccountModal;

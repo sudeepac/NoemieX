@@ -1,0 +1,507 @@
+/* AI-NOTE: Comprehensive styling for MultiStageModal component with modern design,
+   responsive layout, and consistent styling patterns matching existing components */
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+/* Modal Content */
+.modalContent {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Modal Header */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headerIcon {
+  width: 32px;
+  height: 32px;
+  color: #171717;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #171717;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.875rem;
+  color: #737373;
+  line-height: 1.4;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: #737373;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.closeButton:hover:not(:disabled) {
+  background: #f5f5f5;
+  color: #171717;
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Step Indicator */
+.stepIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 32px;
+  background: #fafafa;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 8px;
+  min-width: 80px;
+}
+
+.step:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.stepNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: #e5e7eb;
+  color: #737373;
+  transition: all 0.2s ease;
+}
+
+.stepLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #737373;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.step.active .stepNumber {
+  background: #171717;
+  color: white;
+}
+
+.step.active .stepLabel {
+  color: #171717;
+  font-weight: 600;
+}
+
+.step.current .stepNumber {
+  background: #171717;
+  color: white;
+  box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.1);
+}
+
+.step.current .stepLabel {
+  color: #171717;
+  font-weight: 700;
+}
+
+/* Modal Body */
+.modalBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+.stepContent {
+  width: 100%;
+}
+
+/* Modal Actions */
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 24px 32px;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+/* Button Styles */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: 1px solid #171717;
+  border-radius: 8px;
+  background: #171717;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: #262626;
+  border-color: #262626;
+  transform: translateY(-1px);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btnSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 100px;
+}
+
+.btnOutline:hover:not(:disabled) {
+  background: #f9fafb;
+  color: #374151;
+  border-color: #9ca3af;
+}
+
+.btnOutline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 16px;
+  }
+
+  .modalContent {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+
+  .modalHeader {
+    padding: 20px 24px;
+  }
+
+  .stepIndicator {
+    padding: 20px 24px;
+    gap: 16px;
+  }
+
+  .step {
+    min-width: 60px;
+  }
+
+  .stepNumber {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+
+  .stepLabel {
+    font-size: 0.6875rem;
+  }
+
+  .modalBody {
+    padding: 24px;
+  }
+
+  .modalActions {
+    padding: 20px 24px;
+    flex-wrap: wrap;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnOutline {
+    padding: 10px 20px;
+    font-size: 0.8125rem;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modalHeader {
+    padding: 16px 20px;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .stepIndicator {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+
+  .modalBody {
+    padding: 20px;
+  }
+
+  .modalActions {
+    padding: 16px 20px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .modalContent {
+    background: #171717;
+    color: #fafafa;
+  }
+
+  .modalHeader {
+    background: #262626;
+    border-color: #404040;
+  }
+
+  .title {
+    color: #fafafa;
+  }
+
+  .subtitle {
+    color: #a3a3a3;
+  }
+
+  .closeButton {
+    color: #a3a3a3;
+  }
+
+  .closeButton:hover:not(:disabled) {
+    background: #404040;
+    color: #fafafa;
+  }
+
+  .stepIndicator {
+    background: #262626;
+    border-color: #404040;
+  }
+
+  .step:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .stepNumber {
+    background: #404040;
+    color: #a3a3a3;
+  }
+
+  .stepLabel {
+    color: #a3a3a3;
+  }
+
+  .step.active .stepNumber {
+    background: #fafafa;
+    color: #171717;
+  }
+
+  .step.active .stepLabel {
+    color: #fafafa;
+  }
+
+  .step.current .stepNumber {
+    background: #fafafa;
+    color: #171717;
+    box-shadow: 0 0 0 3px rgba(250, 250, 250, 0.1);
+  }
+
+  .step.current .stepLabel {
+    color: #fafafa;
+  }
+
+  .modalActions {
+    background: #262626;
+    border-color: #404040;
+  }
+
+  .btnPrimary {
+    background: #fafafa;
+    color: #171717;
+    border-color: #fafafa;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    background: #e5e5e5;
+    border-color: #e5e5e5;
+  }
+
+  .btnSecondary {
+    background: #404040;
+    color: #fafafa;
+    border-color: #525252;
+  }
+
+  .btnSecondary:hover:not(:disabled) {
+    background: #525252;
+    border-color: #737373;
+  }
+
+  .btnOutline {
+    background: #171717;
+    color: #fafafa;
+    border-color: #404040;
+  }
+
+  .btnOutline:hover:not(:disabled) {
+    background: #262626;
+    border-color: #525252;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .modalContent {
+    border: 2px solid #000;
+  }
+
+  .stepNumber {
+    border: 2px solid currentColor;
+  }
+
+  .btnPrimary,
+  .btnSecondary,
+  .btnOutline {
+    border-width: 2px;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .modalContent {
+    animation: none;
+  }
+
+  .btnPrimary:hover:not(:disabled) {
+    transform: none;
+  }
+
+  * {
+    transition: none;
+  }
+}
+
+/* AI-NOTE: Comprehensive CSS styling for MultiStageModal with modern design,
+   responsive layout, dark mode support, and accessibility features.
+   Follows existing component patterns while providing enhanced UX for multi-step workflows. */

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { 
   useGetAccountQuery, 
   useCreateAccountMutation, 
@@ -24,7 +25,7 @@ import styles from './AccountForm.module.css';
 // AccountForm component for creating and editing accounts
 function AccountForm() {
   const navigate = useNavigate();
-  const { accountId } = useParams();
+  const { id: accountId } = useParams();
   const isEditing = Boolean(accountId);
   
   const { user: currentUser } = useSelector((state) => state.auth);
@@ -180,7 +181,7 @@ function AccountForm() {
   const onSubmit = async (data) => {
     // Check permissions
     if (!canSubmitForm()) {
-      alert('You do not have permission to perform this action');
+      toast.error('You do not have permission to perform this action');
       return;
     }
     
@@ -202,17 +203,17 @@ function AccountForm() {
       };
 
       if (isEditing) {
-        await updateAccount({ id: accountId, accountData: submitData }).unwrap();
-        alert('Account updated successfully');
+        await updateAccount({ accountId: accountId, ...submitData }).unwrap();
+        toast.success('Account updated successfully');
       } else {
         await createAccount(submitData).unwrap();
-        alert('Account created successfully');
+        toast.success('Account created successfully');
       }
       
       navigate('/accounts');
     } catch (error) {
       console.error('Form submission error:', error);
-      alert(`Error ${isEditing ? 'updating' : 'creating'} account: ${error.data?.message || error.message}`);
+      toast.error(`Error ${isEditing ? 'updating' : 'creating'} account: ${error.data?.message || error.message}`);
     }
   };
 
@@ -730,3 +731,4 @@ function AccountForm() {
 export default AccountForm;
 
 // AI-NOTE: Migrated AccountForm to React Hook Form with comprehensive validation, standardized components (LoadingSpinner, ErrorMessage, Button), and improved form state management. Includes account-specific fields for subscription plans, billing, settings, and features with proper validation rules and error handling. Replaces useState with useForm hook for better performance and validation.
+// AI-NOTE: Fixed ObjectId casting error by changing updateAccount call from { id: accountId, accountData: submitData } to { accountId: accountId, ...submitData } to match accountsApi.js mutation parameter structure.

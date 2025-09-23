@@ -559,6 +559,11 @@
     align-items: stretch;
   }
   
+  .headerActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
   .filtersHeader {
     flex-direction: column;
     gap: 12px;
@@ -575,10 +580,54 @@
   
   .tableContainer {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0;
+    margin: 0 -16px;
+    border-left: none;
+    border-right: none;
   }
   
   .accountsTable {
-    min-width: 800px;
+    min-width: 900px;
+    font-size: 12px;
+  }
+  
+  .accountsTable th,
+  .accountsTable td {
+    padding: 12px 8px;
+  }
+  
+  .accountInfo {
+    gap: 8px;
+  }
+  
+  .accountAvatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .accountName {
+    font-size: 14px;
+  }
+  
+  .accountId {
+    font-size: 11px;
+  }
+  
+  .planBadge {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+  
+  .billingStatus {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+  
+  .statusBadge {
+    font-size: 10px;
+    padding: 3px 6px;
   }
   
   .paginationContainer {
@@ -589,6 +638,154 @@
   
   .actionButtons {
     flex-direction: column;
+    gap: 4px;
+  }
+  
+  .iconBtn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* AI-NOTE: Mobile card layout for better mobile responsiveness */
+.mobileCardContainer {
+  display: none;
+}
+
+.accountCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cardAccountInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+}
+
+.cardBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cardField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cardFieldLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardFieldValue {
+  font-size: 14px;
+  color: #111827;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+@media (max-width: 768px) {
+  .tableContainer {
+    display: none;
+  }
+  
+  .mobileCardContainer {
+    display: block;
+  }
+  
+  .pageHeader {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+  
+  .headerActions {
+    justify-content: center;
+  }
+  
+  .filtersHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .searchBox {
+    max-width: none;
+  }
+  
+  .filtersPanel {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .accountsListContainer {
+    padding: 12px;
+  }
+  
+  .pageHeader {
+    gap: 12px;
+  }
+  
+  .headerLeft h1 {
+    font-size: 24px;
+  }
+  
+  .filtersSection {
+    padding: 16px;
+    margin: 0 -12px 20px -12px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .cardBody {
+    grid-template-columns: 1fr;
+  }
+  
+  .cardActions {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .iconBtn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
+    font-size: 12px;
   }
 }
 

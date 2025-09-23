@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   useGetAccountsQuery,
   useDeleteAccountMutation,
@@ -129,7 +130,7 @@ function AccountsList() {
       }, 2000);
     } catch (error) {
       setConfirmationModal(prev => ({ ...prev, isLoading: false }));
-      alert(`Error deleting account: ${error.data?.message || error.message}`);
+      toast.error(`Error deleting account: ${error.data?.message || error.message}`);
     }
   };
 
@@ -169,7 +170,7 @@ function AccountsList() {
       }, 2000);
     } catch (error) {
       setConfirmationModal(prev => ({ ...prev, isLoading: false }));
-      alert(`Error updating account status: ${error.data?.message || error.message}`);
+      toast.error(`Error updating account status: ${error.data?.message || error.message}`);
     }
   };
 
@@ -305,7 +306,7 @@ function AccountsList() {
         <span>Found {pagination.totalItems || 0} accounts</span>
       </div>
 
-      {/* Accounts Table */}
+      {/* Accounts Table - Desktop */}
       <div className={styles.tableContainer}>
         <table className={styles.accountsTable}>
           <thead>
@@ -446,6 +447,126 @@ function AccountsList() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* AI-NOTE: Mobile Card Layout for responsive design */}
+      <div className={styles.mobileCardContainer}>
+        {accounts.length === 0 ? (
+          <div className={styles.accountCard}>
+            <div style={{ textAlign: 'center', color: '#6b7280', padding: '20px' }}>
+              No accounts found matching your criteria
+            </div>
+          </div>
+        ) : (
+          accounts.map((account) => (
+            <div key={account._id} className={styles.accountCard}>
+              <div className={styles.cardHeader}>
+                <div className={styles.cardAccountInfo}>
+                  <div className={styles.accountAvatar}>
+                    {account.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <div className={styles.accountName}>{account.name}</div>
+                    <div className={styles.accountId}>ID: {account._id}</div>
+                  </div>
+                </div>
+                <div className={styles.cardActions}>
+                  <Link 
+                    to={`/superadmin/accounts/${account._id}`} 
+                    className={`${styles.iconBtn} ${styles.iconBtnOutline}`}
+                    title="View Details"
+                  >
+                    <Eye size={16} />
+                  </Link>
+                  {canManageAccounts() && (
+                    <button
+                      onClick={() => handleEditAccount(account)}
+                      className={`${styles.iconBtn} ${styles.iconBtnPrimary}`}
+                      title="Edit Account"
+                    >
+                      <Edit size={16} />
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <div className={styles.cardBody}>
+                <div className={styles.cardField}>
+                  <div className={styles.cardFieldLabel}>Contact</div>
+                  <div className={styles.cardFieldValue}>
+                    <div>{account.contactInfo?.email}</div>
+                    {account.contactInfo?.phone && (
+                      <div style={{ fontSize: '12px', color: '#6b7280' }}>{account.contactInfo.phone}</div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className={styles.cardField}>
+                  <div className={styles.cardFieldLabel}>Subscription</div>
+                  <div className={styles.cardFieldValue}>
+                    <span className={`${styles.planBadge} ${styles[`plan${account.subscription?.plan}`]}`}>
+                      {accountHelpers.getPlanDisplayText(account.subscription?.plan)}
+                    </span>
+                    <div style={{ fontSize: '12px', marginTop: '4px' }} className={`${styles.subscriptionStatus} ${styles[accountHelpers.getSubscriptionStatusClass(account.subscription?.status)]}`}>
+                      {accountHelpers.getSubscriptionStatusText(account.subscription?.status)}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={styles.cardField}>
+                  <div className={styles.cardFieldLabel}>Billing</div>
+                  <div className={styles.cardFieldValue}>
+                    <span className={`${styles.billingStatus} ${styles[accountHelpers.getBillingStatusClass(account.billing?.status)]}`}>
+                      {accountHelpers.getBillingStatusText(account.billing?.status)}
+                    </span>
+                    <div style={{ fontSize: '12px', marginTop: '4px' }}>
+                      Revenue: {accountHelpers.formatCurrency(account.billing?.totalRevenue, account.settings?.currency)}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={styles.cardField}>
+                  <div className={styles.cardFieldLabel}>Usage</div>
+                  <div className={styles.cardFieldValue}>
+                    <div>Users: {account.usersCount || 0}</div>
+                    <div>Agencies: {account.agenciesCount || 0}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className={styles.cardFooter}>
+                <div>
+                  <span className={`${styles.statusBadge} ${account.isActive ? styles.active : styles.inactive}`}>
+                    {account.isActive ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+                <div style={{ fontSize: '12px', color: '#6b7280' }}>
+                  Created: {new Date(account.createdAt).toLocaleDateString()}
+                </div>
+                {canManageAccounts() && (
+                  <div className={styles.cardActions}>
+                    <button
+                      onClick={() => handleToggleStatus(account._id, account.name, account.isActive)}
+                      disabled={isToggling}
+                      className={`${styles.iconBtn} ${account.isActive ? styles.iconBtnWarning : styles.iconBtnSuccess}`}
+                      title={account.isActive ? 'Deactivate Account' : 'Activate Account'}
+                    >
+                      <Power size={16} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteAccount(account._id, account.name)}
+                      disabled={isDeleting}
+                      className={`${styles.iconBtn} ${styles.iconBtnDanger}`}
+                      title="Delete Account"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Pagination */}

@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AccountsList from '../../components/accounts/AccountsList';
-// AI-NOTE: Imported AccountsList component to fix accounts page routing
+import AccountDetail from '../../components/accounts/AccountDetail';
+// AI-NOTE: Imported AccountsList and AccountDetail components to fix accounts page routing
 // Other components will be imported as they are created
 // import {
-//   AccountDetail,
 //   AccountCreate,
 //   AccountEdit,
 //   AccountBilling,
@@ -38,7 +38,7 @@ const AccountsRoutes = () => {
         {/* <Route path="create" element={<AccountCreate />} /> */}
         
         {/* Detail View - GET /accounts/:id */}
-        {/* <Route path=":id" element={<AccountDetail />} /> */}
+        <Route path=":id" element={<AccountDetail />} />
         
         {/* Edit View - PUT /accounts/:id */}
         {/* <Route path=":id/edit" element={<AccountEdit />} /> */}
